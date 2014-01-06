@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+  <persistence-unit name="RecipeCostingPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>org.adrianwalker.recipecosting.common.entity.RecipeIngredient</class>
+    <class>org.adrianwalker.recipecosting.common.entity.Ingredient</class>
+    <class>org.adrianwalker.recipecosting.common.entity.UnitConversion</class>
+    <class>org.adrianwalker.recipecosting.common.entity.Recipe</class>
+    <class>org.adrianwalker.recipecosting.common.entity.Unit</class>
+    <class>org.adrianwalker.recipecosting.common.entity.User</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/recipecosting"/>
+      <property name="javax.persistence.jdbc.user" value="postgres"/>
+      <property name="javax.persistence.jdbc.password" value="postgres"/>
+      <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+      <property name="eclipselink.ddl-generation" value="create-tables"/>
+    </properties>
+  </persistence-unit>
+</persistence>
