@@ -8,14 +8,14 @@
   <packaging>war</packaging>
 
   <name>recipecosting</name>
-  
+
   <description>
     Usage:-
 
     mvn clean install jetty:run-war
 
     Browse to:-
-    
+
     http://localhost:8080/recipecosting
   </description>
 
@@ -23,7 +23,7 @@
     <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <slf4j.version>1.6.4</slf4j.version>
-    <logback.version>1.0.1</logback.version>    
+    <logback.version>1.0.1</logback.version>
   </properties>
 
   <dependencies>
@@ -32,7 +32,7 @@
       <artifactId>slf4j-api</artifactId>
       <version>${slf4j.version}</version>
     </dependency>
- 
+
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
@@ -57,7 +57,7 @@
       <artifactId>eclipselink</artifactId>
       <version>2.5.0</version>
     </dependency>
-    
+
     <dependency>
       <groupId>postgresql</groupId>
       <artifactId>postgresql</artifactId>
@@ -103,9 +103,23 @@
       </plugin>
 
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.1.1</version>
+      </plugin>
+
+      <plugin>
         <groupId>org.mortbay.jetty</groupId>
         <artifactId>maven-jetty-plugin</artifactId>
         <version>6.1.26</version>
+        <configuration>
+          <connectors>
+            <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+              <port>9090</port>
+              <maxIdleTime>60000</maxIdleTime>
+            </connector>
+          </connectors>
+        </configuration>
       </plugin>
     </plugins>
   </build>
@@ -118,7 +132,7 @@
       <name>Repository for library EclipseLink (JPA 2.0)</name>
     </repository>
   </repositories>
-  
+
   <reporting>
     <plugins>
       <plugin>
@@ -126,21 +140,27 @@
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>2.10</version>
       </plugin>
- 
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
         <version>3.0.1</version>
         <configuration>
-          <targetJdk>1.6</targetJdk>            
+          <targetJdk>1.6</targetJdk>
         </configuration>
       </plugin>
- 
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.1.1</version>
+      </plugin>
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
         <version>2.5.2</version>
       </plugin>
     </plugins>
-  </reporting>  
+  </reporting>
 </project>

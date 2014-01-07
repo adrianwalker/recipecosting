@@ -124,11 +124,13 @@ public final class RecipeCostingUserEntityController<T extends RecipeCostingUser
       cq.where(cb.equal(entity.get("user"), user));
 
       Path path = null;
-      for (String part : PATH_SEPARATOR.split(orderBy)) {
-        if (null == path) {
-          path = entity.get(part);
-        } else {
-          path = path.get(part);
+      if(null != orderBy) {
+        for (String part : PATH_SEPARATOR.split(orderBy)) {
+          if (null == path) {
+            path = entity.get(part);
+          } else {
+            path = path.get(part);
+          }
         }
       }
 

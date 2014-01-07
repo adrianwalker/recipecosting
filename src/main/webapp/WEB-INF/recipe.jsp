@@ -99,16 +99,16 @@
         });
       }
 
-      function addRows(recipeIngredients, ingredients, units) {
+      function addRows(recipeIngredients, ingredients, units, unitConversionsLookup) {
 
         $('#data tbody').remove();
 
         $.each(recipeIngredients, function(index, recipeIngredient) {
-          addRow(index, recipeIngredient, ingredients, units);
+          addRow(index, recipeIngredient, ingredients, units, unitConversionsLookup);
         });
       }
 
-      function addRow(index, recipeIngredient, ingredients, units) {
+      function addRow(index, recipeIngredient, ingredients, units, unitConversionsLookup) {
 
         var ingredientSelect = $("<select id='ingredient" + index + "' />");
         $(ingredientSelect).append("<option>-- select --</option>");
@@ -179,16 +179,18 @@
         }
         var ingredients = read("rest/ingredient");
         var units = read("rest/unit");
+        var unitConversionsLookup = read("rest/unitconversion/lookup");
 
-        $.when(recipe, ingredients, units).done(function(data1, data2, data3) {
+        $.when(recipe, ingredients, units, unitConversionsLookup).done(function(data1, data2, data3, data4) {
 
           recipe = data1[0];
           ingredients = data2[0].ingredients;
           units = data3[0].units;
+          unitConversionsLookup = data4[0].unitConversions;
 
           setName(recipe);
           setServes(recipe);
-          addRows(recipe.recipeIngredients, ingredients, units);
+          addRows(recipe.recipeIngredients, ingredients, units, unitConversionsLookup);
         }).fail(function() {
           error();
         });
@@ -230,7 +232,7 @@
             recipe = read("rest/recipe/" + params.id);
 
             $.when(recipe).done(function(data) {
-              
+
               recipe = data;
 
               setName(recipe);

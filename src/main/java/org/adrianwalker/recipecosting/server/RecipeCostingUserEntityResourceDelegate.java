@@ -37,6 +37,10 @@ public final class RecipeCostingUserEntityResourceDelegate<T extends RecipeCosti
     }
   }
 
+  public List<T> read(final User user) throws Exception {
+    return read(user, true, -1, -1, null);
+  }
+
   public List<T> read(final User user, final String orderBy) throws Exception {
     return read(user, true, -1, -1, orderBy);
   }
@@ -86,7 +90,7 @@ public final class RecipeCostingUserEntityResourceDelegate<T extends RecipeCosti
     LOGGER.info("user = " + user.getUsername() + ", entity = " + entity);
 
     entity.setUser(user);
-    
+
     Long id = entity.getId();
 
     if (id == null) {
@@ -105,9 +109,9 @@ public final class RecipeCostingUserEntityResourceDelegate<T extends RecipeCosti
     LOGGER.info("user = " + user.getUsername() + ", entities = " + entities);
 
     for (T entity : entities) {
-      
+
       entity.setUser(user);
-      
+
       Long id = entity.getId();
       if (id == null) {
         create(user, entity);
