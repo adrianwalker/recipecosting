@@ -65,6 +65,8 @@ function del(url, ids) {
 function replacer(key, value) {
 
   switch (key) {
+    case "cost":
+      return undefined;
     case "changed":
       return undefined;
     case "user":

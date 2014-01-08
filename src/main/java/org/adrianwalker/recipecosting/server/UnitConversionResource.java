@@ -1,6 +1,5 @@
 package org.adrianwalker.recipecosting.server;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,12 +31,12 @@ public final class UnitConversionResource extends AbstractResource {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Map<String, Object> readUnitConversions(
-    @QueryParam("page")
-    @DefaultValue("-1")
-    final int page,
-    @QueryParam("pageSize")
-    @DefaultValue("-1")
-    final int pageSize) throws Exception {
+          @QueryParam("page")
+          @DefaultValue("-1")
+          final int page,
+          @QueryParam("pageSize")
+          @DefaultValue("-1")
+          final int pageSize) throws Exception {
 
     LOGGER.info("page = " + page + " pageSize = " + pageSize);
 
@@ -47,30 +46,6 @@ public final class UnitConversionResource extends AbstractResource {
     } else {
       map.put("unitConversions", unitConversionsDelegate.read(getSessionUser(), page, pageSize, "unitFrom.name"));
       map.put("pageCount", unitConversionsDelegate.countPages(getSessionUser(), pageSize));
-    }
-
-    return map;
-  }
-
-  @GET
-  @Path("/lookup")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Map<String, Object> readUnitConversionsLookup() throws Exception {
-
-    Map<String, Object> map = new HashMap<String, Object>();
-
-    List<UnitConversion> unitConversions = unitConversionsDelegate.read(getSessionUser());
-
-    for (UnitConversion unitConversion : unitConversions) {
-      Long unitFromId = unitConversion.getUnitFrom().getId();
-      Long unitToId = unitConversion.getUnitTo().getId();
-      BigDecimal ratio = unitConversion.getRatio();
-
-      map.put(unitFromId + ":" + unitToId, ratio);
-
-      if (ratio.signum() != 0) {
-        map.put(unitToId + ":" + unitFromId, BigDecimal.ONE.divide(ratio));
-      }
     }
 
     return map;
