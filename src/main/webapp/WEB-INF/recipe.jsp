@@ -138,17 +138,26 @@
         $("#ingredient" + index).bind("change", function() {
           recipeIngredient.changed = true;
           recipeIngredient.ingredient.id = $(this).val();
+          calculateCost(recipeIngredient, unitConversionsLookup);
         });
 
         $("#amount" + index).bind("input", function() {
           recipeIngredient.changed = true;
           recipeIngredient.amount = $(this).val();
+          calculateCost(recipeIngredient, unitConversionsLookup);
         });
 
         $("#unit" + index).bind("change", function() {
           recipeIngredient.changed = true;
           recipeIngredient.unit.id = $(this).val();
+          calculateCost(recipeIngredient, unitConversionsLookup);
         });
+      }
+
+      function calculateCost(recipeIngredient, unitConversionsLookup) {
+        var unitFromId = recipeIngredient.ingredient.unit.id;
+        var unitToId = recipeIngredient.unit.id;
+        var ratio = unitConversionsLookup[unitFromId + ":" + unitToId];
       }
 
       function add(recipeIngredients, ingredients, units) {
