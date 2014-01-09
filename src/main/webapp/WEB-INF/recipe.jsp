@@ -139,21 +139,21 @@
           recipeIngredient.changed = true;
           recipeIngredient.ingredient.id = $(this).val();
           recipeIngredient.cost = calculateCost(recipeIngredient, ratioLookup, ingredientLookup);
-          $("#cost" + index).text(recipeIngredient.cost);
+          $("#cost" + index).text(recipeIngredient.cost.toFixed(2));
         });
 
         $("#amount" + index).bind("input", function() {
           recipeIngredient.changed = true;
           recipeIngredient.amount = $(this).val();
           recipeIngredient.cost = calculateCost(recipeIngredient, ratioLookup, ingredientLookup);
-          $("#cost" + index).text(recipeIngredient.cost);
+          $("#cost" + index).text(recipeIngredient.cost.toFixed(2));
         });
 
         $("#unit" + index).bind("change", function() {
           recipeIngredient.changed = true;
           recipeIngredient.unit.id = $(this).val();
           recipeIngredient.cost = calculateCost(recipeIngredient, ratioLookup, ingredientLookup);
-          $("#cost" + index).text(recipeIngredient.cost);
+          $("#cost" + index).text(recipeIngredient.cost.toFixed(2));
         });
       }
 
@@ -175,8 +175,14 @@
         }
 
         var cost = ratio * (amount * (ingredientCost / ingredientAmount));
+        cost = Math.ceil(cost * 100) / 100;
 
         return cost;
+      }
+
+      function calculateTotalCost(recipeIngredients) {
+
+        return 0;
       }
 
       function add(recipeIngredients, ingredients, units, ratioLookup, ingredientLookup) {
