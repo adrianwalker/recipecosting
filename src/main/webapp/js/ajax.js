@@ -66,9 +66,9 @@ function replacer(key, value) {
 
   switch (key) {
     case "cost":
-      return undefined;
+    case "totalCost":
+    case "servingCost":
     case "changed":
-      return undefined;
     case "user":
       return undefined;
     default:

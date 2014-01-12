@@ -161,6 +161,14 @@
         });
       }
 
+      function updateCosts(recipe, ratioLookup, ingredientLookup) {
+        $.each(recipe.recipeIngredients, function(index, recipeIngredient) {
+          updateCost(index, recipeIngredient, ratioLookup, ingredientLookup);
+        });
+        updateTotalCost(recipe);
+        updateServingCost(recipe);
+      }
+
       function updateCost(index, recipeIngredient, ratioLookup, ingredientLookup) {
         recipeIngredient.cost = calculateCost(recipeIngredient, ratioLookup, ingredientLookup);
         $("#cost" + index).text(recipeIngredient.cost.toFixed(2));
@@ -278,6 +286,7 @@
           setName(recipe);
           setServes(recipe);
           addRows(recipe, ingredients, units, ratioLookup, ingredientLookup);
+          updateCosts(recipe, ratioLookup, ingredientLookup);
         }).fail(function() {
           error();
         });
@@ -291,7 +300,7 @@
             setName(recipe);
             setServes(recipe);
             addRows(recipe, ingredients, units, ratioLookup, ingredientLookup);
-
+            updateCosts(recipe, ratioLookup, ingredientLookup);
           }).fail(function() {
             error();
           });
@@ -325,6 +334,7 @@
               setName(recipe);
               setServes(recipe);
               addRows(recipe, ingredients, units, ratioLookup, ingredientLookup);
+              updateCosts(recipe, ratioLookup, ingredientLookup);
             }).fail(function() {
               error();
             });

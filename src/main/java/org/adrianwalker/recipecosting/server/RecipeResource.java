@@ -107,18 +107,16 @@ public final class RecipeResource extends AbstractResource {
   @Path("/ingredient")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Map<String, Object> deleteRecipeIngredients(final Long recipeId, final List<Long> recipeIngredientIds) throws Exception {
-
-    Recipe recipe = recipesDelegate.read(getSessionUser(), recipeId);
+  public Map<String, Object> deleteRecipeIngredients(final List<Long> recipeIngredientIds) throws Exception {
 
     for (Long recipeIngredientId : recipeIngredientIds) {
 
       RecipeIngredient recipeIngredient = recipeIngredientsDelegate.read(getSessionUser(), recipeIngredientId);
+      Recipe recipe = recipeIngredient.getRecipe();
       recipe.getRecipeIngredients().remove(recipeIngredient);
       recipeIngredientsDelegate.delete(getSessionUser(), recipeIngredientId);
+      recipesDelegate.update(getSessionUser(), recipe);
     }
-
-    recipesDelegate.update(getSessionUser(), recipe);
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("message", "recipe ingredients deleted");
