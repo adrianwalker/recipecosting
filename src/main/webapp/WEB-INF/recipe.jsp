@@ -96,19 +96,20 @@
         $("#serves").bind("input", function() {
           recipe.changed = true;
           recipe.serves = $(this).val();
+          updateServingCost(recipe);
         });
       }
 
-      function addRows(recipeIngredients, ingredients, units, ratioLookup, ingredientLookup) {
+      function addRows(recipe, ingredients, units, ratioLookup, ingredientLookup) {
 
         $('#data tbody').remove();
 
-        $.each(recipeIngredients, function(index, recipeIngredient) {
-          addRow(index, recipeIngredient, ingredients, units, ratioLookup, ingredientLookup);
+        $.each(recipe.recipeIngredients, function(index, recipeIngredient) {
+          addRow(index, recipe, recipeIngredient, ingredients, units, ratioLookup, ingredientLookup);
         });
       }
 
-      function addRow(index, recipeIngredient, ingredients, units, ratioLookup, ingredientLookup) {
+      function addRow(index, recipe, recipeIngredient, ingredients, units, ratioLookup, ingredientLookup) {
 
         var ingredientSelect = $("<select id='ingredient" + index + "' />");
         $(ingredientSelect).append("<option>-- select --</option>");
@@ -138,23 +139,41 @@
         $("#ingredient" + index).bind("change", function() {
           recipeIngredient.changed = true;
           recipeIngredient.ingredient.id = $(this).val();
-          recipeIngredient.cost = calculateCost(recipeIngredient, ratioLookup, ingredientLookup);
-          $("#cost" + index).text(recipeIngredient.cost.toFixed(2));
+          updateCost(index, recipeIngredient, ratioLookup, ingredientLookup);
+          updateTotalCost(recipe);
+          updateServingCost(recipe);
         });
 
         $("#amount" + index).bind("input", function() {
           recipeIngredient.changed = true;
           recipeIngredient.amount = $(this).val();
-          recipeIngredient.cost = calculateCost(recipeIngredient, ratioLookup, ingredientLookup);
-          $("#cost" + index).text(recipeIngredient.cost.toFixed(2));
+          updateCost(index, recipeIngredient, ratioLookup, ingredientLookup);
+          updateTotalCost(recipe);
+          updateServingCost(recipe);
         });
 
         $("#unit" + index).bind("change", function() {
           recipeIngredient.changed = true;
           recipeIngredient.unit.id = $(this).val();
-          recipeIngredient.cost = calculateCost(recipeIngredient, ratioLookup, ingredientLookup);
-          $("#cost" + index).text(recipeIngredient.cost.toFixed(2));
+          updateCost(index, recipeIngredient, ratioLookup, ingredientLookup);
+          updateTotalCost(recipe);
+          updateServingCost(recipe);
         });
+      }
+
+      function updateCost(index, recipeIngredient, ratioLookup, ingredientLookup) {
+        recipeIngredient.cost = calculateCost(recipeIngredient, ratioLookup, ingredientLookup);
+        $("#cost" + index).text(recipeIngredient.cost.toFixed(2));
+      }
+
+      function updateTotalCost(recipe) {
+        recipe.totalCost = calculateTotalCost(recipe.recipeIngredients);
+        $("#total_cost").text(recipe.totalCost.toFixed(2));
+      }
+
+      function updateServingCost(recipe) {
+        recipe.servingCost = calculateServingCost(recipe.totalCost, recipe.serves);
+        $("#serving_cost").text(recipe.servingCost.toFixed(2));
       }
 
       function calculateCost(recipeIngredient, ratioLookup, ingredientLookup) {
@@ -182,18 +201,32 @@
 
       function calculateTotalCost(recipeIngredients) {
 
-        return 0;
+        var totalCost = 0;
+        $.each(recipeIngredients, function(index, recipeIngredient) {
+          totalCost += recipeIngredient.cost;
+        });
+
+        return totalCost;
       }
 
-      function add(recipeIngredients, ingredients, units, ratioLookup, ingredientLookup) {
+      function calculateServingCost(totalCost, servings) {
+
+        var servingCost = totalCost / servings;
+        servingCost = Math.ceil(servingCost * 100) / 100;
+
+        return servingCost;
+      }
+
+      function add(recipe, recipeIngredients, ingredients, units, ratioLookup, ingredientLookup) {
 
         var recipeIngredient = {
           id: null,
           ingredient: {id: null},
           amount: 0.0,
-          unit: {id: null}
+          unit: {id: null},
+          cost: 0
         };
-        addRow(recipeIngredients.length, recipeIngredient, ingredients, units, ratioLookup, ingredientLookup);
+        addRow(recipeIngredients.length, recipe, recipeIngredient, ingredients, units, ratioLookup, ingredientLookup);
         recipeIngredients.push(recipeIngredient);
       }
 
@@ -206,7 +239,9 @@
               id: null,
               name: "",
               serves: 1,
-              recipeIngredients: []
+              recipeIngredients: [],
+              totalCost: 0,
+              servingCost: 0
             }];
         } else {
           recipe = read("rest/recipe/" + params.id);
@@ -242,7 +277,7 @@
 
           setName(recipe);
           setServes(recipe);
-          addRows(recipe.recipeIngredients, ingredients, units, ratioLookup, ingredientLookup);
+          addRows(recipe, ingredients, units, ratioLookup, ingredientLookup);
         }).fail(function() {
           error();
         });
@@ -255,7 +290,7 @@
 
             setName(recipe);
             setServes(recipe);
-            addRows(recipe.recipeIngredients, ingredients, units);
+            addRows(recipe, ingredients, units, ratioLookup, ingredientLookup);
 
           }).fail(function() {
             error();
@@ -263,7 +298,7 @@
         });
 
         $("#add").click(function() {
-          add(recipe.recipeIngredients, ingredients, units, ratioLookup, ingredientLookup);
+          add(recipe, recipe.recipeIngredients, ingredients, units, ratioLookup, ingredientLookup);
         });
 
         $("#delete").click(function() {
@@ -289,7 +324,7 @@
 
               setName(recipe);
               setServes(recipe);
-              addRows(recipe.recipeIngredients, ingredients, units);
+              addRows(recipe, ingredients, units, ratioLookup, ingredientLookup);
             }).fail(function() {
               error();
             });
