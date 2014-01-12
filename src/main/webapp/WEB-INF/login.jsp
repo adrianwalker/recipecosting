@@ -26,7 +26,7 @@
             username: $("#username").val(),
             password: $("#password").val()
           }).done(function() {
-            window.location.replace("units.html");
+            window.location.replace("recipes.html");
           }).fail(function() {
             error("Invalid username/password");
           });

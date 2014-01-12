@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -47,19 +48,26 @@ public final class RecipeResource extends AbstractResource {
   @Produces(MediaType.APPLICATION_JSON)
   public Map<String, Object> readRecipes(
           @QueryParam("page")
+          @DefaultValue("-1")
           final int page,
           @QueryParam("pageSize")
+          @DefaultValue("-1")
           final int pageSize) throws Exception {
 
     LOGGER.info("page = " + page + " pageSize = " + pageSize);
 
-    List<Recipe> recipes = recipesDelegate.read(getSessionUser(), page, pageSize, "name");
+    List<Recipe> recipes;
+    if (page < 0 || pageSize < 0) {
+      recipes = recipesDelegate.read(getSessionUser(), "name");
+    } else {
+      recipes = recipesDelegate.read(getSessionUser(), page, pageSize, "name");
+    }
+
     for (Recipe recipe : recipes) {
       recipe.setRecipeIngredients(null);
     }
 
     Map<String, Object> map = new HashMap<String, Object>();
-
 
     if (page < 0 || pageSize < 0) {
       map.put("recipes", recipes);

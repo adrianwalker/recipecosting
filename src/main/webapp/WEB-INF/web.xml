@@ -44,7 +44,7 @@
     <url-pattern>/login.html</url-pattern>
   </servlet-mapping>
 
-  <!-- recipes -->
+  <!-- recipe -->
   
   <servlet>
     <servlet-name>recipe</servlet-name>
