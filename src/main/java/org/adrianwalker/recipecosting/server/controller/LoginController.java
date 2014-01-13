@@ -42,6 +42,25 @@ public final class LoginController {
     }
   }
 
+  public User find(final String uuid) {
+    EntityManager em = getEntityManager();
+
+    try {
+      CriteriaBuilder cb = em.getCriteriaBuilder();
+      CriteriaQuery cq = cb.createQuery();
+      Root entity = cq.from(User.class);
+      cq.select(entity);
+      cq.where(cb.equal(entity.get("uuid"), uuid));
+
+      Query query = em.createQuery(cq);
+      return (User) query.getSingleResult();
+    } catch (final NoResultException nre) {
+      return null;
+    } finally {
+      em.close();
+    }
+  }
+
   public long count(final String username) {
     EntityManager em = getEntityManager();
     try {

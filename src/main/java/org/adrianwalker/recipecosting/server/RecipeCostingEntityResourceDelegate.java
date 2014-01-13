@@ -2,7 +2,6 @@ package org.adrianwalker.recipecosting.server;
 
 import javax.persistence.EntityManagerFactory;
 import org.adrianwalker.recipecosting.common.entity.RecipeCostingEntity;
-import org.adrianwalker.recipecosting.common.entity.User;
 import org.adrianwalker.recipecosting.server.controller.RecipeCostingEntityController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -29,6 +29,10 @@ public class User implements RecipeCostingEntity {
   private String password;
   @Column(name = "EMAIL", length = 1000, nullable = false)
   private String email;
+  @Column(name = "ENABLED", nullable = false)
+  private Boolean enabled;
+  @Column(name = "EMAIL", length = 36, nullable = false)
+  private String uuid;
 
   public User() {
   }
@@ -65,6 +69,22 @@ public class User implements RecipeCostingEntity {
 
   public void setEmail(final String email) {
     this.email = email;
+  }
+
+  public Boolean getEnabled() {
+    return enabled;
+  }
+
+  public void setEnabled(Boolean enabled) {
+    this.enabled = enabled;
+  }
+
+  public String getUuid() {
+    return uuid;
+  }
+
+  public void setUuid(String uuid) {
+    this.uuid = uuid;
   }
 
   @Override

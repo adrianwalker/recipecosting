@@ -1,5 +1,6 @@
 package org.adrianwalker.recipecosting.server;
 
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.persistence.EntityManagerFactory;
@@ -16,12 +17,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Path("/user")
-public final class UserResource  extends AbstractResource {
+public final class UserResource extends AbstractResource {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(UserResource.class);
   private static final String SESSION_USER_ATTRIBUTE = "user";
   private static final Pattern EMAIL_REGEX = Pattern.compile(Patterns.EMAIL);
-  private static final int MIN_PASSWORD_LENGTH = 6;
+  private static final int UUID_LENGTH = 36;
   private static LoginController loginController;
   private static RecipeCostingEntityResourceDelegate<User> userDelegate;
 
@@ -36,8 +37,17 @@ public final class UserResource  extends AbstractResource {
   public Response register(
           @QueryParam("email")
           final String email,
-          @QueryParam("password")
-          final String password) throws Exception {
+          @QueryParam("password1")
+          final String password1,
+          @QueryParam("password2")
+          final String password2) throws Exception {
+
+    String password;
+    if (password1.equals(password2)) {
+      password = password1;
+    } else {
+      throw new Exception("Passwords do not match");
+    }
 
     LOGGER.info("email = " + email + "password = " + password);
 
@@ -49,8 +59,8 @@ public final class UserResource  extends AbstractResource {
       throw new Exception("Invalid password");
     }
 
-    if (password.length() < MIN_PASSWORD_LENGTH) {
-      throw new Exception("Passwords must be atleast " + MIN_PASSWORD_LENGTH + " characters");
+    if (password.length() < UUID_LENGTH) {
+      throw new Exception("Passwords must be atleast " + UUID_LENGTH + " characters");
     }
 
     Matcher matcher = EMAIL_REGEX.matcher(email);
@@ -75,15 +85,50 @@ public final class UserResource  extends AbstractResource {
     user.setEmail(email);
     user.setUsername(email);
     user.setPassword(password);
+    user.setEnabled(false);
+    user.setUuid(UUID.randomUUID().toString());
 
     try {
-      userDelegate.update(user);
+      user = userDelegate.update(user);
     } catch (Exception e) {
       String message = "Error registering new user";
       LOGGER.error(message, e);
       throw new Exception(message, e);
     }
 
+    return Response.ok().build();
+  }
+
+  @GET
+  @Path("enable")
+  public Response enable(
+          @QueryParam("uuid")
+          final String uuid) throws Exception {
+
+    LOGGER.info("uuid = " + uuid);
+
+    if (null == uuid || uuid.isEmpty()) {
+      throw new Exception("Invalid uuid");
+    }
+
+    if (uuid.length() < UUID_LENGTH) {
+      throw new Exception("Invalid uuid");
+    }
+
+    User user = loginController.find(uuid);
+
+    if (null != user) {
+      user.setEnabled(true);
+
+      try {
+        user = userDelegate.update(user);
+      } catch (Exception e) {
+        String message = "Error enabling user";
+        LOGGER.error(message, e);
+        throw new Exception(message, e);
+      }
+    }
+    
     return Response.ok().build();
   }
 
