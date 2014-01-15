@@ -36,7 +36,7 @@ public final class UserData {
     return unitConversionsDelegate.update(unitConversion);
   }
 
-  private void createDefaultDataForUser(final User user) throws Exception {
+  public void createDefaultDataForUser(final User user) throws Exception {
     // Units
 
     // weights

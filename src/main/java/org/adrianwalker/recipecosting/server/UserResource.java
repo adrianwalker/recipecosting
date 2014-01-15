@@ -10,9 +10,12 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
+import org.adrianwalker.recipecosting.common.entity.Unit;
+import org.adrianwalker.recipecosting.common.entity.UnitConversion;
 import org.adrianwalker.recipecosting.common.entity.User;
 import org.adrianwalker.recipecosting.server.controller.LoginController;
 import org.adrianwalker.recipecosting.server.util.Patterns;
+import org.adrianwalker.recipecosting.server.util.UserData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,22 +28,26 @@ public final class UserResource extends AbstractResource {
   private static final int UUID_LENGTH = 36;
   private static LoginController loginController;
   private static RecipeCostingEntityResourceDelegate<User> userDelegate;
+  private static RecipeCostingEntityResourceDelegate<Unit> unitsDelegate;
+  private static RecipeCostingEntityResourceDelegate<UnitConversion> userConversionsDelegate;
 
   static {
     EntityManagerFactory emf = PersistenceManager.INSTANCE.getEntityManagerFactory();
     loginController = new LoginController(emf);
     userDelegate = new RecipeCostingEntityResourceDelegate<User>(User.class, emf);
+    unitsDelegate = new RecipeCostingEntityResourceDelegate<Unit>(Unit.class, emf);
+    userConversionsDelegate = new RecipeCostingEntityResourceDelegate<UnitConversion>(UnitConversion.class, emf);
   }
 
   @POST
   @Path("register")
   public Response register(
-          @QueryParam("email")
-          final String email,
-          @QueryParam("password1")
-          final String password1,
-          @QueryParam("password2")
-          final String password2) throws Exception {
+    @QueryParam("email")
+    final String email,
+    @QueryParam("password1")
+    final String password1,
+    @QueryParam("password2")
+    final String password2) throws Exception {
 
     String password;
     if (password1.equals(password2)) {
@@ -102,8 +109,8 @@ public final class UserResource extends AbstractResource {
   @GET
   @Path("enable")
   public Response enable(
-          @QueryParam("uuid")
-          final String uuid) throws Exception {
+    @QueryParam("uuid")
+    final String uuid) throws Exception {
 
     LOGGER.info("uuid = " + uuid);
 
@@ -127,18 +134,21 @@ public final class UserResource extends AbstractResource {
         LOGGER.error(message, e);
         throw new Exception(message, e);
       }
+
+      UserData userData = new UserData(unitsDelegate, userConversionsDelegate);
+      userData.createDefaultDataForUser(user);
     }
-    
+
     return Response.ok().build();
   }
 
   @GET
   @Path("login")
   public Response login(
-          @QueryParam("username")
-          final String username,
-          @QueryParam("password")
-          final String password) throws Exception {
+    @QueryParam("username")
+    final String username,
+    @QueryParam("password")
+    final String password) throws Exception {
 
     LOGGER.info("username = " + username + ", password = " + password);
 
@@ -151,7 +161,7 @@ public final class UserResource extends AbstractResource {
       throw new Exception(message, e);
     }
 
-    if (null == user) {
+    if (null == user || !user.getEnabled()) {
       return Response.status(Response.Status.UNAUTHORIZED).build();
     }
 

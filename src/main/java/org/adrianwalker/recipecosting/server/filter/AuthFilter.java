@@ -17,6 +17,7 @@ public final class AuthFilter implements Filter {
   private static final String[] PUBLIC_URLS = {
     REDIRECT_URL,
     "/register.html",
+    "/enable.html",
     "/rest/user/login",
     "/rest/user/register",
     "/rest/user/enable"
