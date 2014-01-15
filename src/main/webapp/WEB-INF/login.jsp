@@ -9,7 +9,7 @@
   </head>
   <body>
     <div>
-      <div>        
+      <div>
         <input id="username" type="text"/>
       </div>
       <div>
@@ -22,7 +22,7 @@
     <script>
       $(function() {
         $("#signin").click(function() {
-          $.get("rest/user/login", {
+          $.post("rest/user/login", {
             username: $("#username").val(),
             password: $("#password").val()
           }).done(function() {

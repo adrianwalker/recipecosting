@@ -31,7 +31,7 @@ public class User implements RecipeCostingEntity {
   private String email;
   @Column(name = "ENABLED", nullable = false)
   private Boolean enabled;
-  @Column(name = "EMAIL", length = 36, nullable = false)
+  @Column(name = "UUID", length = 36, nullable = false)
   private String uuid;
 
   public User() {

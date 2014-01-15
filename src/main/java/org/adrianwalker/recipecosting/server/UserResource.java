@@ -5,6 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.persistence.EntityManagerFactory;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -13,6 +14,7 @@ import javax.ws.rs.core.Response;
 import org.adrianwalker.recipecosting.common.entity.Unit;
 import org.adrianwalker.recipecosting.common.entity.UnitConversion;
 import org.adrianwalker.recipecosting.common.entity.User;
+import org.adrianwalker.recipecosting.server.controller.EmailController;
 import org.adrianwalker.recipecosting.server.controller.LoginController;
 import org.adrianwalker.recipecosting.server.util.Patterns;
 import org.adrianwalker.recipecosting.server.util.UserData;
@@ -25,8 +27,10 @@ public final class UserResource extends AbstractResource {
   private static final Logger LOGGER = LoggerFactory.getLogger(UserResource.class);
   private static final String SESSION_USER_ATTRIBUTE = "user";
   private static final Pattern EMAIL_REGEX = Pattern.compile(Patterns.EMAIL);
+  private static final int PASSWORD_LENGTH = 6;
   private static final int UUID_LENGTH = 36;
   private static LoginController loginController;
+  private static EmailController emailController;
   private static RecipeCostingEntityResourceDelegate<User> userDelegate;
   private static RecipeCostingEntityResourceDelegate<Unit> unitsDelegate;
   private static RecipeCostingEntityResourceDelegate<UnitConversion> userConversionsDelegate;
@@ -34,6 +38,7 @@ public final class UserResource extends AbstractResource {
   static {
     EntityManagerFactory emf = PersistenceManager.INSTANCE.getEntityManagerFactory();
     loginController = new LoginController(emf);
+    emailController = new EmailController();
     userDelegate = new RecipeCostingEntityResourceDelegate<User>(User.class, emf);
     unitsDelegate = new RecipeCostingEntityResourceDelegate<Unit>(Unit.class, emf);
     userConversionsDelegate = new RecipeCostingEntityResourceDelegate<UnitConversion>(UnitConversion.class, emf);
@@ -42,11 +47,11 @@ public final class UserResource extends AbstractResource {
   @POST
   @Path("register")
   public Response register(
-    @QueryParam("email")
+    @FormParam("email")
     final String email,
-    @QueryParam("password1")
+    @FormParam("password1")
     final String password1,
-    @QueryParam("password2")
+    @FormParam("password2")
     final String password2) throws Exception {
 
     String password;
@@ -66,8 +71,8 @@ public final class UserResource extends AbstractResource {
       throw new Exception("Invalid password");
     }
 
-    if (password.length() < UUID_LENGTH) {
-      throw new Exception("Passwords must be atleast " + UUID_LENGTH + " characters");
+    if (password.length() < PASSWORD_LENGTH) {
+      throw new Exception("Passwords must be atleast " + PASSWORD_LENGTH + " characters");
     }
 
     Matcher matcher = EMAIL_REGEX.matcher(email);
@@ -97,6 +102,7 @@ public final class UserResource extends AbstractResource {
 
     try {
       user = userDelegate.update(user);
+      emailController.send(email, "user registered", "http://localhost:9090/recipecosting/enable?uuid=" + user.getUuid());
     } catch (Exception e) {
       String message = "Error registering new user";
       LOGGER.error(message, e);
@@ -142,12 +148,12 @@ public final class UserResource extends AbstractResource {
     return Response.ok().build();
   }
 
-  @GET
+  @POST
   @Path("login")
   public Response login(
-    @QueryParam("username")
+    @FormParam("username")
     final String username,
-    @QueryParam("password")
+    @FormParam("password")
     final String password) throws Exception {
 
     LOGGER.info("username = " + username + ", password = " + password);

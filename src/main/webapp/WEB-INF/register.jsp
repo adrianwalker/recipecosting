@@ -9,8 +9,8 @@
   </head>
   <body>
     <div>
-      <div>        
-        <input id="username" type="text"/>
+      <div>
+        <input id="email" type="text"/>
       </div>
       <div>
         <input id="password1" type="password"/>
@@ -25,8 +25,8 @@
     <script>
       $(function() {
         $("#register").click(function() {
-          $.get("rest/user/register", {
-            username: $("#username").val(),
+          $.post("rest/user/register", {
+            email: $("#email").val(),
             password1: $("#password1").val(),
             password2: $("#password2").val()
           }).done(function() {
