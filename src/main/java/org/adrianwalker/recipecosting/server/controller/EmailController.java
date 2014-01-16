@@ -1,6 +1,5 @@
 package org.adrianwalker.recipecosting.server.controller;
 
-import ch.qos.logback.core.net.LoginAuthenticator;
 import java.io.IOException;
 import java.util.Properties;
 import javax.mail.Authenticator;
@@ -20,19 +19,17 @@ public final class EmailController {
   }
 
   public void send(final String to, final String subject,
-    final String text) throws IOException, MessagingException {
+          final String text) throws IOException, MessagingException {
 
-    Properties properties = new Properties();
+    final Properties properties = new Properties();
     properties.load(EmailController.class.getResourceAsStream(EMAIL_PROPERTIES));
 
-    final String username = properties.getProperty("mail.smtp.user");
-    final String password = properties.getProperty("mail.smtp.pass");
-
     Session session = Session.getDefaultInstance(properties, new Authenticator() {
-
       @Override
       protected PasswordAuthentication getPasswordAuthentication() {
-        return new PasswordAuthentication(username, password);
+        return new PasswordAuthentication(
+                properties.getProperty("mail.smtp.user"), 
+                properties.getProperty("mail.smtp.password"));
       }
     });
 
@@ -41,7 +38,6 @@ public final class EmailController {
     message.setSubject(subject);
     message.setText(text);
 
-    // Send message
     Transport.send(message);
   }
 }

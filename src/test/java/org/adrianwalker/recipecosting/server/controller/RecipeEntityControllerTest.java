@@ -1,6 +1,7 @@
 package org.adrianwalker.recipecosting.server.controller;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 import javax.persistence.EntityManagerFactory;
 import org.adrianwalker.recipecosting.common.entity.Ingredient;
 import org.adrianwalker.recipecosting.common.entity.Recipe;
@@ -60,6 +61,8 @@ public final class RecipeEntityControllerTest {
     user.setEmail(username + "@" + username + ".com");
     user.setUsername(username);
     user.setPassword(username);
+    user.setEnabled(true);
+    user.setUuid(UUID.randomUUID().toString());
     userController.create(user);
 
     Unit unit = new Unit();
