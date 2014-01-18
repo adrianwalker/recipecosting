@@ -47,12 +47,12 @@ public final class UserResource extends AbstractResource {
   @POST
   @Path("register")
   public Response register(
-    @FormParam("email")
-    final String email,
-    @FormParam("password1")
-    final String password1,
-    @FormParam("password2")
-    final String password2) throws Exception {
+          @FormParam("email")
+          final String email,
+          @FormParam("password1")
+          final String password1,
+          @FormParam("password2")
+          final String password2) throws Exception {
 
     String password;
     if (password1.equals(password2)) {
@@ -82,7 +82,7 @@ public final class UserResource extends AbstractResource {
 
     long count;
     try {
-      count = loginController.count(email);
+      count = loginController.countByUsername(email);
     } catch (Exception e) {
       String message = "Error registering new user";
       LOGGER.error(message, e);
@@ -115,8 +115,8 @@ public final class UserResource extends AbstractResource {
   @GET
   @Path("enable")
   public Response enable(
-    @QueryParam("uuid")
-    final String uuid) throws Exception {
+          @QueryParam("uuid")
+          final String uuid) throws Exception {
 
     LOGGER.info("uuid = " + uuid);
 
@@ -128,10 +128,11 @@ public final class UserResource extends AbstractResource {
       throw new Exception("Invalid uuid");
     }
 
-    User user = loginController.find(uuid);
+    User user = loginController.findByUsername(uuid);
 
     if (null != user) {
       user.setEnabled(true);
+      user.setUuid(UUID.randomUUID().toString());
 
       try {
         user = userDelegate.update(user);
@@ -151,16 +152,16 @@ public final class UserResource extends AbstractResource {
   @POST
   @Path("login")
   public Response login(
-    @FormParam("username")
-    final String username,
-    @FormParam("password")
-    final String password) throws Exception {
+          @FormParam("username")
+          final String username,
+          @FormParam("password")
+          final String password) throws Exception {
 
     LOGGER.info("username = " + username + ", password = " + password);
 
     User user;
     try {
-      user = loginController.find(username, password);
+      user = loginController.findByUsernamePassword(username, password);
     } catch (Exception e) {
       String message = "Unable to read login";
       LOGGER.error(message, e);
@@ -183,6 +184,129 @@ public final class UserResource extends AbstractResource {
 
     HttpSession session = getSession();
     session.invalidate();
+
+    return Response.ok().build();
+  }
+
+  @POST
+  @Path("changepassword")
+  public Response changePassword(
+          @FormParam("currentpassword")
+          final String currentPassword,
+          @FormParam("newpassword1")
+          final String newPassword1,
+          @FormParam("newpassword2")
+          final String newPassword2) throws Exception {
+
+    String password;
+    if (newPassword1.equals(newPassword2)) {
+      password = newPassword1;
+    } else {
+      throw new Exception("Passwords do not match");
+    }
+
+    if (null == password || password.isEmpty()) {
+      throw new Exception("Invalid password");
+    }
+
+    if (password.length() < PASSWORD_LENGTH) {
+      throw new Exception("Passwords must be atleast " + PASSWORD_LENGTH + " characters");
+    }
+
+    User user = getSessionUser();
+    user.setPassword(password);
+
+    try {
+      user = userDelegate.update(user);
+    } catch (Exception e) {
+      String message = "Error changing password";
+      LOGGER.error(message, e);
+      throw new Exception(message, e);
+    }
+
+    return Response.ok().build();
+  }
+
+  @POST
+  @Path("forgotpassword")
+  public Response forgotPassword(
+          @FormParam("username")
+          final String username) throws Exception {
+
+    LOGGER.info("username = " + username);
+
+    User user;
+    try {
+      user = loginController.findByUsername(username);
+    } catch (Exception e) {
+      String message = "Unable to read login";
+      LOGGER.error(message, e);
+      throw new Exception(message, e);
+    }
+
+    if (null == user || !user.getEnabled()) {
+      return Response.status(Response.Status.UNAUTHORIZED).build();
+    }
+
+    try {
+      emailController.send(user.getEmail(), "forgot password", "http://localhost:9090/recipecosting/changepassword.html?uuid=" + user.getUuid());
+    } catch (Exception e) {
+      String message = "Error sending forgot password email";
+      LOGGER.error(message, e);
+      throw new Exception(message, e);
+    }
+
+    return Response.ok().build();
+  }
+
+  @POST
+  @Path("changeforgotpassword")
+  public Response changeForgotPassword(
+          @FormParam("uuid")
+          final String uuid,
+          @FormParam("newpassword1")
+          final String newPassword1,
+          @FormParam("newpassword2")
+          final String newPassword2) throws Exception {
+
+    String password;
+    if (newPassword1.equals(newPassword2)) {
+      password = newPassword1;
+    } else {
+      throw new Exception("Passwords do not match");
+    }
+
+    if (null == password || password.isEmpty()) {
+      throw new Exception("Invalid password");
+    }
+
+    if (password.length() < PASSWORD_LENGTH) {
+      throw new Exception("Passwords must be atleast " + PASSWORD_LENGTH + " characters");
+    }
+
+    User user;
+    try {
+      user = loginController.findByUuid(uuid);
+    } catch (Exception e) {
+      String message = "Unable to read login";
+      LOGGER.error(message, e);
+      throw new Exception(message, e);
+    }
+
+    if (null == user || !user.getEnabled()) {
+      return Response.status(Response.Status.UNAUTHORIZED).build();
+    }
+
+    user.setPassword(password);
+    user.setUuid(UUID.randomUUID().toString());
+
+    try {
+      user = userDelegate.update(user);
+    } catch (Exception e) {
+      String message = "Error changing password";
+      LOGGER.error(message, e);
+      throw new Exception(message, e);
+    }
 
     return Response.ok().build();
   }

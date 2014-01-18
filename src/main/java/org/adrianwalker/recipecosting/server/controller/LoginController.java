@@ -21,7 +21,26 @@ public final class LoginController {
     return emf.createEntityManager();
   }
 
-  public User find(final String username, final String password) {
+  public User findByUsername(final String username) {
+    EntityManager em = getEntityManager();
+
+    try {
+      CriteriaBuilder cb = em.getCriteriaBuilder();
+      CriteriaQuery cq = cb.createQuery();
+      Root entity = cq.from(User.class);
+      cq.select(entity);
+      cq.where(cb.equal(entity.get("username"), username));
+
+      Query query = em.createQuery(cq);
+      return (User) query.getSingleResult();
+    } catch (final NoResultException nre) {
+      return null;
+    } finally {
+      em.close();
+    }
+  }
+
+  public User findByUsernamePassword(final String username, final String password) {
     EntityManager em = getEntityManager();
 
     try {
@@ -42,7 +61,7 @@ public final class LoginController {
     }
   }
 
-  public User find(final String uuid) {
+  public User findByUuid(final String uuid) {
     EntityManager em = getEntityManager();
 
     try {
@@ -61,7 +80,7 @@ public final class LoginController {
     }
   }
 
-  public long count(final String username) {
+  public long countByUsername(final String username) {
     EntityManager em = getEntityManager();
     try {
       CriteriaBuilder cb = em.getCriteriaBuilder();

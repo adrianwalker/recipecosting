@@ -27,11 +27,11 @@ public class User implements RecipeCostingEntity {
   private String username;
   @Column(name = "PASSWORD", length = 1000, nullable = false)
   private String password;
-  @Column(name = "EMAIL", length = 1000, nullable = false)
+  @Column(name = "EMAIL", length = 1000, nullable = false, unique = true)
   private String email;
   @Column(name = "ENABLED", nullable = false)
   private Boolean enabled;
-  @Column(name = "UUID", length = 36, nullable = false)
+  @Column(name = "UUID", length = 36, nullable = false, unique = true)
   private String uuid;
 
   public User() {
