@@ -75,7 +75,7 @@ public final class RecipeResource extends AbstractResource {
       map.put("recipes", recipes);
       map.put("pageCount", recipesDelegate.countPages(getSessionUser(), pageSize));
     }
-
+    
     return map;
   }
 

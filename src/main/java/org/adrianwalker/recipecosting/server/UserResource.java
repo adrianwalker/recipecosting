@@ -102,7 +102,7 @@ public final class UserResource extends AbstractResource {
 
     try {
       user = userDelegate.update(user);
-      emailController.send(email, "user registered", "http://localhost:9090/recipecosting/enable?uuid=" + user.getUuid());
+      emailController.send(email, "user registered", "http://localhost:9090/recipecosting/enable.html?uuid=" + user.getUuid());
     } catch (Exception e) {
       String message = "Error registering new user";
       LOGGER.error(message, e);

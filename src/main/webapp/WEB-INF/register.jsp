@@ -30,7 +30,7 @@
             password1: $("#password1").val(),
             password2: $("#password2").val()
           }).done(function() {
-            window.location.replace("recipes.html");
+            window.location.replace("login.html");
           }).fail(function() {
             error();
           });
