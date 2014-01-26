@@ -16,8 +16,8 @@
       $(function() {
 
         var params = getUrlParams();
-        if (params.uuid !== undefined) {
-          $.get("rest/user/enable", {
+        if (params.email !== undefined) {
+          $.get("rest/user/forgotpassword", {
             uuid: params.uuid
           }).done(function() {
           }).fail(function() {

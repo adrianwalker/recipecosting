@@ -128,7 +128,7 @@ public final class UserResource extends AbstractResource {
       throw new Exception("Invalid uuid");
     }
 
-    User user = loginController.findByUsername(uuid);
+    User user = loginController.findByUuid(uuid);
 
     if (null != user) {
       user.setEnabled(true);
