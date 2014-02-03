@@ -55,6 +55,28 @@
     <url-pattern>/enable.html</url-pattern>
   </servlet-mapping>
 
+  <!-- forgotpassword -->
+
+  <servlet>
+    <servlet-name>forgotpassword</servlet-name>
+    <jsp-file>/WEB-INF/forgotpassword.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>forgotpassword</servlet-name>
+    <url-pattern>/forgotpassword.html</url-pattern>
+  </servlet-mapping>
+  
+  <!-- resetpassword -->
+
+  <servlet>
+    <servlet-name>resetpassword</servlet-name>
+    <jsp-file>/WEB-INF/resetpassword</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>resetpassword</servlet-name>
+    <url-pattern>/resetpassword.html</url-pattern>
+  </servlet-mapping>  
+
   <!-- login -->
 
   <servlet>

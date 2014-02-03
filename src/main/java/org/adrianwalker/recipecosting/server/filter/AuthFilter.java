@@ -18,9 +18,13 @@ public final class AuthFilter implements Filter {
     REDIRECT_URL,
     "/register.html",
     "/enable.html",
+    "/forgotpassword.html",
+    "/changeforgotpassword.html",
     "/rest/user/login",
     "/rest/user/register",
-    "/rest/user/enable"
+    "/rest/user/enable",
+    "/rest/user/forgotpassword",
+    "/rest/user/changeforgotpassword"
   };
 
   @Override

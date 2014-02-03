@@ -249,9 +249,9 @@ public final class UserResource extends AbstractResource {
     }
 
     try {
-      emailController.send(user.getEmail(), "forgot password", "http://localhost:9090/recipecosting/changepassword.html?uuid=" + user.getUuid());
+      emailController.send(user.getEmail(), "password reset", "http://localhost:9090/recipecosting/resetpassword.html?uuid=" + user.getUuid());
     } catch (Exception e) {
-      String message = "Error sending forgot password email";
+      String message = "Error sending password reset email";
       LOGGER.error(message, e);
       throw new Exception(message, e);
     }
@@ -260,8 +260,8 @@ public final class UserResource extends AbstractResource {
   }
 
   @POST
-  @Path("changeforgotpassword")
-  public Response changeForgotPassword(
+  @Path("resetpassword")
+  public Response resetPassword(
           @FormParam("uuid")
           final String uuid,
           @FormParam("newpassword1")

@@ -18,10 +18,11 @@
         var params = getUrlParams();
         if (params.email !== undefined) {
           $.get("rest/user/forgotpassword", {
-            uuid: params.uuid
+            email: params.email
           }).done(function() {
+            // check email message
           }).fail(function() {
-            error("Invalid uuid");
+            error("Invalid email");
           });
         }
       });
