@@ -61,7 +61,7 @@ public final class UserResource extends AbstractResource {
       throw new Exception("Passwords do not match");
     }
 
-    LOGGER.info("email = " + email + "password = " + password);
+    LOGGER.info("email = " + email + " password = " + password);
 
     if (null == email || email.isEmpty()) {
       throw new Exception("Invalid email address");
@@ -112,7 +112,7 @@ public final class UserResource extends AbstractResource {
     return Response.ok().build();
   }
 
-  @GET
+  @POST
   @Path("enable")
   public Response enable(
           @QueryParam("uuid")
@@ -191,16 +191,14 @@ public final class UserResource extends AbstractResource {
   @POST
   @Path("changepassword")
   public Response changePassword(
-          @FormParam("currentpassword")
-          final String currentPassword,
-          @FormParam("newpassword1")
-          final String newPassword1,
-          @FormParam("newpassword2")
-          final String newPassword2) throws Exception {
+          @FormParam("password1")
+          final String password1,
+          @FormParam("password2")
+          final String password2) throws Exception {
 
     String password;
-    if (newPassword1.equals(newPassword2)) {
-      password = newPassword1;
+    if (password1.equals(password2)) {
+      password = password1;
     } else {
       throw new Exception("Passwords do not match");
     }
@@ -264,14 +262,14 @@ public final class UserResource extends AbstractResource {
   public Response resetPassword(
           @FormParam("uuid")
           final String uuid,
-          @FormParam("newpassword1")
-          final String newPassword1,
-          @FormParam("newpassword2")
-          final String newPassword2) throws Exception {
+          @FormParam("password1")
+          final String password1,
+          @FormParam("password2")
+          final String password2) throws Exception {
 
     String password;
-    if (newPassword1.equals(newPassword2)) {
-      password = newPassword1;
+    if (password1.equals(password2)) {
+      password = password1;
     } else {
       throw new Exception("Passwords do not match");
     }

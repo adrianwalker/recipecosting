@@ -6,48 +6,37 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script src="js/logging.js"></script>
     <script src="js/error.js"></script>
+    <script src="js/url.js"></script>
   </head>
   <body>
     <div>
       <div>
+        <label for="password1">Password:</label>
         <input id="password1" type="password"/>
       </div>
       <div>
+        <label for="password2">Password Again:</label>
         <input id="password2" type="password"/>
       </div>
       <div>
-        <input id="reset" type="button" value="Reset"/>
+        <input id="resetpassword" type="button" value="Reset Password"/>
       </div>
     </div>
     <script>
-      $(function() {
-
+      $("#resetpassword").click(function() {
 
         var params = getUrlParams();
-        if (params.email !== undefined) {
-          $.get("rest/user/forgotpassword", {
-            email: params.email
+        if (params.uuid !== undefined) {
+          $.post("rest/user/resetpassword", {
+            uuid: params.uuid,
+            password1: $("#password1").val(),
+            password2: $("#password2").val()
           }).done(function() {
-            // check email message
+            window.location.replace("login.html");
           }).fail(function() {
-            error("Invalid email");
+            error();
           });
         }
-
-
-        $("#register").click(function() {
-          if (params.uuid !== undefined) {
-            $.post("rest/user/resetpassword", {
-              uuid: uuid,
-              password1: $("#password1").val(),
-              password2: $("#password2").val()
-            }).done(function() {
-              window.location.replace("login.html");
-            }).fail(function() {
-              error();
-            });
-          }
-        });
       });
     </script>
   </body>

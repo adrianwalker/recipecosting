@@ -11,6 +11,7 @@
   </head>
   <body>
     <div>
+      <%@ include file="menu.jspf" %> 
       <div>
         <table>
           <tr>

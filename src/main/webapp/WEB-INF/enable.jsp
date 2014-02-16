@@ -8,7 +8,7 @@
     <script src="js/url.js"></script>
     <script src="js/error.js"></script>
   </head>
-  <body>
+  <body>    
     <div>
     </div>
     <script>
@@ -17,7 +17,7 @@
 
         var params = getUrlParams();
         if (params.uuid !== undefined) {
-          $.get("rest/user/enable", {
+          $.post("rest/user/enable", {
             uuid: params.uuid
           }).done(function() {
           }).fail(function() {

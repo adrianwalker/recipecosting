@@ -9,27 +9,29 @@
   </head>
   <body>
     <div>
+      <%@ include file="menu.jspf" %> 
       <div>
-        <input id="username" type="text"/>
+        <label for="password1">Password:</label>
+        <input id="password1" type="password"/>
       </div>
       <div>
-        <input id="password" type="password"/>
+        <label for="password2">Password Again:</label>
+        <input id="password2" type="password"/>
       </div>
       <div>
-        <input id ="signin" type="button" value="Sign In"/>
+        <input id="changepassword" type="button" value="Change Password"/>
       </div>
     </div>
     <script>
-      $(function() {
-        $("#signin").click(function() {
-          $.post("rest/user/login", {
-            username: $("#username").val(),
-            password: $("#password").val()
-          }).done(function() {
-            window.location.replace("recipes.html");
-          }).fail(function() {
-            error("Invalid username/password");
-          });
+      $("#changepassword").click(function() {
+
+        $.post("rest/user/changepassword", {
+          password1: $("#password1").val(),
+          password2: $("#password2").val()
+        }).done(function() {
+          alert("Password changed");
+        }).fail(function() {
+          error();
         });
       });
     </script>

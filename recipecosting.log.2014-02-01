@@ -1,0 +1,44 @@
+12:35:37.827 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - <init> > clazz = class org.adrianwalker.recipecosting.common.entity.Unit
+12:35:38.347 [main] INFO  o.a.r.s.c.RecipeCostingUserEntityController - <init> > clazz = class org.adrianwalker.recipecosting.common.entity.Unit
+12:35:38.504 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - <init> > clazz = class org.adrianwalker.recipecosting.common.entity.UnitConversion
+12:35:38.504 [main] INFO  o.a.r.s.c.RecipeCostingUserEntityController - <init> > clazz = class org.adrianwalker.recipecosting.common.entity.UnitConversion
+12:35:38.547 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - <init> > clazz = class org.adrianwalker.recipecosting.common.entity.Ingredient
+12:35:38.548 [main] INFO  o.a.r.s.c.RecipeCostingUserEntityController - <init> > clazz = class org.adrianwalker.recipecosting.common.entity.Ingredient
+12:35:38.655 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - <init> > clazz = class org.adrianwalker.recipecosting.common.entity.Recipe
+12:35:38.656 [main] INFO  o.a.r.s.c.RecipeCostingUserEntityController - <init> > clazz = class org.adrianwalker.recipecosting.common.entity.Recipe
+12:36:05.230 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - update > user = user, entity = Unit{id=null, name=unit, user=User{id=38, username=user, password=user, email=user@user.com}}
+12:36:05.377 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - create > user = user, entity = Unit{id=null, name=unit, user=User{id=38, username=user, password=user, email=user@user.com}}
+12:36:05.378 [main] INFO  o.a.r.s.c.RecipeCostingUserEntityController - create > entity = Unit{id=null, name=unit, user=User{id=38, username=user, password=user, email=user@user.com}}
+12:36:05.435 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - read > user = user, id = 35
+12:36:05.436 [main] INFO  o.a.r.s.c.RecipeCostingUserEntityController - find > user = user, id = 35
+12:36:05.603 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - count > user = user
+12:36:05.604 [main] INFO  o.a.r.s.c.RecipeCostingUserEntityController - count > user = user
+12:36:05.668 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - update > user = user, entity = Ingredient{id=null, amount=1, cost=1, name=ingredient, user=User{id=38, username=user, password=user, email=user@user.com}, unit=Unit{id=35, name=unit, user=User{id=38, username=user, password=user, email=user@user.com}}}
+12:36:05.694 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - create > user = user, entity = Ingredient{id=null, amount=1, cost=1, name=ingredient, user=User{id=38, username=user, password=user, email=user@user.com}, unit=Unit{id=35, name=unit, user=User{id=38, username=user, password=user, email=user@user.com}}}
+12:36:05.695 [main] INFO  o.a.r.s.c.RecipeCostingUserEntityController - create > entity = Ingredient{id=null, amount=1, cost=1, name=ingredient, user=User{id=38, username=user, password=user, email=user@user.com}, unit=Unit{id=35, name=unit, user=User{id=38, username=user, password=user, email=user@user.com}}}
+12:36:05.727 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - read > user = user, id = 23
+12:36:05.728 [main] INFO  o.a.r.s.c.RecipeCostingUserEntityController - find > user = user, id = 23
+12:36:05.732 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - count > user = user
+12:36:05.735 [main] INFO  o.a.r.s.c.RecipeCostingUserEntityController - count > user = user
+12:36:05.741 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - update > user = user, entity = Recipe{id=null, name=recipe, serves=1, recipeIngredients=[RecipeIngredient{id=null, amount=1, unit=unit, ingredient=ingredient}], user=User{id=38, username=user, password=user, email=user@user.com}}
+12:36:05.741 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - create > user = user, entity = Recipe{id=null, name=recipe, serves=1, recipeIngredients=[RecipeIngredient{id=null, amount=1, unit=unit, ingredient=ingredient}], user=User{id=38, username=user, password=user, email=user@user.com}}
+12:36:05.742 [main] INFO  o.a.r.s.c.RecipeCostingUserEntityController - create > entity = Recipe{id=null, name=recipe, serves=1, recipeIngredients=[RecipeIngredient{id=null, amount=1, unit=unit, ingredient=ingredient}], user=User{id=38, username=user, password=user, email=user@user.com}}
+12:36:05.877 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - read > user = user, id = 23
+12:36:05.878 [main] INFO  o.a.r.s.c.RecipeCostingUserEntityController - find > user = user, id = 23
+12:36:05.883 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - count > user = user
+12:36:05.883 [main] INFO  o.a.r.s.c.RecipeCostingUserEntityController - count > user = user
+12:36:05.886 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - delete > user = user, id = 23
+12:36:05.887 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - read > user = user, id = 23
+12:36:05.888 [main] INFO  o.a.r.s.c.RecipeCostingUserEntityController - find > user = user, id = 23
+12:36:05.893 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - destroy > id = 23
+12:36:05.893 [main] INFO  o.a.r.s.c.RecipeCostingUserEntityController - destroy > id = 23
+12:36:05.936 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - delete > user = user, id = 23
+12:36:05.937 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - read > user = user, id = 23
+12:36:05.938 [main] INFO  o.a.r.s.c.RecipeCostingUserEntityController - find > user = user, id = 23
+12:36:05.944 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - destroy > id = 23
+12:36:05.944 [main] INFO  o.a.r.s.c.RecipeCostingUserEntityController - destroy > id = 23
+12:36:05.951 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - delete > user = user, id = 35
+12:36:05.952 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - read > user = user, id = 35
+12:36:05.953 [main] INFO  o.a.r.s.c.RecipeCostingUserEntityController - find > user = user, id = 35
+12:36:05.958 [main] INFO  o.a.r.s.RecipeCostingUserEntityResourceDelegate - destroy > id = 35
+12:36:05.959 [main] INFO  o.a.r.s.c.RecipeCostingUserEntityController - destroy > id = 35

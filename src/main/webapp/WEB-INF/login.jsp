@@ -9,27 +9,79 @@
   </head>
   <body>
     <div>
+      <h2>Login</h2>
       <div>
+        <label for="username">Username:</label>
         <input id="username" type="text"/>
       </div>
       <div>
+        <label for="password">Password:</label>
         <input id="password" type="password"/>
       </div>
       <div>
-        <input id ="signin" type="button" value="Sign In"/>
+        <input id ="login" type="button" value="Log in"/>
+        <a id="forgotpassword" href="#">Forgotten your password?</a>
+      </div>
+    </div>
+    <div>
+      <h2>Register</h2>
+      <div>
+        <label for="email">Email:</label>
+        <input id="email" type="text"/>
+      </div>
+      <div>
+        <label for="password1">Password:</label>
+        <input id="password1" type="password"/>
+      </div>
+      <div>
+        <label for="password2">Password Again:</label>
+        <input id="password2" type="password"/>
+      </div>
+      <div>
+        <input id ="register" type="button" value="Register"/>
       </div>
     </div>
     <script>
       $(function() {
-        $("#signin").click(function() {
+        $("#login").click(function() {
           $.post("rest/user/login", {
             username: $("#username").val(),
             password: $("#password").val()
           }).done(function() {
             window.location.replace("recipes.html");
           }).fail(function() {
-            error("Invalid username/password");
+            error("Invalid email/password");
           });
+        });
+
+        $("#register").click(function() {
+          $.post("rest/user/register", {
+            email: $("#email").val(),
+            password1: $("#password1").val(),
+            password2: $("#password2").val()
+          }).done(function() {
+            alert("Check your email to enable your account");
+          }).fail(function() {
+            error();
+          });
+        });
+
+        $("#forgotpassword").click(function() {
+          var username = $("#username").val();
+
+          if (username) {
+            $.post("rest/user/forgotpassword", {
+              username: username
+            }).done(function() {
+              alert("Check your email to login to your account");
+            }).fail(function() {
+              error("Invalid username");
+            });
+          } else {
+            alert("Enter your username");
+          }
+
+          return false;
         });
       });
     </script>

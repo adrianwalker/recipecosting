@@ -10,7 +10,9 @@
 
   <filter-mapping>
     <filter-name>AuthFilter</filter-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/</url-pattern>
+    <url-pattern>*.html</url-pattern>
+    <url-pattern>rest/*</url-pattern>
   </filter-mapping>
 
   <!-- jersey -->
@@ -54,28 +56,28 @@
     <servlet-name>enable</servlet-name>
     <url-pattern>/enable.html</url-pattern>
   </servlet-mapping>
-
-  <!-- forgotpassword -->
-
-  <servlet>
-    <servlet-name>forgotpassword</servlet-name>
-    <jsp-file>/WEB-INF/forgotpassword.jsp</jsp-file>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>forgotpassword</servlet-name>
-    <url-pattern>/forgotpassword.html</url-pattern>
-  </servlet-mapping>
   
   <!-- resetpassword -->
 
   <servlet>
     <servlet-name>resetpassword</servlet-name>
-    <jsp-file>/WEB-INF/resetpassword</jsp-file>
+    <jsp-file>/WEB-INF/resetpassword.jsp</jsp-file>
   </servlet>
   <servlet-mapping>
     <servlet-name>resetpassword</servlet-name>
     <url-pattern>/resetpassword.html</url-pattern>
   </servlet-mapping>  
+
+  <!-- changepassword -->
+
+  <servlet>
+    <servlet-name>changepassword</servlet-name>
+    <jsp-file>/WEB-INF/changepassword.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>changepassword</servlet-name>
+    <url-pattern>/changepassword.html</url-pattern>
+  </servlet-mapping>
 
   <!-- login -->
 
@@ -125,7 +127,7 @@
 
   <servlet>
     <servlet-name>unitconversions</servlet-name>
-    <jsp-file>/WEB-INF/unitConversions.jsp</jsp-file>
+    <jsp-file>/WEB-INF/unitconversions.jsp</jsp-file>
   </servlet>
   <servlet-mapping>
     <servlet-name>unitconversions</servlet-name>
@@ -141,6 +143,17 @@
   <servlet-mapping>
     <servlet-name>units</servlet-name>
     <url-pattern>/units.html</url-pattern>
+  </servlet-mapping>
+
+  <!-- login -->
+
+  <servlet>
+    <servlet-name>logout</servlet-name>
+    <jsp-file>/WEB-INF/logout.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>logout</servlet-name>
+    <url-pattern>/logout.html</url-pattern>
   </servlet-mapping>
 
   <!-- session -->
