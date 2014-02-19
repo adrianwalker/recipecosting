@@ -1,6 +1,5 @@
 package org.adrianwalker.recipecosting.server;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManagerFactory;
@@ -40,15 +39,15 @@ public final class UnitResource extends AbstractResource {
 
     LOGGER.info("page = " + page + " pageSize = " + pageSize);
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> response = response();
     if (page < 0 || pageSize < 0) {
-      map.put("units", unitsDelegate.read(getSessionUser(), "name"));
+      response.put("units", unitsDelegate.read(getSessionUser(), "name"));
     } else {
-      map.put("units", unitsDelegate.read(getSessionUser(), page, pageSize, "name"));
-      map.put("pageCount", unitsDelegate.countPages(getSessionUser(), pageSize));
+      response.put("units", unitsDelegate.read(getSessionUser(), page, pageSize, "name"));
+      response.put("pageCount", unitsDelegate.countPages(getSessionUser(), pageSize));
     }
 
-    return map;
+    return response;
   }
 
   @POST
@@ -58,10 +57,7 @@ public final class UnitResource extends AbstractResource {
 
     unitsDelegate.update(getSessionUser(), units);
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("message", "units saved");
-
-    return map;
+    return response("units saved");
   }
 
   @DELETE
@@ -71,9 +67,6 @@ public final class UnitResource extends AbstractResource {
 
     unitsDelegate.delete(getSessionUser(), ids);
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("message", "units deleted");
-
-    return map;
+    return response("units deleted");
   }
 }

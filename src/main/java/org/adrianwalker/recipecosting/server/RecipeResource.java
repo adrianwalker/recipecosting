@@ -1,6 +1,5 @@
 package org.adrianwalker.recipecosting.server;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManagerFactory;
@@ -67,16 +66,16 @@ public final class RecipeResource extends AbstractResource {
       recipe.setRecipeIngredients(null);
     }
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> response = response();
 
     if (page < 0 || pageSize < 0) {
-      map.put("recipes", recipes);
+      response.put("recipes", recipes);
     } else {
-      map.put("recipes", recipes);
-      map.put("pageCount", recipesDelegate.countPages(getSessionUser(), pageSize));
+      response.put("recipes", recipes);
+      response.put("pageCount", recipesDelegate.countPages(getSessionUser(), pageSize));
     }
     
-    return map;
+    return response;
   }
 
   @POST
@@ -84,7 +83,7 @@ public final class RecipeResource extends AbstractResource {
   @Produces(MediaType.APPLICATION_JSON)
   public Map<String, Object> updateRecipe(final Recipe recipe) throws Exception {
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> response = response();
 
     List<RecipeIngredient> recipeIngredients = recipe.getRecipeIngredients();
     for (RecipeIngredient recipeIngredient : recipeIngredients) {
@@ -92,10 +91,10 @@ public final class RecipeResource extends AbstractResource {
       recipeIngredient.setUser(getSessionUser());
     }
 
-    map.put("recipe", recipesDelegate.update(getSessionUser(), recipe));
-    map.put("message", "recipe saved");
+    response.put("recipe", recipesDelegate.update(getSessionUser(), recipe));
+    response.put("message", "recipe saved");
 
-    return map;
+    return response;
   }
 
   @DELETE
@@ -105,10 +104,7 @@ public final class RecipeResource extends AbstractResource {
 
     recipesDelegate.delete(getSessionUser(), ids);
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("message", "recipes deleted");
-
-    return map;
+    return response("recipes deleted");
   }
 
   @DELETE
@@ -126,9 +122,6 @@ public final class RecipeResource extends AbstractResource {
       recipesDelegate.update(getSessionUser(), recipe);
     }
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("message", "recipe ingredients deleted");
-
-    return map;
+    return response("recipe ingredients deleted");
   }
 }

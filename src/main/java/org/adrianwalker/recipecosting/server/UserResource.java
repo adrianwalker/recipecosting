@@ -1,5 +1,6 @@
 package org.adrianwalker.recipecosting.server;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,8 +10,8 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import org.adrianwalker.recipecosting.common.entity.Unit;
 import org.adrianwalker.recipecosting.common.entity.UnitConversion;
 import org.adrianwalker.recipecosting.common.entity.User;
@@ -46,7 +47,8 @@ public final class UserResource extends AbstractResource {
 
   @POST
   @Path("register")
-  public Response register(
+  @Produces(MediaType.APPLICATION_JSON)
+  public Map<String, Object> register(
           @FormParam("email")
           final String email,
           @FormParam("password1")
@@ -54,30 +56,34 @@ public final class UserResource extends AbstractResource {
           @FormParam("password2")
           final String password2) throws Exception {
 
+    LOGGER.info("email = " + email + " password1 = " + password1 + " password2 = " + password2);
+
+
+    if (null == email || email.isEmpty()) {
+      return response("Invalid email address");
+    }
+
+    if (null == password1 || password1.isEmpty()
+            || null == password2 || password2.isEmpty()) {
+
+      return response("Invalid passwords");
+    }
+
     String password;
     if (password1.equals(password2)) {
       password = password1;
     } else {
-      throw new Exception("Passwords do not match");
+      return response("Passwords do not match");
     }
 
-    LOGGER.info("email = " + email + " password = " + password);
-
-    if (null == email || email.isEmpty()) {
-      throw new Exception("Invalid email address");
-    }
-
-    if (null == password || password.isEmpty()) {
-      throw new Exception("Invalid password");
-    }
 
     if (password.length() < PASSWORD_LENGTH) {
-      throw new Exception("Passwords must be atleast " + PASSWORD_LENGTH + " characters");
+      return response("Passwords must be at least " + PASSWORD_LENGTH + " characters");
     }
 
     Matcher matcher = EMAIL_REGEX.matcher(email);
     if (!matcher.matches()) {
-      throw new Exception("Invalid email address");
+      return response("Invalid email address");
     }
 
     long count;
@@ -86,11 +92,11 @@ public final class UserResource extends AbstractResource {
     } catch (Exception e) {
       String message = "Error registering new user";
       LOGGER.error(message, e);
-      throw new Exception(message, e);
+      return response(message);
     }
 
     if (count != 0) {
-      throw new Exception("User already exists");
+      return response("User already exists");
     }
 
     User user = new User();
@@ -106,26 +112,23 @@ public final class UserResource extends AbstractResource {
     } catch (Exception e) {
       String message = "Error registering new user";
       LOGGER.error(message, e);
-      throw new Exception(message, e);
+      return response(message);
     }
 
-    return Response.ok().build();
+    return response("Check your email to enable your account");
   }
 
   @POST
   @Path("enable")
-  public Response enable(
+  @Produces(MediaType.APPLICATION_JSON)
+  public Map<String, Object> enable(
           @FormParam("uuid")
           final String uuid) throws Exception {
 
     LOGGER.info("uuid = " + uuid);
 
-    if (null == uuid || uuid.isEmpty()) {
-      throw new Exception("Invalid uuid");
-    }
-
-    if (uuid.length() < UUID_LENGTH) {
-      throw new Exception("Invalid uuid");
+    if (null == uuid || uuid.length() < UUID_LENGTH) {
+      return response("Invalid identifier");
     }
 
     User user = loginController.findByUuid(uuid);
@@ -139,19 +142,20 @@ public final class UserResource extends AbstractResource {
       } catch (Exception e) {
         String message = "Error enabling user";
         LOGGER.error(message, e);
-        throw new Exception(message, e);
+        return response(message);
       }
 
       UserData userData = new UserData(unitsDelegate, userConversionsDelegate);
       userData.createDefaultDataForUser(user);
     }
 
-    return Response.ok().build();
+    return response();
   }
 
   @POST
   @Path("login")
-  public Response login(
+  @Produces(MediaType.APPLICATION_JSON)
+  public Map<String, Object> login(
           @FormParam("username")
           final String username,
           @FormParam("password")
@@ -159,38 +163,51 @@ public final class UserResource extends AbstractResource {
 
     LOGGER.info("username = " + username + ", password = " + password);
 
+    if (null == username || username.isEmpty()
+            || null == password || password.isEmpty()) {
+
+      return response("Invalid username/password");
+    }
+
+    Matcher matcher = EMAIL_REGEX.matcher(username);
+    if (!matcher.matches()) {
+      return response("Invalid username/password");
+    }
+
     User user;
     try {
       user = loginController.findByUsernamePassword(username, password);
     } catch (Exception e) {
-      String message = "Unable to read login";
+      String message = "Error logging in";
       LOGGER.error(message, e);
-      throw new Exception(message, e);
+      return response(message);
     }
 
     if (null == user || !user.getEnabled()) {
-      return Response.status(Response.Status.UNAUTHORIZED).build();
+      return response("Invalid username/password");
     }
 
     HttpSession session = getSession();
     session.setAttribute(SESSION_USER_ATTRIBUTE, user);
 
-    return Response.ok().build();
+    return response();
   }
 
   @GET
   @Path("logout")
-  public Response logout() throws Exception {
+  @Produces(MediaType.APPLICATION_JSON)
+  public Map<String, Object> logout() throws Exception {
 
     HttpSession session = getSession();
     session.invalidate();
 
-    return Response.ok().build();
+    return response();
   }
 
   @POST
   @Path("changepassword")
-  public Response changePassword(
+  @Produces(MediaType.APPLICATION_JSON)
+  public Map<String, Object> changePassword(
           @FormParam("password1")
           final String password1,
           @FormParam("password2")
@@ -200,15 +217,11 @@ public final class UserResource extends AbstractResource {
     if (password1.equals(password2)) {
       password = password1;
     } else {
-      throw new Exception("Passwords do not match");
+      return response("Passwords do not match");
     }
 
-    if (null == password || password.isEmpty()) {
-      throw new Exception("Invalid password");
-    }
-
-    if (password.length() < PASSWORD_LENGTH) {
-      throw new Exception("Passwords must be atleast " + PASSWORD_LENGTH + " characters");
+    if (null == password || password.length() < PASSWORD_LENGTH) {
+      return response("Passwords must be atleast " + PASSWORD_LENGTH + " characters");
     }
 
     User user = getSessionUser();
@@ -219,31 +232,36 @@ public final class UserResource extends AbstractResource {
     } catch (Exception e) {
       String message = "Error changing password";
       LOGGER.error(message, e);
-      throw new Exception(message, e);
+      return response(message);
     }
 
-    return Response.ok().build();
+    return response("Password changed");
   }
 
   @POST
   @Path("forgotpassword")
-  public Response forgotPassword(
+  @Produces(MediaType.APPLICATION_JSON)
+  public Map<String, Object> forgotPassword(
           @FormParam("username")
           final String username) throws Exception {
 
     LOGGER.info("username = " + username);
 
+    if (null == username || username.isEmpty()) {
+      return response("Invalid username");
+    }
+
     User user;
     try {
       user = loginController.findByUsername(username);
     } catch (Exception e) {
-      String message = "Unable to read login";
+      String message = "Error finding user";
       LOGGER.error(message, e);
-      throw new Exception(message, e);
+      return response(message);
     }
 
     if (null == user || !user.getEnabled()) {
-      return Response.status(Response.Status.UNAUTHORIZED).build();
+      return response("User not found");
     }
 
     try {
@@ -251,15 +269,16 @@ public final class UserResource extends AbstractResource {
     } catch (Exception e) {
       String message = "Error sending password reset email";
       LOGGER.error(message, e);
-      throw new Exception(message, e);
+      return response(message);
     }
 
-    return Response.ok().build();
+    return response();
   }
 
   @POST
   @Path("resetpassword")
-  public Response resetPassword(
+  @Produces(MediaType.APPLICATION_JSON)
+  public Map<String, Object> resetPassword(
           @FormParam("uuid")
           final String uuid,
           @FormParam("password1")
@@ -271,28 +290,24 @@ public final class UserResource extends AbstractResource {
     if (password1.equals(password2)) {
       password = password1;
     } else {
-      throw new Exception("Passwords do not match");
+      return response("Passwords do not match");
     }
 
-    if (null == password || password.isEmpty()) {
-      throw new Exception("Invalid password");
-    }
-
-    if (password.length() < PASSWORD_LENGTH) {
-      throw new Exception("Passwords must be atleast " + PASSWORD_LENGTH + " characters");
+    if (null == password || password.length() < PASSWORD_LENGTH) {
+      return response("Passwords must be atleast " + PASSWORD_LENGTH + " characters");
     }
 
     User user;
     try {
       user = loginController.findByUuid(uuid);
     } catch (Exception e) {
-      String message = "Unable to read login";
+      String message = "Error resetting password";
       LOGGER.error(message, e);
-      throw new Exception(message, e);
+      return response(message);
     }
 
     if (null == user || !user.getEnabled()) {
-      return Response.status(Response.Status.UNAUTHORIZED).build();
+      return response("User not found");
     }
 
     user.setPassword(password);
@@ -301,11 +316,11 @@ public final class UserResource extends AbstractResource {
     try {
       user = userDelegate.update(user);
     } catch (Exception e) {
-      String message = "Error changing password";
+      String message = "Error resetting password";
       LOGGER.error(message, e);
-      throw new Exception(message, e);
+      return response(message);
     }
 
-    return Response.ok().build();
+    return response();
   }
 }

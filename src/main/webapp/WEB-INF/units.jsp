@@ -45,9 +45,6 @@
       </div>
     </div>
     <script>
-      var page = 1;
-      var pageSize = 20;
-
       function addRows(units) {
 
         $('#data tbody').remove();
@@ -81,7 +78,7 @@
       }
 
       $(function() {
-        var units = read("rest/unit", page, pageSize);
+        var units = read("rest/unit");
 
         $.when(units).done(function(data) {
           units = data.units;
@@ -94,7 +91,7 @@
           $.when(save("rest/unit", units)).done(function(data) {
             dialog(data.message);
 
-            units = read("rest/unit", page, pageSize);
+            units = read("rest/unit");
 
             $.when(units).done(function(data) {
               units = data.units;
@@ -127,7 +124,7 @@
           $.when(del("rest/unit", ids)).done(function(data) {
             dialog(data.message);
 
-            units = read("rest/unit", page, pageSize);
+            units = read("rest/unit");
 
             $.when(units).done(function(data) {
               units = data.units;

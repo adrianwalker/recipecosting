@@ -42,9 +42,6 @@
       </div>
     </div>
     <script>
-      var page = 1;
-      var pageSize = 20;
-
       function addRows(recipes) {
 
         $('#data tbody').remove();
@@ -64,7 +61,7 @@
       }
 
       $(function() {
-        var recipes = read("rest/recipe", page, pageSize);
+        var recipes = read("rest/recipe");
 
         $.when(recipes).done(function(data) {
           recipes = data.recipes;
@@ -92,7 +89,7 @@
           $.when(del("rest/recipe", ids)).done(function(data) {
             dialog(data.message);
 
-            recipes = read("rest/recipe", page, pageSize);
+            recipes = read("rest/recipe");
 
             $.when(recipes).done(function(data) {
               recipes = data.recipes;

@@ -1,6 +1,5 @@
 package org.adrianwalker.recipecosting.server;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManagerFactory;
@@ -40,16 +39,16 @@ public final class IngredientResource extends AbstractResource {
 
     LOGGER.info("page = " + page + " pageSize = " + pageSize);
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> response = response();
 
     if (page < 0 || pageSize < 0) {
-      map.put("ingredients", ingredientsDelegate.read(getSessionUser(), "name"));
+      response.put("ingredients", ingredientsDelegate.read(getSessionUser(), "name"));
     } else {
-      map.put("ingredients", ingredientsDelegate.read(getSessionUser(), page, pageSize, "name"));
-      map.put("pageCount", ingredientsDelegate.countPages(getSessionUser(), pageSize));
+      response.put("ingredients", ingredientsDelegate.read(getSessionUser(), page, pageSize, "name"));
+      response.put("pageCount", ingredientsDelegate.countPages(getSessionUser(), pageSize));
     }
 
-    return map;
+    return response;
   }
 
   @POST
@@ -59,10 +58,7 @@ public final class IngredientResource extends AbstractResource {
 
     ingredientsDelegate.update(getSessionUser(), ingredients);
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("message", "ingredients saved");
-
-    return map;
+    return response("ingredients saved");
   }
 
   @DELETE
@@ -72,9 +68,6 @@ public final class IngredientResource extends AbstractResource {
 
     ingredientsDelegate.delete(getSessionUser(), ids);
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("message", "ingredients deleted");
-
-    return map;
+    return response("ingredients deleted");
   }
 }

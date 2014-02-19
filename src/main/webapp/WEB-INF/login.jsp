@@ -47,23 +47,74 @@
     <script>
       $(function() {
         $("#login").click(function() {
+
+          var username = $("#username").val();
+          var password = $("#password").val();
+
+          if (!username) {
+            dialog("Enter your username");
+            return false;
+          }
+
+          if (!password) {
+            dialog("Enter your password");
+            return false;
+          }
+
           $.post("rest/user/login", {
-            username: $("#username").val(),
-            password: $("#password").val()
-          }).done(function() {
-            window.location.replace("recipes.html");
+            username: username,
+            password: password
+          }).done(function(data) {
+
+            var message = data.message;
+            if (message) {
+              dialog(message);
+            } else {
+              window.location.replace("recipes.html");
+            }
+
           }).fail(function() {
-            dialog("Invalid email/password");
+            error();
           });
         });
 
         $("#register").click(function() {
+          var email = $("#email").val();
+          var password1 = $("#password1").val();
+          var password2 = $("#password2").val();
+
+          if (!email) {
+            dialog("Enter an email address");
+            return false;
+          }
+
+          if (!password1) {
+            dialog("Enter a password");
+            return false;
+          }
+
+          if (!password2) {
+            dialog("Enter a password again");
+            return false;
+          }
+
+          if (password1 !== password2) {
+            dialog("Passwords do not match");
+            return false;
+          }
+
+
           $.post("rest/user/register", {
-            email: $("#email").val(),
-            password1: $("#password1").val(),
-            password2: $("#password2").val()
-          }).done(function() {
-            dialog("Check your email to enable your account");
+            email: email,
+            password1: password1,
+            password2: password2
+          }).done(function(data) {
+
+            var message = data.message;
+            if (message) {
+              dialog(message);
+            }
+
           }).fail(function() {
             error();
           });
@@ -72,17 +123,23 @@
         $("#forgotpassword").click(function() {
           var username = $("#username").val();
 
-          if (username) {
-            $.post("rest/user/forgotpassword", {
-              username: username
-            }).done(function() {
-              dialog("Check your email to login to your account");
-            }).fail(function() {
-              dialog("Invalid username");
-            });
-          } else {
+          if (!username) {
             dialog("Enter your username");
+            return false;
           }
+
+          $.post("rest/user/forgotpassword", {
+            username: username
+          }).done(function(data) {
+
+            var message = data.message;
+            if (message) {
+              dialog(message);
+            }
+
+          }).fail(function() {
+            error();
+          });
 
           return false;
         });

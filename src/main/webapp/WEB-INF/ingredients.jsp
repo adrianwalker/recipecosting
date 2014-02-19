@@ -54,9 +54,6 @@
       </div>
     </div>
     <script>
-      var page = 1;
-      var pageSize = 20;
-
       function addRows(ingredients, units) {
 
         $('#data tbody').remove();
@@ -119,7 +116,7 @@
       }
 
       $(function() {
-        var ingredients = read("rest/ingredient", page, pageSize);
+        var ingredients = read("rest/ingredient");
         var units = read("rest/unit");
 
         $.when(ingredients, units).done(function(data1, data2) {
@@ -134,7 +131,7 @@
           $.when(save("rest/ingredient", ingredients)).done(function(data) {
             dialog(data.message);
 
-            ingredients = read("rest/ingredient", page, pageSize);
+            ingredients = read("rest/ingredient");
 
             $.when(ingredients).done(function(data) {
               ingredients = data.ingredients;
@@ -167,7 +164,7 @@
           $.when(del("rest/ingredient", ids)).done(function(data) {
             dialog(data.message);
 
-            ingredients = read("rest/ingredient", page, pageSize);
+            ingredients = read("rest/ingredient");
 
             $.when(ingredients).done(function(data) {
               ingredients = data.ingredients;
