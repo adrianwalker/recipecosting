@@ -7,11 +7,14 @@
     <script src="js/ajax.js"></script>
     <script src="js/logging.js"></script>
     <script src="js/error.js"></script>
+    <script src="js/dialog.js"></script>
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
   </head>
   <body>
     <div>
-      <%@ include file="menu.jspf" %> 
-      <div>        
+      <%@ include file="dialog.jspf" %>
+      <%@ include file="menu.jspf" %>
+      <div>
         <table id="data">
           <thead>
             <tr>
@@ -83,22 +86,22 @@
         $("#data").append(row);
 
         $("#name" + index).bind("input", function() {
-          ingredient.changed = true;
+          ingredient._changed = true;
           ingredient.name = $(this).val();
         });
 
         $("#amount" + index).bind("input", function() {
-          ingredient.changed = true;
+          ingredient._changed = true;
           ingredient.amount = $(this).val();
         });
 
         $("#unit" + index).bind("change", function() {
-          ingredient.changed = true;
+          ingredient._changed = true;
           ingredient.unit.id = $(this).val();
         });
 
         $("#cost" + index).bind("input", function() {
-          ingredient.changed = true;
+          ingredient._changed = true;
           ingredient.cost = $(this).val();
         });
       }
@@ -129,7 +132,7 @@
 
         $("#save").click(function() {
           $.when(save("rest/ingredient", ingredients)).done(function(data) {
-            alert(data.message);
+            dialog(data.message);
 
             ingredients = read("rest/ingredient", page, pageSize);
 
@@ -162,7 +165,7 @@
           });
 
           $.when(del("rest/ingredient", ids)).done(function(data) {
-            alert(data.message);
+            dialog(data.message);
 
             ingredients = read("rest/ingredient", page, pageSize);
 

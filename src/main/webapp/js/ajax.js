@@ -26,7 +26,7 @@ function save(url, data) {
 
     $.each(data, function(index, value) {
 
-      if (value.changed) {
+      if (value._changed) {
         changed.push(value);
       }
     });
@@ -64,14 +64,9 @@ function del(url, ids) {
 
 function replacer(key, value) {
 
-  switch (key) {
-    case "cost":
-    case "totalCost":
-    case "servingCost":
-    case "changed":
-    case "user":
-      return undefined;
-    default:
-      return value;
+  if(key.indexOf("_") === 0) {
+    return undefined;
+  } else {
+    return value;
   }
 }

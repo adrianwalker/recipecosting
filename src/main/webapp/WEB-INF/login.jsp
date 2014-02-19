@@ -6,9 +6,12 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script src="js/logging.js"></script>
     <script src="js/error.js"></script>
+    <script src="js/dialog.js"></script>
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
   </head>
   <body>
     <div>
+      <%@ include file="dialog.jspf" %>
       <h2>Login</h2>
       <div>
         <label for="username">Username:</label>
@@ -50,7 +53,7 @@
           }).done(function() {
             window.location.replace("recipes.html");
           }).fail(function() {
-            error("Invalid email/password");
+            dialog("Invalid email/password");
           });
         });
 
@@ -60,7 +63,7 @@
             password1: $("#password1").val(),
             password2: $("#password2").val()
           }).done(function() {
-            alert("Check your email to enable your account");
+            dialog("Check your email to enable your account");
           }).fail(function() {
             error();
           });
@@ -73,12 +76,12 @@
             $.post("rest/user/forgotpassword", {
               username: username
             }).done(function() {
-              alert("Check your email to login to your account");
+              dialog("Check your email to login to your account");
             }).fail(function() {
-              error("Invalid username");
+              dialog("Invalid username");
             });
           } else {
-            alert("Enter your username");
+            dialog("Enter your username");
           }
 
           return false;

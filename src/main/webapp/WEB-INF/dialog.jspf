@@ -1,0 +1,11 @@
+<div id="overlay">
+  <div id="dialog">
+    <div id="text">
+      <p id="message"></p>
+    </div>
+    <div id="buttons">
+      <input id="ok" type="button" value="OK"/>
+    </div>
+  </div>
+</div>
+

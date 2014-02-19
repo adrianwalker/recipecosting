@@ -3,5 +3,5 @@ function error() {
 }
 
 function error(message) {
-  alert(message);
+  dialog(message);
 }

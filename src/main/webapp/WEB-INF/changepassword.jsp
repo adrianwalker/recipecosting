@@ -6,10 +6,13 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script src="js/logging.js"></script>
     <script src="js/error.js"></script>
+    <script src="js/dialog.js"></script>
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
   </head>
   <body>
     <div>
-      <%@ include file="menu.jspf" %> 
+      <%@ include file="dialog.jspf" %>
+      <%@ include file="menu.jspf" %>
       <div>
         <label for="password1">Password:</label>
         <input id="password1" type="password"/>
@@ -29,7 +32,7 @@
           password1: $("#password1").val(),
           password2: $("#password2").val()
         }).done(function() {
-          alert("Password changed");
+          dialog("Password changed");
         }).fail(function() {
           error();
         });

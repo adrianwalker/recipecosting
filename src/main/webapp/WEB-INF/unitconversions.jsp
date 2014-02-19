@@ -7,11 +7,14 @@
     <script src="js/ajax.js"></script>
     <script src="js/logging.js"></script>
     <script src="js/error.js"></script>
+    <script src="js/dialog.js"></script>
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
   </head>
   <body>
     <div>
-      <%@ include file="menu.jspf" %> 
-      <div>        
+      <%@ include file="dialog.jspf" %>
+      <%@ include file="menu.jspf" %>
+      <div>
         <table id="data">
           <thead>
             <tr>
@@ -83,17 +86,17 @@
         $("#data").append(row);
 
         $("#unitFrom" + index).bind("change", function() {
-          unitConversion.changed = true;
+          unitConversion._changed = true;
           unitConversion.unitFrom.id = $(this).val();
         });
 
         $("#ratio" + index).bind("input", function() {
-          unitConversion.changed = true;
+          unitConversion._changed = true;
           unitConversion.ratio = $(this).val();
         });
 
         $("#unitTo" + index).bind("change", function() {
-          unitConversion.changed = true;
+          unitConversion._changed = true;
           unitConversion.unitTo.id = $(this).val();
         });
       }
@@ -123,7 +126,7 @@
 
         $("#save").click(function() {
           $.when(save("rest/unitconversion", unitConversions)).done(function(data) {
-            alert(data.message);
+            dialog(data.message);
 
             unitConversions = read("rest/unitconversion", page, pageSize);
 
@@ -156,7 +159,7 @@
           });
 
           $.when(del("rest/unitconversion", ids)).done(function(data) {
-            alert(data.message);
+            dialog(data.message);
 
             unitConversions = read("rest/unitconversion", page, pageSize);
 

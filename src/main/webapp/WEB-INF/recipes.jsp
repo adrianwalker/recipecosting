@@ -7,11 +7,14 @@
     <script src="js/ajax.js"></script>
     <script src="js/logging.js"></script>
     <script src="js/error.js"></script>
+    <script src="js/dialog.js"></script>
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
   </head>
   <body>
     <div>
-      <%@ include file="menu.jspf" %> 
-      <div>        
+      <%@ include file="dialog.jspf" %>
+      <%@ include file="menu.jspf" %>
+      <div>
         <table id="data">
           <thead>
             <tr>
@@ -87,7 +90,7 @@
           });
 
           $.when(del("rest/recipe", ids)).done(function(data) {
-            alert(data.message);
+            dialog(data.message);
 
             recipes = read("rest/recipe", page, pageSize);
 

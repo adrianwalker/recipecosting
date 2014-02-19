@@ -8,10 +8,13 @@
     <script src="js/logging.js"></script>
     <script src="js/error.js"></script>
     <script src="js/url.js"></script>
+    <script src="js/dialog.js"></script>
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
   </head>
   <body>
     <div>
-      <%@ include file="menu.jspf" %> 
+      <%@ include file="dialog.jspf" %>
+      <%@ include file="menu.jspf" %>
       <div>
         <table>
           <tr>
@@ -87,7 +90,7 @@
       function setName(recipe) {
         $('#name').val(recipe.name);
         $("#name").bind("input", function() {
-          recipe.changed = true;
+          recipe._changed = true;
           recipe.name = $(this).val();
         });
       }
@@ -95,7 +98,7 @@
       function setServes(recipe) {
         $('#serves').val(recipe.serves);
         $("#serves").bind("input", function() {
-          recipe.changed = true;
+          recipe._changed = true;
           recipe.serves = $(this).val();
           updateServingCost(recipe);
         });
@@ -138,7 +141,7 @@
         $("#data").append(row);
 
         $("#ingredient" + index).bind("change", function() {
-          recipeIngredient.changed = true;
+          recipeIngredient._changed = true;
           recipeIngredient.ingredient.id = $(this).val();
           updateCost(index, recipeIngredient, ratioLookup, ingredientLookup);
           updateTotalCost(recipe);
@@ -146,7 +149,7 @@
         });
 
         $("#amount" + index).bind("input", function() {
-          recipeIngredient.changed = true;
+          recipeIngredient._changed = true;
           recipeIngredient.amount = $(this).val();
           updateCost(index, recipeIngredient, ratioLookup, ingredientLookup);
           updateTotalCost(recipe);
@@ -154,7 +157,7 @@
         });
 
         $("#unit" + index).bind("change", function() {
-          recipeIngredient.changed = true;
+          recipeIngredient._changed = true;
           recipeIngredient.unit.id = $(this).val();
           updateCost(index, recipeIngredient, ratioLookup, ingredientLookup);
           updateTotalCost(recipe);
@@ -171,18 +174,18 @@
       }
 
       function updateCost(index, recipeIngredient, ratioLookup, ingredientLookup) {
-        recipeIngredient.cost = calculateCost(recipeIngredient, ratioLookup, ingredientLookup);
-        $("#cost" + index).text(recipeIngredient.cost.toFixed(2));
+        recipeIngredient._cost = calculateCost(recipeIngredient, ratioLookup, ingredientLookup);
+        $("#cost" + index).text(recipeIngredient._cost.toFixed(2));
       }
 
       function updateTotalCost(recipe) {
-        recipe.totalCost = calculateTotalCost(recipe.recipeIngredients);
-        $("#total_cost").text(recipe.totalCost.toFixed(2));
+        recipe._totalCost = calculateTotalCost(recipe.recipeIngredients);
+        $("#total_cost").text(recipe._totalCost.toFixed(2));
       }
 
       function updateServingCost(recipe) {
-        recipe.servingCost = calculateServingCost(recipe.totalCost, recipe.serves);
-        $("#serving_cost").text(recipe.servingCost.toFixed(2));
+        recipe._servingCost = calculateServingCost(recipe._totalCost, recipe.serves);
+        $("#serving_cost").text(recipe._servingCost.toFixed(2));
       }
 
       function calculateCost(recipeIngredient, ratioLookup, ingredientLookup) {
@@ -212,7 +215,7 @@
 
         var totalCost = 0;
         $.each(recipeIngredients, function(index, recipeIngredient) {
-          totalCost += recipeIngredient.cost;
+          totalCost += recipeIngredient._cost;
         });
 
         return totalCost;
@@ -233,7 +236,7 @@
           ingredient: {id: null},
           amount: 0.0,
           unit: {id: null},
-          cost: 0
+          _cost: 0
         };
         addRow(recipeIngredients.length, recipe, recipeIngredient, ingredients, units, ratioLookup, ingredientLookup);
         recipeIngredients.push(recipeIngredient);
@@ -249,8 +252,8 @@
               name: "",
               serves: 1,
               recipeIngredients: [],
-              totalCost: 0,
-              servingCost: 0
+              _totalCost: 0,
+              _servingCost: 0
             }];
         } else {
           recipe = read("rest/recipe/" + params.id);
@@ -294,7 +297,7 @@
 
         $("#save").click(function() {
           $.when(save("rest/recipe", recipe)).done(function(data) {
-            alert(data.message);
+            dialog(data.message);
 
             recipe = data.recipe;
 
@@ -324,7 +327,7 @@
           });
 
           $.when(del("rest/recipe/ingredient", ids)).done(function(data) {
-            alert(data.message);
+            dialog(data.message);
 
             recipe = read("rest/recipe/" + params.id);
 

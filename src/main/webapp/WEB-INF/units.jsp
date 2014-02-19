@@ -7,11 +7,14 @@
     <script src="js/ajax.js"></script>
     <script src="js/logging.js"></script>
     <script src="js/error.js"></script>
+    <script src="js/dialog.js"></script>
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
   </head>
   <body>
     <div>
-      <%@ include file="menu.jspf" %> 
-      <div>        
+      <%@ include file="dialog.jspf" %>
+      <%@ include file="menu.jspf" %>
+      <div>
         <table id="data">
           <thead>
             <tr>
@@ -63,7 +66,7 @@
         $("#data").append(row);
 
         $("#name" + index).bind("input", function() {
-          unit.changed = true;
+          unit._changed = true;
           unit.name = $(this).val();
         });
       }
@@ -89,7 +92,7 @@
 
         $("#save").click(function() {
           $.when(save("rest/unit", units)).done(function(data) {
-            alert(data.message);
+            dialog(data.message);
 
             units = read("rest/unit", page, pageSize);
 
@@ -122,7 +125,7 @@
           });
 
           $.when(del("rest/unit", ids)).done(function(data) {
-            alert(data.message);
+            dialog(data.message);
 
             units = read("rest/unit", page, pageSize);
 

@@ -115,7 +115,7 @@ public final class UserResource extends AbstractResource {
   @POST
   @Path("enable")
   public Response enable(
-          @QueryParam("uuid")
+          @FormParam("uuid")
           final String uuid) throws Exception {
 
     LOGGER.info("uuid = " + uuid);
