@@ -2,8 +2,9 @@
 <html>
   <head>
     <title></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="js/jquery-1.11.0.min.js"></script>
+    <script src="js/jquery.validate.min.js"></script>
     <script src="js/logging.js"></script>
     <script src="js/error.js"></script>
     <script src="js/dialog.js"></script>
@@ -13,57 +14,93 @@
     <div>
       <%@ include file="dialog.jspf" %>
       <h2>Login</h2>
-      <div>
-        <label for="username">Username:</label>
-        <input id="username" type="text"/>
-      </div>
-      <div>
-        <label for="password">Password:</label>
-        <input id="password" type="password"/>
-      </div>
-      <div>
-        <input id ="login" type="button" value="Log in"/>
-        <a id="forgotpassword" href="#">Forgotten your password?</a>
-      </div>
+      <form id="form1">
+        <div>
+          <label for="username">Username:</label>
+          <input id="username" name="username" type="text"/>
+        </div>
+        <div>
+          <label for="password">Password:</label>
+          <input id="password" name="password" type="password"/>
+        </div>
+        <div>
+          <input id ="login" type="button" value="Log in"/>
+          <a id="forgotpassword" href="#">Forgotten your password?</a>
+        </div>
+      </form>
     </div>
     <div>
       <h2>Register</h2>
-      <div>
-        <label for="email">Email:</label>
-        <input id="email" type="text"/>
-      </div>
-      <div>
-        <label for="password1">Password:</label>
-        <input id="password1" type="password"/>
-      </div>
-      <div>
-        <label for="password2">Password Again:</label>
-        <input id="password2" type="password"/>
-      </div>
-      <div>
-        <input id ="register" type="button" value="Register"/>
-      </div>
+      <form id="form2">
+        <div>
+          <label for="email">Email:</label>
+          <input id="email" name="email" type="text"/>
+        </div>
+        <div>
+          <label for="password1">Password:</label>
+          <input id="password1" name="password1" type="password"/>
+        </div>
+        <div>
+          <label for="password2">Password Again:</label>
+          <input id="password2" name="password2" type="password"/>
+        </div>
+        <div>
+          <input id ="register" type="button" value="Register"/>
+        </div>
+      </form>
     </div>
     <script>
       $(function() {
+
+        $("#form1").validate({
+          rules: {
+            username: {
+              required: true,
+              email: true,
+              minlength: 1,
+              maxlength: 1000
+            },
+            password: {
+              required: true,
+              email: true,
+              minlength: 1,
+              maxlength: 1000
+            }
+          }
+        });
+
+        $("#form2").validate({
+          rules: {
+            email: {
+              required: true,
+              email: true,
+              minlength: 1,
+              maxlength: 1000
+            },
+            password1: {
+              required: true,
+              email: true,
+              minlength: 1,
+              maxlength: 1000
+            },
+            password2: {
+              required: true,
+              email: true,
+              minlength: 1,
+              maxlength: 1000
+            }
+          }
+        });
+
         $("#login").click(function() {
 
-          var username = $("#username").val();
-          var password = $("#password").val();
-
-          if (!username) {
-            dialog("Enter your username");
-            return false;
-          }
-
-          if (!password) {
-            dialog("Enter your password");
+          if (!$("#form1").valid()) {
             return false;
           }
 
           $.post("rest/user/login", {
-            username: username,
-            password: password
+            username: $("#username").val(),
+            password: $("#password").val()
           }).done(function(data) {
 
             var message = data.message;
@@ -79,35 +116,15 @@
         });
 
         $("#register").click(function() {
-          var email = $("#email").val();
-          var password1 = $("#password1").val();
-          var password2 = $("#password2").val();
 
-          if (!email) {
-            dialog("Enter an email address");
+          if (!$("#form2").valid()) {
             return false;
           }
-
-          if (!password1) {
-            dialog("Enter a password");
-            return false;
-          }
-
-          if (!password2) {
-            dialog("Enter a password again");
-            return false;
-          }
-
-          if (password1 !== password2) {
-            dialog("Passwords do not match");
-            return false;
-          }
-
 
           $.post("rest/user/register", {
-            email: email,
-            password1: password1,
-            password2: password2
+            email: $("#email").val(),
+            password1: $("#password1").val(),
+            password2: $("#password2").val()
           }).done(function(data) {
 
             var message = data.message;
@@ -121,15 +138,9 @@
         });
 
         $("#forgotpassword").click(function() {
-          var username = $("#username").val();
-
-          if (!username) {
-            dialog("Enter your username");
-            return false;
-          }
 
           $.post("rest/user/forgotpassword", {
-            username: username
+            username: $("#username").val()
           }).done(function(data) {
 
             var message = data.message;

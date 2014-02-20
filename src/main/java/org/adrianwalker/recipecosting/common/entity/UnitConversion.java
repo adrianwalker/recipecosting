@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -21,6 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "UNIT_CONVERSION")
 public class UnitConversion implements RecipeCostingUserEntity {
+
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +32,7 @@ public class UnitConversion implements RecipeCostingUserEntity {
   private Long id;
   @Basic(optional = false)
   @Column(name = "RATIO", nullable = false, scale = 10, precision = 20)
+  @Digits(integer = 20, fraction = 10, message = "Invalid ratio")
   private BigDecimal ratio;
   @JoinColumn(name = "FROM_UNIT_ID", referencedColumnName = "ID", nullable = false)
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -92,7 +96,7 @@ public class UnitConversion implements RecipeCostingUserEntity {
   public void setUser(User user) {
     this.user = user;
   }
-  
+
   @Override
   public int hashCode() {
     int hash = 0;

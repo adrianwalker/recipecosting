@@ -7,9 +7,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.validation.constraints.Size;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -23,10 +26,14 @@ public class User implements RecipeCostingEntity {
   @Basic(optional = false)
   @Column(name = "ID", nullable = false)
   private Long id;
+  @Size(min = 1, max = 1000, message = "Invalid username")
   @Column(name = "USERNAME", length = 1000, nullable = false, unique = true)
   private String username;
+  @Size(min = 1, max = 1000, message = "Invalid password")
   @Column(name = "PASSWORD", length = 1000, nullable = false)
   private String password;
+  @Size(min = 1, max = 1000, message = "Invalid email address")
+  @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$", message="Invalid email address")
   @Column(name = "EMAIL", length = 1000, nullable = false, unique = true)
   private String email;
   @Column(name = "ENABLED", nullable = false)

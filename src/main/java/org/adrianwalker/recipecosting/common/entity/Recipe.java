@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -33,9 +35,11 @@ public class Recipe implements RecipeCostingUserEntity {
   private Long id;
   @Basic(optional = false)
   @Column(name = "NAME", nullable = false, length = 1000)
+  @Size(min = 1, max = 1000, message = "Invalid name")
   private String name;
   @Basic(optional = false)
   @Column(name = "SERVES", nullable = false)
+  @Min(0)
   private int serves;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe", fetch = FetchType.LAZY)
   private List<RecipeIngredient> recipeIngredients;

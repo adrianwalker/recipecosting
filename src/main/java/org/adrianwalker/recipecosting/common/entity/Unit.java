@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -27,6 +28,7 @@ public class Unit implements RecipeCostingUserEntity {
   @Basic(optional = false)
   @Column(name = "ID", nullable = false)
   private Long id;
+  @Size(min = 1, max = 1000, message = "Invalid name")
   @Column(name = "NAME", length = 1000, nullable = false)
   private String name;
   @XmlTransient

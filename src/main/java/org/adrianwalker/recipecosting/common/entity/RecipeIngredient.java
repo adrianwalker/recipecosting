@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -30,6 +31,7 @@ public class RecipeIngredient implements RecipeCostingUserEntity {
   private Long id;
   @Basic(optional = false)
   @Column(name = "AMOUNT", nullable = false, scale = 10, precision = 20)
+  @Digits(integer = 20, fraction = 10, message = "Invalid ratio")
   private BigDecimal amount;
   @JoinColumn(name = "UNIT_ID", referencedColumnName = "ID", nullable = false)
   @ManyToOne(optional = false, fetch = FetchType.EAGER)

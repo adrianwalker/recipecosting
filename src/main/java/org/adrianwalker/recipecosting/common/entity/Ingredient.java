@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -30,12 +32,15 @@ public class Ingredient implements RecipeCostingUserEntity {
   private Long id;
   @Basic(optional = false)
   @Column(name = "NAME", nullable = false, length = 1000)
+  @Size(min = 1, max = 1000, message = "Invalid name")
   private String name;
   @Basic(optional = false)
   @Column(name = "AMOUNT", nullable = false, scale = 10, precision = 20)
+  @Digits(integer = 20, fraction = 10, message = "Invalid amount")
   private BigDecimal amount;
   @Basic(optional = false)
-  @Column(name = "COST", nullable = false, scale = 10, precision = 20)
+  @Column(name = "COST", nullable = false, scale = 2, precision = 20)
+  @Digits(integer = 20, fraction = 2, message = "Invalid cost")
   private BigDecimal cost;
   @JoinColumn(name = "UNIT_ID", referencedColumnName = "ID", nullable = false)
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
