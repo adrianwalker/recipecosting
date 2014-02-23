@@ -7,7 +7,6 @@
     <script src="js/jquery.validate.min.js"></script>
     <script src="js/ajax.js"></script>
     <script src="js/logging.js"></script>
-    <script src="js/error.js"></script>
     <script src="js/dialog.js"></script>
     <link rel="stylesheet" href="css/style.css" type="text/css" />
   </head>
@@ -15,35 +14,37 @@
     <div>
       <%@ include file="dialog.jspf" %>
       <%@ include file="menu.jspf" %>
-      <div>
-        <table id="data">
-          <thead>
+      <form id="form">
+        <div>
+          <table id="data">
+            <thead>
+              <tr>
+                <th>
+                  &nbsp;
+                </th>
+                <th>
+                  unit
+                </th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div>
+          <table>
             <tr>
-              <th>
-                &nbsp;
-              </th>
-              <th>
-                unit
-              </th>
+              <td>
+                <input id="save" type="button" value="Save" />
+              </td>
+              <td>
+                <input id="add" type="button" value="Add" />
+              </td>
+              <td>
+                <input id="delete" type="button" value="Delete" />
+              </td>
             </tr>
-          </thead>
-        </table>
-      </div>
-      <div>
-        <table>
-          <tr>
-            <td>
-              <input id="save" type="button" value="Save" />
-            </td>
-            <td>
-              <input id="add" type="button" value="Add" />
-            </td>
-            <td>
-              <input id="delete" type="button" value="Delete" />
-            </td>
-          </tr>
-        </table>
-      </div>
+          </table>
+        </div>
+      </form>
     </div>
     <script>
       function addRows(units) {
@@ -58,14 +59,20 @@
       function addRow(index, unit) {
 
         var row = $("<tr id='row" + index + "'/>");
-        $(row).append($("<td/>").append("<input id='id" + index + "' type='checkbox' value='" + unit.id + "'/>"));
-        $(row).append($("<td/>").append("<input id='name" + index + "' value='" + unit.name + "' />"));
+        $(row).append($("<td/>").append("<input id='id" + index + "' name='id" + index + "' type='checkbox' value='" + unit.id + "'/>"));
+        $(row).append($("<td/>").append("<input id='name" + index + "'  name='name" + index + "'value='" + unit.name + "' />"));
 
         $("#data").append(row);
 
         $("#name" + index).bind("input", function() {
           unit._changed = true;
           unit.name = $(this).val();
+        });
+
+        $("#name" + index).rules('add', {
+          required: true,
+          minlength: 1,
+          maxlength: 1000
         });
       }
 
@@ -79,6 +86,10 @@
       }
 
       $(function() {
+
+        var form = $("#form");
+        form.validate();
+
         var units = read("rest/unit");
 
         $.when(units).done(function(data) {
@@ -89,6 +100,11 @@
         });
 
         $("#save").click(function() {
+
+          if (!form.valid()) {
+            return false;
+          }
+
           $.when(save("rest/unit", units)).done(function(data) {
             dialog(data.message);
 
@@ -121,6 +137,11 @@
               ids.push(value);
             }
           });
+
+          if (ids.length === 0) {
+            dialog("Select units to delete");
+            return;
+          }
 
           $.when(del("rest/unit", ids)).done(function(data) {
             dialog(data.message);

@@ -9,3 +9,7 @@ function dialog(message) {
 
   overlay.show();
 }
+
+function error() {
+  dialog("An unexpected error has occurred");
+}

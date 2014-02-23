@@ -7,7 +7,6 @@
     <script src="js/jquery.validate.min.js"></script>
     <script src="js/ajax.js"></script>
     <script src="js/logging.js"></script>
-    <script src="js/error.js"></script>
     <script src="js/url.js"></script>
     <script src="js/dialog.js"></script>
     <link rel="stylesheet" href="css/style.css" type="text/css" />
@@ -16,76 +15,78 @@
     <div>
       <%@ include file="dialog.jspf" %>
       <%@ include file="menu.jspf" %>
-      <div>
-        <table>
-          <tr>
-            <td>name:</td>
-            <td><input id="name"/></td>
-          </tr>
-          <tr>
-            <td>servings:</td>
-            <td><input id="serves"/></td>
-          </tr>
-        </table>
-      </div>
-      <div>
-        <table id="data">
-          <thead>
+      <form id="form">
+        <div>
+          <table>
             <tr>
-              <th>
-                &nbsp;
-              </th>
-              <th>
-                ingredient
-              </th>
-              <th>
-                amount
-              </th>
-              <th>
-                unit
-              </th>
-              <th>
-                cost
-              </th>
+              <td>name:</td>
+              <td><input id="name" name="name"/></td>
             </tr>
-          </thead>
-        </table>
-      </div>
-      <div>
-        <table>
-          <tr>
-            <td>
-              total cost:
-            </td>
-            <td>
-              <label id="total_cost"></label>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              serving cost:
-            </td>
-            <td>
-              <label id="serving_cost"></label>
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div>
-        <table>
-          <tr>
-            <td>
-              <input id="save" type="button" value="Save" />
-            </td>
-            <td>
-              <input id="add" type="button" value="Add" />
-            </td>
-            <td>
-              <input id="delete" type="button" value="Delete" />
-            </td>
-          </tr>
-        </table>
-      </div>
+            <tr>
+              <td>servings:</td>
+              <td><input id="serves" name="serves"/></td>
+            </tr>
+          </table>
+        </div>
+        <div>
+          <table id="data">
+            <thead>
+              <tr>
+                <th>
+                  &nbsp;
+                </th>
+                <th>
+                  ingredient
+                </th>
+                <th>
+                  amount
+                </th>
+                <th>
+                  unit
+                </th>
+                <th>
+                  cost
+                </th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div>
+          <table>
+            <tr>
+              <td>
+                total cost:
+              </td>
+              <td>
+                <label id="total_cost"></label>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                serving cost:
+              </td>
+              <td>
+                <label id="serving_cost"></label>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div>
+          <table>
+            <tr>
+              <td>
+                <input id="save" type="button" value="Save" />
+              </td>
+              <td>
+                <input id="add" type="button" value="Add" />
+              </td>
+              <td>
+                <input id="delete" type="button" value="Delete" />
+              </td>
+            </tr>
+          </table>
+        </div>
+      </form>
     </div>
     <script>
       function setName(recipe) {
@@ -116,16 +117,16 @@
 
       function addRow(index, recipe, recipeIngredient, ingredients, units, ratioLookup, ingredientLookup) {
 
-        var ingredientSelect = $("<select id='ingredient" + index + "' />");
-        $(ingredientSelect).append("<option>-- select --</option>");
+        var ingredientSelect = $("<select id='ingredient" + index + "' name='ingredient" + index + "' />");
+        $(ingredientSelect).append("<option value=''>-- select --</option>");
         $.each(ingredients, function(index, ingredient) {
           var selected;
           selected = (ingredient.id === recipeIngredient.ingredient.id) ? "selected" : "";
           $(ingredientSelect).append("<option value='" + ingredient.id + "' " + selected + ">" + ingredient.name + "</option>");
         });
 
-        var unitSelect = $("<select id='unit" + index + "' />");
-        $(unitSelect).append("<option>-- select --</option>");
+        var unitSelect = $("<select id='unit" + index + "' name='unit" + index + "' />");
+        $(unitSelect).append("<option value=''>-- select --</option>");
         $.each(units, function(index, unit) {
           var selected;
           selected = (unit.id === recipeIngredient.unit.id) ? "selected" : "";
@@ -133,11 +134,11 @@
         });
 
         var row = $("<tr id='row" + index + "'/>");
-        $(row).append($("<td/>").append("<input id='id" + index + "' type='checkbox' value='" + recipeIngredient.id + "'/>"));
+        $(row).append($("<td/>").append("<input id='id" + index + "' name='id" + index + "' type='checkbox' value='" + recipeIngredient.id + "'/>"));
         $(row).append($("<td/>").append(ingredientSelect));
-        $(row).append($("<td/>").append("<input id='amount" + index + "' value='" + recipeIngredient.amount + "' />"));
+        $(row).append($("<td/>").append("<input id='amount" + index + "' name='amount" + index + "' value='" + recipeIngredient.amount + "' />"));
         $(row).append($("<td/>").append(unitSelect));
-        $(row).append($("<td/>").append("<label id='cost" + index + "' >?</label>"));
+        $(row).append($("<td/>").append("<label id='cost" + index + "' name='cost" + index + "' >?</label>"));
 
         $("#data").append(row);
 
@@ -149,6 +150,10 @@
           updateServingCost(recipe);
         });
 
+        $("#ingredient" + index).rules('add', {
+          required: true,
+        });
+
         $("#amount" + index).bind("input", function() {
           recipeIngredient._changed = true;
           recipeIngredient.amount = $(this).val();
@@ -157,12 +162,23 @@
           updateServingCost(recipe);
         });
 
+        $("#amount" + index).rules('add', {
+          required: true,
+          number: true,
+          minlength: 1,
+          maxlength: 20
+        });
+
         $("#unit" + index).bind("change", function() {
           recipeIngredient._changed = true;
           recipeIngredient.unit.id = $(this).val();
           updateCost(index, recipeIngredient, ratioLookup, ingredientLookup);
           updateTotalCost(recipe);
           updateServingCost(recipe);
+        });
+
+        $("#unit" + index).rules('add', {
+          required: true,
         });
       }
 
@@ -245,6 +261,23 @@
 
       $(function() {
 
+        $("#form").validate({
+          rules: {
+            name: {
+              required: true,
+              minlength: 1,
+              maxlength: 1000
+            },
+            serves: {
+              required: true,
+              digits: true,
+              min: 1,
+              minlength: 1,
+              maxlength: 20
+            }
+          }
+        });
+
         var params = getUrlParams();
         var recipe;
         if (params.id === undefined) {
@@ -297,6 +330,14 @@
         });
 
         $("#save").click(function() {
+
+          var form = $("#form");
+          form.validate();
+
+          if (!form.valid()) {
+            return false;
+          }
+
           $.when(save("rest/recipe", recipe)).done(function(data) {
             dialog(data.message);
 
@@ -326,6 +367,11 @@
               ids.push(value);
             }
           });
+
+          if (ids.length === 0) {
+            dialog("Select recipe ingredients to delete");
+            return;
+          }
 
           $.when(del("rest/recipe/ingredient", ids)).done(function(data) {
             dialog(data.message);

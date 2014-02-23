@@ -7,7 +7,6 @@
     <script src="js/jquery.validate.min.js"></script>
     <script src="js/ajax.js"></script>
     <script src="js/logging.js"></script>
-    <script src="js/error.js"></script>
     <script src="js/dialog.js"></script>
     <link rel="stylesheet" href="css/style.css" type="text/css" />
   </head>
@@ -15,44 +14,46 @@
     <div>
       <%@ include file="dialog.jspf" %>
       <%@ include file="menu.jspf" %>
-      <div>
-        <table id="data">
-          <thead>
+      <form id="form">
+        <div>
+          <table id="data">
+            <thead>
+              <tr>
+                <th>
+                  &nbsp;
+                </th>
+                <th>
+                  name
+                </th>
+                <th>
+                  amount
+                </th>
+                <th>
+                  unit
+                </th>
+                <th>
+                  cost
+                </th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div>
+          <table>
             <tr>
-              <th>
-                &nbsp;
-              </th>
-              <th>
-                name
-              </th>
-              <th>
-                amount
-              </th>
-              <th>
-                unit
-              </th>
-              <th>
-                cost
-              </th>
+              <td>
+                <input id="save" type="button" value="Save" />
+              </td>
+              <td>
+                <input id="add" type="button" value="Add" />
+              </td>
+              <td>
+                <input id="delete" type="button" value="Delete" />
+              </td>
             </tr>
-          </thead>
-        </table>
-      </div>
-      <div>
-        <table>
-          <tr>
-            <td>
-              <input id="save" type="button" value="Save" />
-            </td>
-            <td>
-              <input id="add" type="button" value="Add" />
-            </td>
-            <td>
-              <input id="delete" type="button" value="Delete" />
-            </td>
-          </tr>
-        </table>
-      </div>
+          </table>
+        </div>
+      </form>
     </div>
     <script>
       function addRows(ingredients, units) {
@@ -66,8 +67,8 @@
 
       function addRow(index, ingredient, units) {
 
-        var unitSelect = $("<select id='unit" + index + "' />");
-        $(unitSelect).append("<option>-- select --</option>");
+        var unitSelect = $("<select id='unit" + index + "' name='unit" + index + "' />");
+        $(unitSelect).append("<option value=''>-- select --</option>");
         $.each(units, function(index, unit) {
           var selected;
           selected = (unit.id === ingredient.unit.id) ? "selected" : "";
@@ -75,11 +76,11 @@
         });
 
         var row = $("<tr id='row" + index + "'/>");
-        $(row).append($("<td/>").append("<input id='id" + index + "' type='checkbox' value='" + ingredient.id + "'/>"));
-        $(row).append($("<td/>").append("<input id='name" + index + "' value='" + ingredient.name + "' />"));
-        $(row).append($("<td/>").append("<input id='amount" + index + "' value='" + ingredient.amount + "' />"));
+        $(row).append($("<td/>").append("<input id='id" + index + "' name='id" + index + "' type='checkbox' value='" + ingredient.id + "'/>"));
+        $(row).append($("<td/>").append("<input id='name" + index + "' name='name" + index + "' value='" + ingredient.name + "' />"));
+        $(row).append($("<td/>").append("<input id='amount" + index + "' name='amount" + index + "' value='" + ingredient.amount + "' />"));
         $(row).append($("<td/>").append(unitSelect));
-        $(row).append($("<td/>").append("<input id='cost" + index + "' value='" + ingredient.cost + "' />"));
+        $(row).append($("<td/>").append("<input id='cost" + index + "' name='cost" + index + "' value='" + ingredient.cost + "' />"));
 
         $("#data").append(row);
 
@@ -88,9 +89,22 @@
           ingredient.name = $(this).val();
         });
 
+        $("#name" + index).rules('add', {
+          required: true,
+          minlength: 1,
+          maxlength: 1000
+        });
+
         $("#amount" + index).bind("input", function() {
           ingredient._changed = true;
           ingredient.amount = $(this).val();
+        });
+
+        $("#amount" + index).rules('add', {
+          required: true,
+          number: true,
+          minlength: 1,
+          maxlength: 20
         });
 
         $("#unit" + index).bind("change", function() {
@@ -98,9 +112,20 @@
           ingredient.unit.id = $(this).val();
         });
 
+        $("#unit" + index).rules('add', {
+          required: true,
+        });
+
         $("#cost" + index).bind("input", function() {
           ingredient._changed = true;
           ingredient.cost = $(this).val();
+        });
+
+        $("#cost" + index).rules('add', {
+          required: true,
+          number: true,
+          minlength: 1,
+          maxlength: 20
         });
       }
 
@@ -117,6 +142,9 @@
       }
 
       $(function() {
+
+        $("#form").validate();
+
         var ingredients = read("rest/ingredient");
         var units = read("rest/unit");
 
@@ -129,6 +157,14 @@
         });
 
         $("#save").click(function() {
+
+          var form = $("#form");
+          form.validate();
+
+          if (!form.valid()) {
+            return false;
+          }
+
           $.when(save("rest/ingredient", ingredients)).done(function(data) {
             dialog(data.message);
 
@@ -161,6 +197,11 @@
               ids.push(value);
             }
           });
+
+          if (ids.length === 0) {
+            dialog("Select ingedients to delete");
+            return;
+          }
 
           $.when(del("rest/ingredient", ids)).done(function(data) {
             dialog(data.message);

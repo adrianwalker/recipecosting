@@ -7,7 +7,6 @@
     <script src="js/jquery.validate.min.js"></script>
     <script src="js/ajax.js"></script>
     <script src="js/logging.js"></script>
-    <script src="js/error.js"></script>
     <script src="js/dialog.js"></script>
     <link rel="stylesheet" href="css/style.css" type="text/css" />
   </head>
@@ -15,41 +14,43 @@
     <div>
       <%@ include file="dialog.jspf" %>
       <%@ include file="menu.jspf" %>
-      <div>
-        <table id="data">
-          <thead>
+      <form id="form">
+        <div>
+          <table id="data">
+            <thead>
+              <tr>
+                <th>
+                  &nbsp;
+                </th>
+                <th>
+                  from unit
+                </th>
+                <th>
+                  ratio
+                </th>
+                <th>
+                  to unit
+                </th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div>
+          <table>
             <tr>
-              <th>
-                &nbsp;
-              </th>
-              <th>
-                from unit
-              </th>
-              <th>
-                ratio
-              </th>
-              <th>
-                to unit
-              </th>
+              <td>
+                <input id="save" type="button" value="Save" />
+              </td>
+              <td>
+                <input id="add" type="button" value="Add" />
+              </td>
+              <td>
+                <input id="delete" type="button" value="Delete" />
+              </td>
             </tr>
-          </thead>
-        </table>
-      </div>
-      <div>
-        <table>
-          <tr>
-            <td>
-              <input id="save" type="button" value="Save" />
-            </td>
-            <td>
-              <input id="add" type="button" value="Add" />
-            </td>
-            <td>
-              <input id="delete" type="button" value="Delete" />
-            </td>
-          </tr>
-        </table>
-      </div>
+          </table>
+        </div>
+      </form>
     </div>
     <script>
       function addRows(unitConversions, units) {
@@ -63,10 +64,10 @@
 
       function addRow(index, unitConversion, units) {
 
-        var unitFromSelect = $("<select id='unitFrom" + index + "' />");
-        $(unitFromSelect).append("<option>-- select --</option>");
-        var unitToSelect = $("<select id='unitTo" + index + "' />");
-        $(unitToSelect).append("<option>-- select --</option>");
+        var unitFromSelect = $("<select id='unitFrom" + index + "' name='unitFrom" + index + "' />");
+        $(unitFromSelect).append("<option value=''>-- select --</option>");
+        var unitToSelect = $("<select id='unitTo" + index + "' name='unitTo" + index + "' />");
+        $(unitToSelect).append("<option value=''>-- select --</option>");
         $.each(units, function(index, unit) {
           var selected;
           selected = (unit.id === unitConversion.unitFrom.id) ? "selected" : "";
@@ -76,9 +77,9 @@
         });
 
         var row = $("<tr id='row" + index + "'/>");
-        $(row).append($("<td/>").append("<input id='id" + index + "' type='checkbox' value='" + unitConversion.id + "'/>"));
+        $(row).append($("<td/>").append("<input id='id" + index + "' name='id" + index + "' type='checkbox' value='" + unitConversion.id + "'/>"));
         $(row).append($("<td/>").append(unitFromSelect));
-        $(row).append($("<td/>").append("<input id='ratio" + index + "' value='" + unitConversion.ratio + "' />"));
+        $(row).append($("<td/>").append("<input id='ratio" + index + "' name='ratio" + index + "' value='" + unitConversion.ratio + "' />"));
         $(row).append($("<td/>").append(unitToSelect));
 
         $("#data").append(row);
@@ -88,14 +89,29 @@
           unitConversion.unitFrom.id = $(this).val();
         });
 
+        $("#unitFrom" + index).rules('add', {
+          required: true,
+        });
+
         $("#ratio" + index).bind("input", function() {
           unitConversion._changed = true;
           unitConversion.ratio = $(this).val();
         });
 
+        $("#ratio" + index).rules('add', {
+          required: true,
+          number: true,
+          minlength: 1,
+          maxlength: 20
+        });
+
         $("#unitTo" + index).bind("change", function() {
           unitConversion._changed = true;
           unitConversion.unitTo.id = $(this).val();
+        });
+
+        $("#unitTo" + index).rules('add', {
+          required: true,
         });
       }
 
@@ -111,6 +127,10 @@
       }
 
       $(function() {
+
+        var form = $("#form");
+        form.validate();
+
         var unitConversions = read("rest/unitconversion");
         var units = read("rest/unit");
 
@@ -123,6 +143,13 @@
         });
 
         $("#save").click(function() {
+
+          form.validate();
+
+          if (!form.valid()) {
+            return false;
+          }
+
           $.when(save("rest/unitconversion", unitConversions)).done(function(data) {
             dialog(data.message);
 
@@ -155,6 +182,11 @@
               ids.push(value);
             }
           });
+
+          if (ids.length === 0) {
+            dialog("Select unit conversions to delete");
+            return;
+          }
 
           $.when(del("rest/unitconversion", ids)).done(function(data) {
             dialog(data.message);

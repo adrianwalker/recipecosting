@@ -6,7 +6,6 @@
     <script src="js/jquery-1.11.0.min.js"></script>
     <script src="js/jquery.validate.min.js"></script>
     <script src="js/logging.js"></script>
-    <script src="js/error.js"></script>
     <script src="js/dialog.js"></script>
     <link rel="stylesheet" href="css/style.css" type="text/css" />
   </head>
@@ -52,49 +51,28 @@
     <script>
       $(function() {
 
-        $("#form1").validate({
-          rules: {
-            username: {
-              required: true,
-              email: true,
-              minlength: 1,
-              maxlength: 1000
-            },
-            password: {
-              required: true,
-              email: true,
-              minlength: 1,
-              maxlength: 1000
-            }
-          }
-        });
-
-        $("#form2").validate({
-          rules: {
-            email: {
-              required: true,
-              email: true,
-              minlength: 1,
-              maxlength: 1000
-            },
-            password1: {
-              required: true,
-              email: true,
-              minlength: 1,
-              maxlength: 1000
-            },
-            password2: {
-              required: true,
-              email: true,
-              minlength: 1,
-              maxlength: 1000
-            }
-          }
-        });
-
         $("#login").click(function() {
 
-          if (!$("#form1").valid()) {
+          var form = $("#form1");
+
+          form.validate({
+            rules: {
+              username: {
+                required: true,
+                email: true,
+                minlength: 1,
+                maxlength: 1000
+              },
+              password: {
+                required: true,
+                email: true,
+                minlength: 1,
+                maxlength: 1000
+              }
+            }
+          });
+
+          if (!form.valid()) {
             return false;
           }
 
@@ -117,7 +95,31 @@
 
         $("#register").click(function() {
 
-          if (!$("#form2").valid()) {
+          var form = $("#form2");
+
+          form.validate({
+            rules: {
+              email: {
+                required: true,
+                email: true,
+                minlength: 1,
+                maxlength: 1000
+              },
+              password1: {
+                required: true,
+                minlength: 1,
+                maxlength: 1000
+              },
+              password2: {
+                required: true,
+                minlength: 1,
+                maxlength: 1000,
+                equalTo: '#password1'
+              }
+            }
+          });
+
+          if (!form.valid()) {
             return false;
           }
 
@@ -138,6 +140,23 @@
         });
 
         $("#forgotpassword").click(function() {
+
+          var form = $("#form1");
+
+          form.validate({
+            rules: {
+              username: {
+                required: true,
+                email: true,
+                minlength: 1,
+                maxlength: 1000
+              }
+            }
+          });
+
+          if (!form.valid()) {
+            return false;
+          }
 
           $.post("rest/user/forgotpassword", {
             username: $("#username").val()

@@ -7,7 +7,6 @@
     <script src="js/jquery.validate.min.js"></script>
     <script src="js/ajax.js"></script>
     <script src="js/logging.js"></script>
-    <script src="js/error.js"></script>
     <script src="js/dialog.js"></script>
     <link rel="stylesheet" href="css/style.css" type="text/css" />
   </head>
@@ -86,6 +85,11 @@
               ids.push(value);
             }
           });
+
+          if (ids.length === 0) {
+            dialog("Select recipes to delete");
+            return;
+          }
 
           $.when(del("rest/recipe", ids)).done(function(data) {
             dialog(data.message);
