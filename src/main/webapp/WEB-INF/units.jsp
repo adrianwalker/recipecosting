@@ -91,9 +91,11 @@
         form.validate();
 
         var units = read("rest/unit");
+        var unitLookup;
 
         $.when(units).done(function(data) {
           units = data.units;
+          unitLookup = lookup(units);
           addRows(units);
         }).fail(function() {
           error();
@@ -112,6 +114,7 @@
 
             $.when(units).done(function(data) {
               units = data.units;
+              unitLookup = lookup(units);
               addRows(units);
             }).fail(function() {
               error();
@@ -128,35 +131,22 @@
 
         $("#delete").click(function() {
 
-          var ids = [];
+          var checked = $('input[id^=id]:checked');
 
-          $('input[id^=id]:checked').each(function() {
-
-            var value = $(this).val();
-            if (value !== 'null') {
-              ids.push(value);
-            }
-          });
-
-          if (ids.length === 0) {
-            dialog("Select units to delete");
+          if (checked.length === 0) {
+            dialog("Select items to delete");
             return;
           }
 
-          $.when(del("rest/unit", ids)).done(function(data) {
-            dialog(data.message);
+          checked.each(function() {
 
-            units = read("rest/unit");
+            var value = $(this).val();
+            if (value !== 'null') {
+              var unit = unitLookup[value];
+              unit._delete = true;
+            }
 
-            $.when(units).done(function(data) {
-              units = data.units;
-              addRows(units);
-            }).fail(function() {
-              error();
-            });
-
-          }).fail(function() {
-            error();
+            $(this).closest("tr[id^=row]").remove();
           });
         });
       });

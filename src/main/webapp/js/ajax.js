@@ -18,18 +18,31 @@ function read(url) {
   });
 }
 
+function lookup(entities) {
+  var entityLookup = {};
+  $.each(entities, function(index, entity) {
+    entityLookup[entity.id] = entity;
+  });
+  return entityLookup;
+}
+
 function save(url, data) {
 
   if ($.isArray(data)) {
 
     var changed = [];
+    var ids = [];
 
     $.each(data, function(index, value) {
 
-      if (value._changed) {
+      if (value._delete) {
+        ids.push(value.id);
+      } else if (value._changed) {
         changed.push(value);
       }
     });
+
+    del(url, ids);
 
     return $.ajax({
       type: "POST",
@@ -64,7 +77,7 @@ function del(url, ids) {
 
 function replacer(key, value) {
 
-  if(key.indexOf("_") === 0) {
+  if (key.indexOf("_") === 0) {
     return undefined;
   } else {
     return value;
