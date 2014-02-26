@@ -8,6 +8,7 @@
     <script src="js/ajax.js"></script>
     <script src="js/logging.js"></script>
     <script src="js/dialog.js"></script>
+    <script src="js/common.js"></script>
     <link rel="stylesheet" href="css/style.css" type="text/css" />
   </head>
   <body>
@@ -147,10 +148,12 @@
 
         var ingredients = read("rest/ingredient");
         var units = read("rest/unit");
+        var ingredientsLookup;
 
         $.when(ingredients, units).done(function(data1, data2) {
           ingredients = data1[0].ingredients;
           units = data2[0].units;
+          ingredientsLookup = lookup(ingredients);
           addRows(ingredients, units);
         }).fail(function() {
           error();
@@ -172,6 +175,7 @@
 
             $.when(ingredients).done(function(data) {
               ingredients = data.ingredients;
+              ingredientsLookup = lookup(ingredients);
               addRows(ingredients, units);
             }).fail(function() {
               error();
@@ -187,37 +191,7 @@
         });
 
         $("#delete").click(function() {
-
-          var ids = [];
-
-          $('input[id^=id]:checked').each(function() {
-
-            var value = $(this).val();
-            if (value !== 'null') {
-              ids.push(value);
-            }
-          });
-
-          if (ids.length === 0) {
-            dialog("Select ingedients to delete");
-            return;
-          }
-
-          $.when(del("rest/ingredient", ids)).done(function(data) {
-            dialog(data.message);
-
-            ingredients = read("rest/ingredient");
-
-            $.when(ingredients).done(function(data) {
-              ingredients = data.ingredients;
-              addRows(ingredients, units);
-            }).fail(function() {
-              error();
-            });
-
-          }).fail(function() {
-            error();
-          });
+          del(ingredientsLookup);
         });
       });
     </script>

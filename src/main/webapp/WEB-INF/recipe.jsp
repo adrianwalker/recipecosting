@@ -9,6 +9,7 @@
     <script src="js/logging.js"></script>
     <script src="js/url.js"></script>
     <script src="js/dialog.js"></script>
+    <script src="js/common.js"></script>
     <link rel="stylesheet" href="css/style.css" type="text/css" />
   </head>
   <body>
@@ -296,8 +297,9 @@
         var units = read("rest/unit");
         var unitConversions = read("rest/unitconversion");
 
-        var ratioLookup = {};
-        var ingredientLookup = {};
+        var ratiosLookup;
+        var ingredientsLookup;
+        var recipeIngredientsLookup;
 
         $.when(recipe, ingredients, units, unitConversions).done(function(data1, data2, data3, data4) {
 
@@ -306,25 +308,25 @@
           units = data3[0].units;
           unitConversions = data4[0].unitConversions;
 
+          ratiosLookup = {};
           $.each(unitConversions, function(index, unitConversion) {
             var fromId = unitConversion.unitFrom.id;
             var toId = unitConversion.unitTo.id;
             var ratio = unitConversion.ratio;
 
-            ratioLookup[fromId + ":" + toId] = ratio;
+            ratiosLookup[fromId + ":" + toId] = ratio;
             if (ratio !== 0) {
-              ratioLookup[toId + ":" + fromId] = 1 / ratio;
+              ratiosLookup[toId + ":" + fromId] = 1 / ratio;
             }
           });
 
-          $.each(ingredients, function(index, ingredient) {
-            ingredientLookup[ingredient.id] = ingredient;
-          });
+          ingredientsLookup = lookup(ingredients);
+          recipeIngredientsLookup = lookup(recipe.recipeIngredients)
 
           setName(recipe);
           setServes(recipe);
-          addRows(recipe, ingredients, units, ratioLookup, ingredientLookup);
-          updateCosts(recipe, ratioLookup, ingredientLookup);
+          addRows(recipe, ingredients, units, ratiosLookup, ingredientsLookup);
+          updateCosts(recipe, ratiosLookup, ingredientsLookup);
         }).fail(function() {
           error();
         });
@@ -342,57 +344,24 @@
             dialog(data.message);
 
             recipe = data.recipe;
+            recipeIngredientsLookup = lookup(recipe.recipeIngredients)
 
             setName(recipe);
             setServes(recipe);
-            addRows(recipe, ingredients, units, ratioLookup, ingredientLookup);
-            updateCosts(recipe, ratioLookup, ingredientLookup);
+            addRows(recipe, ingredients, units, ratiosLookup, ingredientsLookup);
+            updateCosts(recipe, ratiosLookup, ingredientsLookup);
           }).fail(function() {
             error();
           });
         });
 
         $("#add").click(function() {
-          add(recipe, recipe.recipeIngredients, ingredients, units, ratioLookup, ingredientLookup);
+          add(recipe, recipe.recipeIngredients, ingredients, units, ratiosLookup, ingredientsLookup);
         });
 
         $("#delete").click(function() {
-
-          var ids = [];
-
-          $('input[id^=id]:checked').each(function() {
-
-            var value = $(this).val();
-            if (value !== 'null') {
-              ids.push(value);
-            }
-          });
-
-          if (ids.length === 0) {
-            dialog("Select recipe ingredients to delete");
-            return;
-          }
-
-          $.when(del("rest/recipe/ingredient", ids)).done(function(data) {
-            dialog(data.message);
-
-            recipe = read("rest/recipe/" + params.id);
-
-            $.when(recipe).done(function(data) {
-
-              recipe = data;
-
-              setName(recipe);
-              setServes(recipe);
-              addRows(recipe, ingredients, units, ratioLookup, ingredientLookup);
-              updateCosts(recipe, ratioLookup, ingredientLookup);
-            }).fail(function() {
-              error();
-            });
-
-          }).fail(function() {
-            error();
-          });
+          del(recipeIngredientsLookup);
+          updateCosts(recipe, ratiosLookup, ingredientsLookup);
         });
       });
     </script>
