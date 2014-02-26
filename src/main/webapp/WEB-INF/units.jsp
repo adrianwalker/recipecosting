@@ -8,6 +8,7 @@
     <script src="js/ajax.js"></script>
     <script src="js/logging.js"></script>
     <script src="js/dialog.js"></script>
+    <script src="js/common.js"></script>
     <link rel="stylesheet" href="css/style.css" type="text/css" />
   </head>
   <body>
@@ -91,11 +92,11 @@
         form.validate();
 
         var units = read("rest/unit");
-        var unitLookup;
+        var unitsLookup;
 
         $.when(units).done(function(data) {
           units = data.units;
-          unitLookup = lookup(units);
+          unitsLookup = lookup(units);
           addRows(units);
         }).fail(function() {
           error();
@@ -114,7 +115,7 @@
 
             $.when(units).done(function(data) {
               units = data.units;
-              unitLookup = lookup(units);
+              unitsLookup = lookup(units);
               addRows(units);
             }).fail(function() {
               error();
@@ -130,24 +131,7 @@
         });
 
         $("#delete").click(function() {
-
-          var checked = $('input[id^=id]:checked');
-
-          if (checked.length === 0) {
-            dialog("Select items to delete");
-            return;
-          }
-
-          checked.each(function() {
-
-            var value = $(this).val();
-            if (value !== 'null') {
-              var unit = unitLookup[value];
-              unit._delete = true;
-            }
-
-            $(this).closest("tr[id^=row]").remove();
-          });
+          del(unitsLookup)
         });
       });
     </script>

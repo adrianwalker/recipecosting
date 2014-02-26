@@ -8,6 +8,7 @@
     <script src="js/ajax.js"></script>
     <script src="js/logging.js"></script>
     <script src="js/dialog.js"></script>
+    <script src="js/common.js"></script>
     <link rel="stylesheet" href="css/style.css" type="text/css" />
   </head>
   <body>
@@ -133,10 +134,12 @@
 
         var unitConversions = read("rest/unitconversion");
         var units = read("rest/unit");
+        var unitConversionsLookup;
 
         $.when(unitConversions, units).done(function(data1, data2) {
           unitConversions = data1[0].unitConversions;
           units = data2[0].units;
+          unitConversionsLookup = lookup(unitConversions);
           addRows(unitConversions, units);
         }).fail(function() {
           error();
@@ -157,6 +160,7 @@
 
             $.when(unitConversions).done(function(data) {
               unitConversions = data.unitConversions;
+              unitConversionsLookup = lookup(unitConversions);
               addRows(unitConversions, units);
             }).fail(function() {
               error();
@@ -168,41 +172,11 @@
         });
 
         $("#add").click(function() {
-          add(unitConversions, units);
+          add(unitConversions, units)
         });
 
         $("#delete").click(function() {
-
-          var ids = [];
-
-          $('input[id^=id]:checked').each(function() {
-
-            var value = $(this).val();
-            if (value !== 'null') {
-              ids.push(value);
-            }
-          });
-
-          if (ids.length === 0) {
-            dialog("Select unit conversions to delete");
-            return;
-          }
-
-          $.when(del("rest/unitconversion", ids)).done(function(data) {
-            dialog(data.message);
-
-            unitConversions = read("rest/unitconversion");
-
-            $.when(unitConversions).done(function(data) {
-              unitConversions = data.unitConversions;
-              addRows(unitConversions, units);
-            }).fail(function() {
-              error();
-            });
-
-          }).fail(function() {
-            error();
-          });
+          del(unitConversionsLookup)
         });
       });
     </script>

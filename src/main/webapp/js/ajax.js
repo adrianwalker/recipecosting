@@ -18,14 +18,6 @@ function read(url) {
   });
 }
 
-function lookup(entities) {
-  var entityLookup = {};
-  $.each(entities, function(index, entity) {
-    entityLookup[entity.id] = entity;
-  });
-  return entityLookup;
-}
-
 function save(url, data) {
 
   if ($.isArray(data)) {
