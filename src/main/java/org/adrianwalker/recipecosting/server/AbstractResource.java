@@ -9,12 +9,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import org.adrianwalker.recipecosting.common.entity.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class AbstractResource {
+public abstract class AbstractResource {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractResource.class);
   private static final String SESSION_USER_ATTRIBUTE = "user";
   @Context
   private HttpServletRequest request;

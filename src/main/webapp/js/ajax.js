@@ -23,18 +23,13 @@ function save(url, data) {
   if ($.isArray(data)) {
 
     var changed = [];
-    var ids = [];
 
     $.each(data, function(index, value) {
 
-      if (value._delete) {
-        ids.push(value.id);
-      } else if (value._changed) {
+      if (value._changed) {
         changed.push(value);
       }
     });
-
-    del(url, ids);
 
     return $.ajax({
       type: "POST",
@@ -56,7 +51,16 @@ function save(url, data) {
   }
 }
 
-function del(url, ids) {
+function del(url, data) {
+
+  var ids = [];
+
+  $.each(data, function(index, value) {
+
+    if (value._delete) {
+      ids.push(value.id);
+    }
+  });
 
   return $.ajax({
     type: "DELETE",

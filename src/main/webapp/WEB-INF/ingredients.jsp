@@ -168,9 +168,10 @@
             return false;
           }
 
-          $.when(save("rest/ingredient", ingredients)).done(function(data) {
-            dialog(data.message);
+          $.when(save("rest/ingredient", ingredients), del("rest/ingredient", ingredients)).done(function(data1, data2) {
+            dialog(data1[0].message);
 
+            /*
             ingredients = read("rest/ingredient");
 
             $.when(ingredients).done(function(data) {
@@ -180,6 +181,7 @@
             }).fail(function() {
               error();
             });
+            */
 
           }).fail(function() {
             error();
@@ -191,7 +193,7 @@
         });
 
         $("#delete").click(function() {
-          del(ingredientsLookup);
+          remove(ingredientsLookup);
         });
       });
     </script>

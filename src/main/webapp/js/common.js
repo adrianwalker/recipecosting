@@ -6,7 +6,7 @@ function lookup(entities) {
   return entityLookup;
 }
 
-function del(lookup) {
+function remove(lookup) {
   var checked = $('input[id^=id]:checked');
 
   if (checked.length === 0) {

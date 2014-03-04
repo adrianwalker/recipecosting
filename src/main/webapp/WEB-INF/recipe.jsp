@@ -179,7 +179,7 @@
         });
 
         $("#unit" + index).rules('add', {
-          required: true,
+          required: true
         });
       }
 
@@ -340,10 +340,10 @@
             return false;
           }
 
-          $.when(save("rest/recipe", recipe)).done(function(data) {
-            dialog(data.message);
+          $.when(save("rest/recipe", recipe), del("rest/recipe/ingredient", recipe.recipeIngredients)).done(function(data1, data2) {
+            dialog(data1[0].message);
 
-            recipe = data.recipe;
+            recipe = data1[0].recipe;
             recipeIngredientsLookup = lookup(recipe.recipeIngredients)
 
             setName(recipe);
@@ -360,7 +360,7 @@
         });
 
         $("#delete").click(function() {
-          del(recipeIngredientsLookup);
+          remove(recipeIngredientsLookup);
           updateCosts(recipe, ratiosLookup, ingredientsLookup);
         });
       });

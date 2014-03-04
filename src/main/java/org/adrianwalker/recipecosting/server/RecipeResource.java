@@ -90,7 +90,7 @@ public final class RecipeResource extends AbstractResource {
       recipeIngredient.setRecipe(recipe);
       recipeIngredient.setUser(getSessionUser());
     }
-
+    
     response.put("recipe", recipesDelegate.update(getSessionUser(), recipe));
     response.put("message", "recipe saved");
 

@@ -108,9 +108,10 @@
             return false;
           }
 
-          $.when(save("rest/unit", units)).done(function(data) {
-            dialog(data.message);
+          $.when(save("rest/unit", units), del("rest/unit", units)).done(function(data1, data2) {
+            dialog(data1[0].message);
 
+            /*
             units = read("rest/unit");
 
             $.when(units).done(function(data) {
@@ -120,6 +121,7 @@
             }).fail(function() {
               error();
             });
+            */
 
           }).fail(function() {
             error();
@@ -131,7 +133,7 @@
         });
 
         $("#delete").click(function() {
-          del(unitsLookup)
+          remove(unitsLookup)
         });
       });
     </script>
