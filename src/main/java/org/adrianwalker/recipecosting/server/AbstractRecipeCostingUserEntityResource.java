@@ -7,10 +7,6 @@ import org.adrianwalker.recipecosting.common.entity.User;
 
 public abstract class AbstractRecipeCostingUserEntityResource<T extends RecipeCostingUserEntity> extends AbstractResource {
 
-  public abstract Map<String, Object> read() throws Exception;
-
-  public abstract Map<String, Object> save(final Map<String, Object> save) throws Exception;
-
   public abstract RecipeCostingUserEntityResourceDelegate<T> getDelegate();
 
   public Map<String, Object> read(final String entities, final String orderBy) throws Exception {
@@ -31,9 +27,6 @@ public abstract class AbstractRecipeCostingUserEntityResource<T extends RecipeCo
     delegate.update(sessionUser, (List<T>) save.get("changed"));
     delegate.delete(sessionUser, (List<Long>) save.get("ids"));
 
-    Map<String, Object> response = response(message);
-    response.putAll(read());
-
-    return response;
+    return response(message);
   }
 }

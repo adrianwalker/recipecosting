@@ -1,6 +1,7 @@
 package org.adrianwalker.recipecosting.server;
 
 import java.util.Map;
+import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -12,16 +13,19 @@ import org.adrianwalker.recipecosting.common.entity.Unit;
 @Path("/unit")
 public final class UnitResource extends AbstractRecipeCostingUserEntityResource<Unit> {
 
-  private static RecipeCostingUserEntityResourceDelegate<Unit> unitDelegate = new RecipeCostingUserEntityResourceDelegate<Unit>(Unit.class, PersistenceManager.INSTANCE.getEntityManagerFactory());
+  private static RecipeCostingUserEntityResourceDelegate<Unit> unitDelegate;
+  static {
+    EntityManagerFactory emf = PersistenceManager.INSTANCE.getEntityManagerFactory();
+    unitDelegate = new RecipeCostingUserEntityResourceDelegate<Unit>(Unit.class, emf);
+  }
 
   @Override
-  public RecipeCostingUserEntityResourceDelegate getDelegate() {
+  public RecipeCostingUserEntityResourceDelegate<Unit> getDelegate() {
     return unitDelegate;
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Override
   public Map<String, Object> read() throws Exception {
 
     return read("units", "name");
@@ -30,7 +34,6 @@ public final class UnitResource extends AbstractRecipeCostingUserEntityResource<
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  @Override
   public Map<String, Object> save(final Map<String, Object> save) throws Exception {
 
     return save(save, "units saved");
