@@ -8,6 +8,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import org.adrianwalker.recipecosting.common.entity.Save;
 import org.adrianwalker.recipecosting.common.entity.Unit;
 
 @Path("/unit")
@@ -34,7 +35,7 @@ public final class UnitResource extends AbstractRecipeCostingUserEntityResource<
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Map<String, Object> save(final Map<String, Object> save) throws Exception {
+  public Map<String, Object> save(final Save<Unit> save) throws Exception {
 
     return save(save, "units saved");
   }

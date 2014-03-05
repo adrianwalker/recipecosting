@@ -144,7 +144,7 @@
         $("#data").append(row);
 
         $("#ingredient" + index).bind("change", function() {
-          recipeIngredient._changed = true;
+          recipe._changed = true;
           recipeIngredient.ingredient.id = $(this).val();
           updateCost(index, recipeIngredient, ratioLookup, ingredientLookup);
           updateTotalCost(recipe);
@@ -156,7 +156,7 @@
         });
 
         $("#amount" + index).bind("input", function() {
-          recipeIngredient._changed = true;
+          recipe._changed = true;
           recipeIngredient.amount = $(this).val();
           updateCost(index, recipeIngredient, ratioLookup, ingredientLookup);
           updateTotalCost(recipe);
@@ -171,7 +171,7 @@
         });
 
         $("#unit" + index).bind("change", function() {
-          recipeIngredient._changed = true;
+          recipe._changed = true;
           recipeIngredient.unit.id = $(this).val();
           updateCost(index, recipeIngredient, ratioLookup, ingredientLookup);
           updateTotalCost(recipe);
@@ -339,11 +339,11 @@
           if (!form.valid()) {
             return false;
           }
+          
+          $.when(save("rest/recipe", [recipe, recipe.recipeIngredients])).done(function(data) {
+            dialog(data.message);
 
-          $.when(save("rest/recipe", recipe), del("rest/recipe/ingredient", recipe.recipeIngredients)).done(function(data1, data2) {
-            dialog(data1[0].message);
-
-            recipe = data1[0].recipe;
+            recipe = data.recipe;
             recipeIngredientsLookup = lookup(recipe.recipeIngredients)
 
             setName(recipe);

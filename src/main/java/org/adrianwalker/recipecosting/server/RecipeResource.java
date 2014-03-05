@@ -13,9 +13,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.adrianwalker.recipecosting.common.entity.Recipe;
 import org.adrianwalker.recipecosting.common.entity.RecipeIngredient;
+import org.adrianwalker.recipecosting.common.entity.Save;
 
 @Path("/recipe")
-public final class RecipeResource extends AbstractRecipeCostingUserEntityResource<Recipe> {
+public final class RecipeResource extends AbstractResource {
 
   private static RecipeCostingUserEntityResourceDelegate<Recipe> recipesDelegate;
   private static RecipeCostingUserEntityResourceDelegate<RecipeIngredient> recipeIngredientsDelegate;
@@ -26,11 +27,6 @@ public final class RecipeResource extends AbstractRecipeCostingUserEntityResourc
     recipeIngredientsDelegate = new RecipeCostingUserEntityResourceDelegate<RecipeIngredient>(RecipeIngredient.class, emf);
   }
 
-  @Override
-  public RecipeCostingUserEntityResourceDelegate<Recipe> getDelegate() {
-    return recipesDelegate;
-  }
-
   @GET
   @Path("{id}")
   @Produces(MediaType.APPLICATION_JSON)
@@ -38,14 +34,14 @@ public final class RecipeResource extends AbstractRecipeCostingUserEntityResourc
     @PathParam("id")
     final long id) throws Exception {
 
-    return getDelegate().read(getSessionUser(), id);
+    return recipesDelegate.read(getSessionUser(), id);
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Map<String, Object> read() throws Exception {
 
-    List<Recipe> recipes = getDelegate().read(getSessionUser(), "name");
+    List<Recipe> recipes = recipesDelegate.read(getSessionUser(), "name");
 
     for (Recipe recipe : recipes) {
       recipe.setRecipeIngredients(null);
@@ -62,7 +58,7 @@ public final class RecipeResource extends AbstractRecipeCostingUserEntityResourc
   @Produces(MediaType.APPLICATION_JSON)
   public Map<String, Object> delete(final List<Long> ids) throws Exception {
 
-    getDelegate().delete(getSessionUser(), ids);
+    recipesDelegate.delete(getSessionUser(), ids);
 
     return response("recipes deleted");
   }
@@ -70,10 +66,10 @@ public final class RecipeResource extends AbstractRecipeCostingUserEntityResourc
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Map<String, Object> save(final Map<String, Object> save) throws Exception {
+  public Map<String, Object> save(final Save<Recipe> save) throws Exception {
 
     // save recipe
-    Recipe recipe = (Recipe) save.get("recipe");
+    Recipe recipe = save.getChanged().get(0);
     List<RecipeIngredient> recipeIngredients = recipe.getRecipeIngredients();
     for (RecipeIngredient recipeIngredient : recipeIngredients) {
       recipeIngredient.setRecipe(recipe);
@@ -81,14 +77,14 @@ public final class RecipeResource extends AbstractRecipeCostingUserEntityResourc
     }
 
     // delete any ingredients
-    List<Long> recipeIngredientIds = (List<Long>) save.get("ids");
+    List<Long> recipeIngredientIds = save.getIds();
     for (Long recipeIngredientId : recipeIngredientIds) {
       RecipeIngredient recipeIngredient = recipeIngredientsDelegate.read(getSessionUser(), recipeIngredientId);
       recipeIngredients.remove(recipeIngredient);
       recipeIngredientsDelegate.delete(getSessionUser(), recipeIngredientId);
     }
 
-    recipe = getDelegate().update(getSessionUser(), recipe);
+    recipe = recipesDelegate.update(getSessionUser(), recipe);
 
     Map<String, Object> response = response();
     response.put("recipe", recipe);

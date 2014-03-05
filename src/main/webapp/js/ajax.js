@@ -1,14 +1,16 @@
-function read(url, page, pageSize) {
-
-  return $.ajax({
-    type: "GET",
-    url: url,
-    data: {
-      page: page,
-      pageSize: pageSize
-    }
-  });
-}
+/*
+ function read(url, page, pageSize) {
+ 
+ return $.ajax({
+ type: "GET",
+ url: url,
+ data: {
+ page: page,
+ pageSize: pageSize
+ }
+ });
+ }
+ */
 
 function read(url) {
 
@@ -20,47 +22,33 @@ function read(url) {
 
 function save(url, data) {
 
-  if ($.isArray(data)) {
-
-    var changed = [];
-
-    $.each(data, function(index, value) {
-
-      if (value._changed) {
-        changed.push(value);
-      }
-    });
-
-    return $.ajax({
-      type: "POST",
-      url: url,
-      data: JSON.stringify(changed, replacer),
-      contentType: "application/json",
-      dataType: "json"
-    });
-
-  } else {
-
-    return $.ajax({
-      type: "POST",
-      url: url,
-      data: JSON.stringify(data, replacer),
-      contentType: "application/json",
-      dataType: "json"
-    });
-  }
-}
-
-function del(url, data) {
-
+  var changed = [];
   var ids = [];
 
   $.each(data, function(index, value) {
 
     if (value._delete) {
       ids.push(value.id);
+    } else if (value._changed) {
+      changed.push(value);
     }
   });
+
+  data = {
+    changed: changed,
+    ids: ids
+  };
+
+  return $.ajax({
+    type: "POST",
+    url: url,
+    data: JSON.stringify(data, replacer),
+    contentType: "application/json",
+    dataType: "json"
+  });
+}
+
+function del(url, ids) {
 
   return $.ajax({
     type: "DELETE",

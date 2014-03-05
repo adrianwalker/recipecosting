@@ -153,10 +153,9 @@
             return false;
           }
 
-          $.when(save("rest/unitconversion", unitConversions), del("rest/unitconversion", unitConversions)).done(function(data1, data2) {
-            dialog(data1[0].message);
+          $.when(save("rest/unitconversion", unitConversions)).done(function(data) {
+            dialog(data.message);
 
-            /*
             unitConversions = read("rest/unitconversion");
 
             $.when(unitConversions).done(function(data) {
@@ -166,7 +165,6 @@
             }).fail(function() {
               error();
             });
-            */
 
           }).fail(function() {
             error();
