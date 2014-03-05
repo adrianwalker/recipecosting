@@ -141,8 +141,8 @@
           units = data2[0].units;
           unitConversionsLookup = lookup(unitConversions);
           addRows(unitConversions, units);
-        }).fail(function() {
-          error();
+        }).fail(function(xhr, status, error) {
+          dialog(error);
         });
 
         $("#save").click(function() {
@@ -162,12 +162,12 @@
               unitConversions = data.unitConversions;
               unitConversionsLookup = lookup(unitConversions);
               addRows(unitConversions, units);
-            }).fail(function() {
-              error();
+            }).fail(function(xhr, status, error) {
+              dialog(error);
             });
 
-          }).fail(function() {
-            error();
+          }).fail(function(xhr, status, error) {
+            dialog(error);
           });
         });
 

@@ -137,4 +137,9 @@ public class RecipeIngredient implements RecipeCostingUserEntity {
             + ", unit=" + unit.getName()
             + ", ingredient=" + ingredient.getName() + '}';
   }
+
+  @Override
+  public String getName() {
+    return ingredient.getName();
+  }
 }

@@ -128,7 +128,7 @@ public final class RecipeCostingUserEntityResourceDelegate<T extends RecipeCosti
 
     for (long id : ids) {
       read(user, id);
-      destroy(id);
+      destroy(user, id);
     }
   }
 
@@ -137,7 +137,7 @@ public final class RecipeCostingUserEntityResourceDelegate<T extends RecipeCosti
     LOGGER.info("user = " + user.getUsername() + ", id = " + id);
 
     read(user, id);
-    destroy(id);
+    destroy(user, id);
   }
 
   public long count(final User user) throws Exception {
@@ -177,7 +177,7 @@ public final class RecipeCostingUserEntityResourceDelegate<T extends RecipeCosti
       entity.setUser(user);
       controller.create(entity);
     } catch (Exception e) {
-      String message = "Unable to create " + getClassName();
+      String message = "Unable to create " + getClassName() + ": " + entity.getName();
       LOGGER.error(message, e);
       throw new Exception(message, e);
     }
@@ -190,20 +190,20 @@ public final class RecipeCostingUserEntityResourceDelegate<T extends RecipeCosti
     try {
       controller.edit(entity);
     } catch (Exception e) {
-      String message = "Unable to save " + getClassName();
+      String message = "Unable to save " + getClassName() + ": " + entity.getName();
       LOGGER.error(message, e);
       throw new Exception(message, e);
     }
   }
 
-  private void destroy(final long id) throws Exception {
+  private void destroy(final User user, final long id) throws Exception {
 
     LOGGER.info("id = " + id);
 
     try {
       controller.destroy(id);
     } catch (Exception e) {
-      String message = "Unable to delete " + getClassName();
+      String message = "Unable to delete " + getClassName() + ": " + getEntityName(user, id);
       LOGGER.error(message, e);
       throw new Exception(message, e);
     }
@@ -211,5 +211,9 @@ public final class RecipeCostingUserEntityResourceDelegate<T extends RecipeCosti
 
   private String getClassName() {
     return clazz.getName().substring(clazz.getName().lastIndexOf('.') + 1).toLowerCase();
+  }
+
+  private String getEntityName(final User user, final long id) throws Exception {
+    return read(user, id).getName();
   }
 }

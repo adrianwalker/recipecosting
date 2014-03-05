@@ -59,8 +59,8 @@
             password2: $("#password2").val()
           }).done(function() {
             dialog("Password changed");
-          }).fail(function() {
-            error();
+          }).fail(function(xhr, status, error) {
+            dialog(error);
           });
         });
       });

@@ -66,8 +66,8 @@
         $.when(recipes).done(function(data) {
           recipes = data.recipes;
           addRows(recipes);
-        }).fail(function() {
-          error();
+        }).fail(function(xhr, status, error) {
+          dialog(error);
         });
 
         $("#new").click(function() {
@@ -99,12 +99,12 @@
             $.when(recipes).done(function(data) {
               recipes = data.recipes;
               addRows(recipes);
-            }).fail(function() {
-              error();
+            }).fail(function(xhr, status, error) {
+              dialog(error);
             });
 
-          }).fail(function() {
-            error();
+          }).fail(function(xhr, status, error) {
+            dialog(error);
           });
         });
       });

@@ -1,17 +1,3 @@
-/*
- function read(url, page, pageSize) {
- 
- return $.ajax({
- type: "GET",
- url: url,
- data: {
- page: page,
- pageSize: pageSize
- }
- });
- }
- */
-
 function read(url) {
 
   return $.ajax({
@@ -26,7 +12,7 @@ function save(url, data) {
   var ids = [];
 
   $.each(data, function(index, value) {
-
+    
     if (value._delete) {
       ids.push(value.id);
     } else if (value._changed) {

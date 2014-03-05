@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -120,5 +119,10 @@ public class UnitConversion implements RecipeCostingUserEntity {
   @Override
   public String toString() {
     return "UnitConversion{" + "id=" + id + ", ratio=" + ratio + ", unitFrom=" + unitFrom + ", unitTo=" + unitTo + ", user=" + user + '}';
+  }
+
+  @Override
+  public String getName() {
+    return unitFrom.getName() + " to " + unitTo.getName();
   }
 }

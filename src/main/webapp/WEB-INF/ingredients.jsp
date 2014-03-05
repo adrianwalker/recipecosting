@@ -155,8 +155,8 @@
           units = data2[0].units;
           ingredientsLookup = lookup(ingredients);
           addRows(ingredients, units);
-        }).fail(function() {
-          error();
+        }).fail(function(xhr, status, error) {
+          dialog(error);
         });
 
         $("#save").click(function() {
@@ -177,12 +177,12 @@
               ingredients = data.ingredients;
               ingredientsLookup = lookup(ingredients);
               addRows(ingredients, units);
-            }).fail(function() {
-              error();
+            }).fail(function(xhr, status, error) {
+              dialog(error);
             });
 
-          }).fail(function() {
-            error();
+          }).fail(function(xhr, status, error) {
+            dialog(error);
           });
         });
 

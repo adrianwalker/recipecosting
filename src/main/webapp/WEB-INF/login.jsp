@@ -88,8 +88,8 @@
               window.location.replace("recipes.html");
             }
 
-          }).fail(function() {
-            error();
+          }).fail(function(xhr, status, error) {
+            dialog(error);
           });
         });
 
@@ -134,8 +134,8 @@
               dialog(message);
             }
 
-          }).fail(function() {
-            error();
+          }).fail(function(xhr, status, error) {
+            dialog(error);
           });
         });
 
@@ -167,8 +167,8 @@
               dialog(message);
             }
 
-          }).fail(function() {
-            error();
+          }).fail(function(xhr, status, error) {
+            dialog(error);
           });
 
           return false;

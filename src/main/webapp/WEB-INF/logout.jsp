@@ -19,8 +19,8 @@
         $.get("rest/user/logout", {
         }).done(function() {
           window.location.replace("login.html");
-        }).fail(function() {
-          error();
+        }).fail(function(xhr, status, error) {
+          dialog(error);
         });
       });
     </script>

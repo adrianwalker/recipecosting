@@ -40,18 +40,18 @@ public final class UserData {
     // Units
 
     // weights
-    Unit kilogram = createUnit(user, "kilogram (kg)");
-    Unit pound = createUnit(user, "pound (lb)");
-    Unit ounce = createUnit(user, "ounce (oz)");
-    Unit gram = createUnit(user, "gram (g)");
+    Unit kilogram = createUnit(user, "kg");
+    Unit pound = createUnit(user, "lb");
+    Unit ounce = createUnit(user, "oz");
+    Unit gram = createUnit(user, "g");
     // volumes
-    Unit quart = createUnit(user, "quart (qt)");
-    Unit litre = createUnit(user, "litre (L)");
-    Unit pint = createUnit(user, "pint (pt)");
-    Unit fluidOunce = createUnit(user, "fluid ounce (fl oz)");
-    Unit tablespoon = createUnit(user, "tablespoon (tbsp)");
-    Unit teaspoon = createUnit(user, "teaspoon (tsp)");
-    Unit millilitre = createUnit(user, "millilitre (ml)");
+    Unit quart = createUnit(user, "qt");
+    Unit litre = createUnit(user, "L");
+    Unit pint = createUnit(user, "pt");
+    Unit fluidOunce = createUnit(user, "fl oz");
+    Unit tablespoon = createUnit(user, "tbsp");
+    Unit teaspoon = createUnit(user, "tsp");
+    Unit millilitre = createUnit(user, "ml");
     // each
     Unit each = createUnit(user, "each");
 

@@ -123,7 +123,7 @@
         $.each(ingredients, function(index, ingredient) {
           var selected;
           selected = (ingredient.id === recipeIngredient.ingredient.id) ? "selected" : "";
-          $(ingredientSelect).append("<option value='" + ingredient.id + "' " + selected + ">" + ingredient.name + "</option>");
+          $(ingredientSelect).append("<option value='" + ingredient.id + "' " + selected + ">" + ingredient.name + " (" + ingredient.unit.name + ")</option>");
         });
 
         var unitSelect = $("<select id='unit" + index + "' name='unit" + index + "' />");
@@ -193,17 +193,29 @@
 
       function updateCost(index, recipeIngredient, ratioLookup, ingredientLookup) {
         recipeIngredient._cost = calculateCost(recipeIngredient, ratioLookup, ingredientLookup);
-        $("#cost" + index).text(recipeIngredient._cost.toFixed(2));
+        if (isNaN(recipeIngredient._cost)) {
+          $("#cost" + index).text("#ERROR");
+        } else {
+          $("#cost" + index).text(recipeIngredient._cost.toFixed(2));
+        }
       }
 
       function updateTotalCost(recipe) {
         recipe._totalCost = calculateTotalCost(recipe.recipeIngredients);
-        $("#total_cost").text(recipe._totalCost.toFixed(2));
+        if (isNaN(recipe._totalCost)) {
+          $("#total_cost").text("#ERROR");
+        } else {
+          $("#total_cost").text(recipe._totalCost.toFixed(2));
+        }
       }
 
       function updateServingCost(recipe) {
         recipe._servingCost = calculateServingCost(recipe._totalCost, recipe.serves);
-        $("#serving_cost").text(recipe._servingCost.toFixed(2));
+        if (isNaN(recipe._servingCost)) {
+          $("#serving_cost").text("#ERROR");
+        } else {
+          $("#serving_cost").text(recipe._servingCost.toFixed(2));
+        }
       }
 
       function calculateCost(recipeIngredient, ratioLookup, ingredientLookup) {
@@ -327,8 +339,8 @@
           setServes(recipe);
           addRows(recipe, ingredients, units, ratiosLookup, ingredientsLookup);
           updateCosts(recipe, ratiosLookup, ingredientsLookup);
-        }).fail(function() {
-          error();
+        }).fail(function(xhr, status, error) {
+          dialog(error);
         });
 
         $("#save").click(function() {
@@ -339,8 +351,8 @@
           if (!form.valid()) {
             return false;
           }
-          
-          $.when(save("rest/recipe", [recipe, recipe.recipeIngredients])).done(function(data) {
+
+          $.when(save("rest/recipe", [recipe].concat(recipe.recipeIngredients))).done(function(data) {
             dialog(data.message);
 
             recipe = data.recipe;
@@ -350,8 +362,8 @@
             setServes(recipe);
             addRows(recipe, ingredients, units, ratiosLookup, ingredientsLookup);
             updateCosts(recipe, ratiosLookup, ingredientsLookup);
-          }).fail(function() {
-            error();
+          }).fail(function(xhr, status, error) {
+            dialog(error);
           });
         });
 

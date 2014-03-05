@@ -98,8 +98,8 @@
           units = data.units;
           unitsLookup = lookup(units);
           addRows(units);
-        }).fail(function() {
-          error();
+        }).fail(function(xhr, status, error) {
+          dialog(error);
         });
 
         $("#save").click(function() {
@@ -117,12 +117,12 @@
               units = data.units;
               unitsLookup = lookup(units);
               addRows(units);
-            }).fail(function() {
-              error();
+            }).fail(function(xhr, status, error) {
+              dialog(error);
             });
 
-          }).fail(function() {
-            error();
+          }).fail(function(xhr, status, error) {
+            dialog(error);
           });
         });
 
