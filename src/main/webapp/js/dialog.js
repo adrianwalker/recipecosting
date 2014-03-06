@@ -1,7 +1,12 @@
-function dialog(message) {
-  var overlay = $("#overlay");
+function dialog(message, messages) {
 
-  $("#message").text(message);
+  var overlay = $("#overlay");
+  var html = message;
+  $(messages).each(function(index, value) {
+    html = html + "<br>" + value;
+  });
+
+  $("#text").html(html);
 
   $("#ok").click(function() {
     overlay.hide();

@@ -169,18 +169,10 @@
           }
 
           $.when(save("rest/ingredient", ingredients)).done(function(data) {
-            dialog(data.message);
-
-            ingredients = read("rest/ingredient");
-
-            $.when(ingredients).done(function(data) {
-              ingredients = data.ingredients;
-              ingredientsLookup = lookup(ingredients);
-              addRows(ingredients, units);
-            }).fail(function(xhr, status, error) {
-              dialog(error);
-            });
-
+            dialog(data.message, data.messages);
+            ingredients = data.ingredients;
+            ingredientsLookup = lookup(ingredients);
+            addRows(ingredients, units);
           }).fail(function(xhr, status, error) {
             dialog(error);
           });

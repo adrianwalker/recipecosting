@@ -220,6 +220,10 @@
 
       function calculateCost(recipeIngredient, ratioLookup, ingredientLookup) {
 
+        if(recipeIngredient._delete) {
+          return 0;
+        }
+
         var ingredient = ingredientLookup[recipeIngredient.ingredient.id];
         var ingredientUnitId = ingredient.unit.id;
         var ingredientAmount = ingredient.amount;
@@ -353,7 +357,7 @@
           }
 
           $.when(save("rest/recipe", [recipe].concat(recipe.recipeIngredients))).done(function(data) {
-            dialog(data.message);
+            dialog(data.message, data.messages);
 
             recipe = data.recipe;
             recipeIngredientsLookup = lookup(recipe.recipeIngredients)

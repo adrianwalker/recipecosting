@@ -38,6 +38,10 @@ public final class UnitConversionResource extends AbstractRecipeCostingUserEntit
   @Produces(MediaType.APPLICATION_JSON)
   public Map<String, Object> save(final Save<UnitConversion> save) throws Exception {
 
-    return save(save, "unit conversions saved");
+    Map<String, Object> response = response();
+    response.putAll(save(save, "units conversions saved"));
+    response.putAll(read());
+
+    return response;
   }
 }

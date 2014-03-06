@@ -1,5 +1,7 @@
 package org.adrianwalker.recipecosting.server;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import org.adrianwalker.recipecosting.common.entity.RecipeCostingUserEntity;
 import org.adrianwalker.recipecosting.common.entity.Save;
@@ -22,11 +24,34 @@ public abstract class AbstractRecipeCostingUserEntityResource<T extends RecipeCo
   public Map<String, Object> save(final Save<T> save, final String message) throws Exception {
 
     User sessionUser = getSessionUser();
-
     RecipeCostingUserEntityResourceDelegate<T> delegate = getDelegate();
-    delegate.update(sessionUser, save.getChanged());
-    delegate.delete(sessionUser, save.getIds());
 
-    return response(message);
+    List<String> messages = new ArrayList<String>();
+
+    List<Long> ids = save.getIds();
+    for (Long id : ids) {
+      try {
+        delegate.delete(sessionUser, id);
+      } catch (Exception ex) {
+        messages.add(ex.getMessage());
+      }
+    }
+
+    List<T> changed = save.getChanged();
+    for (T change : changed) {
+      try {
+        delegate.update(sessionUser, change);
+      } catch (Exception ex) {
+        messages.add(ex.getMessage());
+      }
+    }
+    
+    Map<String, Object> response = response();
+    response.put("message", message);
+    if(!messages.isEmpty()) {
+      response.put("messages", messages);
+    }
+
+    return response;
   }
 }

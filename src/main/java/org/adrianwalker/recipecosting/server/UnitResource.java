@@ -36,7 +36,11 @@ public final class UnitResource extends AbstractRecipeCostingUserEntityResource<
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Map<String, Object> save(final Save<Unit> save) throws Exception {
+    
+    Map<String, Object> response = response();
+    response.putAll(save(save, "units saved"));
+    response.putAll(read());
 
-    return save(save, "units saved");
+    return response;
   }
 }

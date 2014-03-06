@@ -109,18 +109,10 @@
           }
 
           $.when(save("rest/unit", units)).done(function(data) {
-            dialog(data.message);
-
-            units = read("rest/unit");
-
-            $.when(units).done(function(data) {
-              units = data.units;
-              unitsLookup = lookup(units);
-              addRows(units);
-            }).fail(function(xhr, status, error) {
-              dialog(error);
-            });
-
+            dialog(data.message, data.messages);
+            units = data.units;
+            unitsLookup = lookup(units);
+            addRows(units);
           }).fail(function(xhr, status, error) {
             dialog(error);
           });

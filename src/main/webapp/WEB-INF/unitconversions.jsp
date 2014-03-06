@@ -154,18 +154,10 @@
           }
 
           $.when(save("rest/unitconversion", unitConversions)).done(function(data) {
-            dialog(data.message);
-
-            unitConversions = read("rest/unitconversion");
-
-            $.when(unitConversions).done(function(data) {
-              unitConversions = data.unitConversions;
-              unitConversionsLookup = lookup(unitConversions);
-              addRows(unitConversions, units);
-            }).fail(function(xhr, status, error) {
-              dialog(error);
-            });
-
+            dialog(data.message, data.messages);
+            unitConversions = data.unitConversions;
+            unitConversionsLookup = lookup(unitConversions);
+            addRows(unitConversions, units);
           }).fail(function(xhr, status, error) {
             dialog(error);
           });

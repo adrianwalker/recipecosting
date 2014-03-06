@@ -37,6 +37,10 @@ public final class IngredientResource extends AbstractRecipeCostingUserEntityRes
   @Produces(MediaType.APPLICATION_JSON)
   public Map<String, Object> save(final Save<Ingredient> save) throws Exception {
 
-    return save(save, "ingredients saved");
+    Map<String, Object> response = response();
+    response.putAll(save(save, "ingredients saved"));
+    response.putAll(read());
+
+    return response;    
   }
 }
