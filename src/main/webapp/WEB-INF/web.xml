@@ -56,7 +56,7 @@
     <servlet-name>enable</servlet-name>
     <url-pattern>/enable.html</url-pattern>
   </servlet-mapping>
-  
+
   <!-- resetpassword -->
 
   <servlet>
@@ -66,7 +66,7 @@
   <servlet-mapping>
     <servlet-name>resetpassword</servlet-name>
     <url-pattern>/resetpassword.html</url-pattern>
-  </servlet-mapping>  
+  </servlet-mapping>
 
   <!-- changepassword -->
 

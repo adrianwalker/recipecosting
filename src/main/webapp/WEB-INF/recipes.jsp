@@ -8,6 +8,7 @@
     <script src="js/ajax.js"></script>
     <script src="js/logging.js"></script>
     <script src="js/dialog.js"></script>
+    <script src="js/common.js"></script>
     <link rel="stylesheet" href="css/style.css" type="text/css" />
   </head>
   <body>
@@ -32,7 +33,10 @@
         <table>
           <tr>
             <td>
-              <input id="new" type="button" value="New" />
+              <input id="save" type="button" value="Save" />
+            </td>
+            <td>
+              <input id="add" type="button" value="Add" />
             </td>
             <td>
               <input id="delete" type="button" value="Delete" />
@@ -62,36 +66,19 @@
 
       $(function() {
         var recipes = read("rest/recipe");
+        var recipsLookup;
 
         $.when(recipes).done(function(data) {
           recipes = data.recipes;
+          recipsLookup = lookup(recipes);
           addRows(recipes);
         }).fail(function(xhr, status, error) {
           dialog(error);
         });
 
-        $("#new").click(function() {
-          window.location.replace("recipe.html");
-        });
+        $("#save").click(function() {
 
-        $("#delete").click(function() {
-
-          var ids = [];
-
-          $('input[id^=id]:checked').each(function() {
-
-            var value = $(this).val();
-            if (value !== 'null') {
-              ids.push(value);
-            }
-          });
-
-          if (ids.length === 0) {
-            dialog("Select recipes to delete");
-            return;
-          }
-
-          $.when(del("rest/recipe", ids)).done(function(data) {
+          $.when(del("rest/recipe", recipes)).done(function(data) {
             dialog(data.message);
 
             recipes = read("rest/recipe");
@@ -106,6 +93,14 @@
           }).fail(function(xhr, status, error) {
             dialog(error);
           });
+        });
+
+        $("#add").click(function() {
+          window.location.replace("recipe.html");
+        });
+
+        $("#delete").click(function() {
+          remove(recipsLookup);
         });
       });
     </script>

@@ -12,13 +12,17 @@ function save(url, data) {
   var ids = [];
 
   $.each(data, function(index, value) {
-    
+
     if (value._delete) {
       ids.push(value.id);
     } else if (value._changed) {
       changed.push(value);
     }
   });
+
+  if (changed.length === 0 && ids.length === 0) {
+    return {message: "no changes to save"};
+  }
 
   data = {
     changed: changed,
@@ -34,7 +38,20 @@ function save(url, data) {
   });
 }
 
-function del(url, ids) {
+function del(url, data) {
+
+  var ids = [];
+
+  $.each(data, function(index, value) {
+
+    if (value._delete) {
+      ids.push(value.id);
+    }
+  });
+
+  if (ids.length === 0) {
+    return {message: "no changes to save"};
+  }
 
   return $.ajax({
     type: "DELETE",

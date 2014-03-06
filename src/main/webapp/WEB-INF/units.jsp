@@ -131,7 +131,7 @@
         });
 
         $("#delete").click(function() {
-          remove(unitsLookup)
+          remove(unitsLookup);
         });
       });
     </script>
