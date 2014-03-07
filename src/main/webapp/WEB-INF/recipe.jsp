@@ -373,10 +373,13 @@
 
         $("#add").click(function() {
           add(recipe, recipe.recipeIngredients, ingredients, units, ratiosLookup, ingredientsLookup);
+          recipe._changed = true;
         });
 
         $("#delete").click(function() {
           remove(recipeIngredientsLookup);
+          recipe._changed = true;
+          
           updateCosts(recipe, ratiosLookup, ingredientsLookup);
         });
       });

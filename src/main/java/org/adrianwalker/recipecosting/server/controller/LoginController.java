@@ -1,5 +1,9 @@
 package org.adrianwalker.recipecosting.server.controller;
 
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Properties;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
@@ -11,10 +15,15 @@ import org.adrianwalker.recipecosting.common.entity.User;
 
 public final class LoginController {
 
+  private static final String SECURITY_PROPERTIES = "/security.properties";
+  private final Properties properties;
   private EntityManagerFactory emf = null;
 
-  public LoginController(final EntityManagerFactory emf) {
+  public LoginController(final EntityManagerFactory emf) throws IOException {
     this.emf = emf;
+
+    properties = new Properties();
+    properties.load(LoginController.class.getResourceAsStream(SECURITY_PROPERTIES));
   }
 
   public EntityManager getEntityManager() {
@@ -94,5 +103,17 @@ public final class LoginController {
     } finally {
       em.close();
     }
+  }
+
+  public String passwordHash(final String password) throws NoSuchAlgorithmException {
+
+    String digest = properties.getProperty("password.digest");
+    String salt = properties.getProperty("password.salt");
+
+    MessageDigest md = MessageDigest.getInstance(digest);
+    md.update(password.getBytes());
+    md.update(salt.getBytes());
+
+    return String.valueOf(md.digest());
   }
 }

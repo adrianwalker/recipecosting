@@ -90,7 +90,7 @@ public final class UserResource extends AbstractResource {
     try {
       count = loginController.countByUsername(email);
     } catch (Exception e) {
-      String message = "Error registering new user";
+      String message = "error registering new user";
       LOGGER.error(message, e);
       return response(message);
     }
@@ -110,7 +110,7 @@ public final class UserResource extends AbstractResource {
       user = userDelegate.update(user);
       emailController.send(email, "user registered", "http://localhost:9090/recipecosting/enable.html?uuid=" + user.getUuid());
     } catch (Exception e) {
-      String message = "Error registering new user";
+      String message = "error registering new user";
       LOGGER.error(message, e);
       return response(message);
     }
@@ -140,7 +140,7 @@ public final class UserResource extends AbstractResource {
       try {
         user = userDelegate.update(user);
       } catch (Exception e) {
-        String message = "Error enabling user";
+        String message = "error enabling user";
         LOGGER.error(message, e);
         return response(message);
       }
@@ -178,7 +178,7 @@ public final class UserResource extends AbstractResource {
     try {
       user = loginController.findByUsernamePassword(username, password);
     } catch (Exception e) {
-      String message = "Error logging in";
+      String message = "error logging in";
       LOGGER.error(message, e);
       return response(message);
     }
@@ -230,7 +230,7 @@ public final class UserResource extends AbstractResource {
     try {
       user = userDelegate.update(user);
     } catch (Exception e) {
-      String message = "Error changing password";
+      String message = "error changing password";
       LOGGER.error(message, e);
       return response(message);
     }
@@ -255,7 +255,7 @@ public final class UserResource extends AbstractResource {
     try {
       user = loginController.findByUsername(username);
     } catch (Exception e) {
-      String message = "Error finding user";
+      String message = "error finding user";
       LOGGER.error(message, e);
       return response(message);
     }
@@ -267,7 +267,7 @@ public final class UserResource extends AbstractResource {
     try {
       emailController.send(user.getEmail(), "password reset", "http://localhost:9090/recipecosting/resetpassword.html?uuid=" + user.getUuid());
     } catch (Exception e) {
-      String message = "Error sending password reset email";
+      String message = "error sending password reset email";
       LOGGER.error(message, e);
       return response(message);
     }
@@ -301,7 +301,7 @@ public final class UserResource extends AbstractResource {
     try {
       user = loginController.findByUuid(uuid);
     } catch (Exception e) {
-      String message = "Error resetting password";
+      String message = "error resetting password";
       LOGGER.error(message, e);
       return response(message);
     }
@@ -316,7 +316,7 @@ public final class UserResource extends AbstractResource {
     try {
       user = userDelegate.update(user);
     } catch (Exception e) {
-      String message = "Error resetting password";
+      String message = "error resetting password";
       LOGGER.error(message, e);
       return response(message);
     }

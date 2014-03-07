@@ -1,10 +1,15 @@
 function dialog(message, messages) {
 
   var overlay = $("#overlay");
-  var html = message;
-  $(messages).each(function(index, value) {
-    html = html + "<br>" + value;
-  });
+
+  var html = $("<p>" + message + "</p>");
+  if (messages && messages.length > 0) {
+    html.append("<ul>");
+    $(messages).each(function(index, value) {
+      html.append("<li>" + value + "</li>");
+    });
+    html.append("</ul>");
+  }
 
   $("#text").html(html);
 

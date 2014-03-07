@@ -26,7 +26,7 @@ public final class RecipeCostingEntityResourceDelegate<T extends RecipeCostingEn
     try {
       return controller.find(id);
     } catch (Exception e) {
-      String message = "Unable to read entity";
+      String message = "unable to read entity";
       LOGGER.error(message, e);
       throw new Exception(message, e);
     }
@@ -62,7 +62,7 @@ public final class RecipeCostingEntityResourceDelegate<T extends RecipeCostingEn
     try {
       controller.create(entity);
     } catch (Exception e) {
-      String message = "Unable to create entity";
+      String message = "unable to create entity";
       LOGGER.error(message, e);
       throw new Exception(message, e);
     }
@@ -75,7 +75,7 @@ public final class RecipeCostingEntityResourceDelegate<T extends RecipeCostingEn
     try {
       controller.edit(entity);
     } catch (Exception e) {
-      String message = "Unable to save entity";
+      String message = "unable to save entity";
       LOGGER.error(message, e);
       throw new Exception(message, e);
     }
@@ -88,7 +88,7 @@ public final class RecipeCostingEntityResourceDelegate<T extends RecipeCostingEn
     try {
       controller.destroy(id);
     } catch (Exception e) {
-      String message = "Unable to delete entity";
+      String message = "unable to delete entity";
       LOGGER.error(message, e);
       throw new Exception(message, e);
     }

@@ -14,21 +14,21 @@ import javax.mail.internet.MimeMessage;
 public final class EmailController {
 
   private static final String EMAIL_PROPERTIES = "/email.properties";
+  private final Properties properties;
 
-  public EmailController() {
+  public EmailController() throws IOException {
+    properties = new Properties();
+    properties.load(EmailController.class.getResourceAsStream(EMAIL_PROPERTIES));
   }
 
   public void send(final String to, final String subject,
           final String text) throws IOException, MessagingException {
 
-    final Properties properties = new Properties();
-    properties.load(EmailController.class.getResourceAsStream(EMAIL_PROPERTIES));
-
     Session session = Session.getDefaultInstance(properties, new Authenticator() {
       @Override
       protected PasswordAuthentication getPasswordAuthentication() {
         return new PasswordAuthentication(
-                properties.getProperty("mail.smtp.user"), 
+                properties.getProperty("mail.smtp.user"),
                 properties.getProperty("mail.smtp.password"));
       }
     });

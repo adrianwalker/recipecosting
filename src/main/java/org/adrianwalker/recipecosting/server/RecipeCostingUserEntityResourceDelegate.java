@@ -31,7 +31,7 @@ public final class RecipeCostingUserEntityResourceDelegate<T extends RecipeCosti
     try {
       return controller.find(user, id);
     } catch (Exception e) {
-      String message = "Unable to read " + getClassName();
+      String message = "unable to read " + getClassName();
       LOGGER.error(message, e);
       throw new Exception(message, e);
     }
@@ -64,7 +64,7 @@ public final class RecipeCostingUserEntityResourceDelegate<T extends RecipeCosti
       try {
         entities = controller.find(user, maxResults, firstResult, orderBy);
       } catch (Exception e) {
-        String message = "Unable to read " + getClassName();
+        String message = "unable to read " + getClassName();
         LOGGER.error(message, e);
         throw new Exception(message, e);
       }
@@ -73,7 +73,7 @@ public final class RecipeCostingUserEntityResourceDelegate<T extends RecipeCosti
       try {
         entities = controller.find(user, orderBy);
       } catch (Exception e) {
-        String message = "Unable to read " + getClassName();
+        String message = "unable to read " + getClassName();
         LOGGER.error(message, e);
         throw new Exception(message, e);
       }
@@ -147,7 +147,7 @@ public final class RecipeCostingUserEntityResourceDelegate<T extends RecipeCosti
     try {
       return controller.count(user);
     } catch (Exception e) {
-      String message = "Unable to count " + getClassName();
+      String message = "unable to count " + getClassName();
       LOGGER.error(message, e);
       throw new Exception(message, e);
     }
@@ -163,7 +163,7 @@ public final class RecipeCostingUserEntityResourceDelegate<T extends RecipeCosti
 
       return pageCount;
     } catch (Exception e) {
-      String message = "Unable to count pages for " + getClassName();
+      String message = "unable to count pages for " + getClassName();
       LOGGER.error(message, e);
       throw new Exception(message, e);
     }
@@ -177,7 +177,7 @@ public final class RecipeCostingUserEntityResourceDelegate<T extends RecipeCosti
       entity.setUser(user);
       controller.create(entity);
     } catch (Exception e) {
-      String message = "Unable to create " + getClassName() + ": " + entity.getName();
+      String message = "unable to create " + getClassName() + ": " + entity.getName();
       LOGGER.error(message, e);
       throw new Exception(message, e);
     }
@@ -190,7 +190,7 @@ public final class RecipeCostingUserEntityResourceDelegate<T extends RecipeCosti
     try {
       controller.edit(entity);
     } catch (Exception e) {
-      String message = "Unable to save " + getClassName() + ": " + entity.getName();
+      String message = "unable to save " + getClassName() + ": " + entity.getName();
       LOGGER.error(message, e);
       throw new Exception(message, e);
     }
@@ -203,7 +203,7 @@ public final class RecipeCostingUserEntityResourceDelegate<T extends RecipeCosti
     try {
       controller.destroy(id);
     } catch (Exception e) {
-      String message = "Unable to delete " + getClassName() + ": " + getEntityName(user, id);
+      String message = "unable to delete " + getClassName() + ": " + getEntityName(user, id);
       LOGGER.error(message, e);
       throw new Exception(message, e);
     }
