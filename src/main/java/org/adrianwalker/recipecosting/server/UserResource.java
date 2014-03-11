@@ -76,7 +76,6 @@ public final class UserResource extends AbstractResource {
       return response("Passwords do not match");
     }
 
-
     if (password.length() < PASSWORD_LENGTH) {
       return response("Passwords must be at least " + PASSWORD_LENGTH + " characters");
     }
@@ -102,7 +101,7 @@ public final class UserResource extends AbstractResource {
     User user = new User();
     user.setEmail(email);
     user.setUsername(email);
-    user.setPassword(password);
+    user.setPassword(loginController.passwordHash(password));
     user.setEnabled(false);
     user.setUuid(UUID.randomUUID().toString());
 
@@ -176,7 +175,7 @@ public final class UserResource extends AbstractResource {
 
     User user;
     try {
-      user = loginController.findByUsernamePassword(username, password);
+      user = loginController.findByUsernamePassword(username, loginController.passwordHash(password));
     } catch (Exception e) {
       String message = "error logging in";
       LOGGER.error(message, e);
@@ -225,7 +224,7 @@ public final class UserResource extends AbstractResource {
     }
 
     User user = getSessionUser();
-    user.setPassword(password);
+    user.setPassword(loginController.passwordHash(password));
 
     try {
       user = userDelegate.update(user);
@@ -310,7 +309,7 @@ public final class UserResource extends AbstractResource {
       return response("User not found");
     }
 
-    user.setPassword(password);
+    user.setPassword(loginController.passwordHash(password));
     user.setUuid(UUID.randomUUID().toString());
 
     try {

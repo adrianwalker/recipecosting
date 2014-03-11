@@ -19,11 +19,15 @@ public final class LoginController {
   private final Properties properties;
   private EntityManagerFactory emf = null;
 
-  public LoginController(final EntityManagerFactory emf) throws IOException {
+  public LoginController(final EntityManagerFactory emf) {
     this.emf = emf;
 
     properties = new Properties();
-    properties.load(LoginController.class.getResourceAsStream(SECURITY_PROPERTIES));
+    try {
+      properties.load(LoginController.class.getResourceAsStream(SECURITY_PROPERTIES));
+    } catch (final IOException ioe) {
+      throw new IllegalStateException(ioe);
+    }
   }
 
   public EntityManager getEntityManager() {
@@ -105,12 +109,17 @@ public final class LoginController {
     }
   }
 
-  public String passwordHash(final String password) throws NoSuchAlgorithmException {
+  public String passwordHash(final String password) {
 
     String digest = properties.getProperty("password.digest");
     String salt = properties.getProperty("password.salt");
 
-    MessageDigest md = MessageDigest.getInstance(digest);
+    MessageDigest md;
+    try {
+      md = MessageDigest.getInstance(digest);
+    } catch (final NoSuchAlgorithmException nsae) {
+      throw new IllegalArgumentException(nsae);
+    }
     md.update(password.getBytes());
     md.update(salt.getBytes());
 

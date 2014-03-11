@@ -14,11 +14,15 @@ import javax.mail.internet.MimeMessage;
 public final class EmailController {
 
   private static final String EMAIL_PROPERTIES = "/email.properties";
-  private final Properties properties;
+  private Properties properties;
 
-  public EmailController() throws IOException {
+  public EmailController() {
     properties = new Properties();
-    properties.load(EmailController.class.getResourceAsStream(EMAIL_PROPERTIES));
+    try {
+      properties.load(EmailController.class.getResourceAsStream(EMAIL_PROPERTIES));
+    } catch (final IOException ioe) {
+      throw new IllegalStateException(ioe);
+    }
   }
 
   public void send(final String to, final String subject,
