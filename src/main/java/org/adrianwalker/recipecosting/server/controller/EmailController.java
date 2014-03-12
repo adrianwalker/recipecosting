@@ -44,4 +44,8 @@ public final class EmailController {
 
     Transport.send(message);
   }
+
+  public String getProperty(final String key) {
+    return properties.getProperty(key);
+  }
 }

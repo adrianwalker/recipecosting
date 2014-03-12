@@ -107,7 +107,10 @@ public final class UserResource extends AbstractResource {
     
     try {
       user = userDelegate.update(user);
-      emailController.send(email, "user registered", "http://localhost:9090/recipecosting/enable.html?uuid=" + user.getUuid());
+      String subject = emailController.getProperty("mail.registration.subject");
+      String template = emailController.getProperty("mail.registration.template");
+      String text = template.replace("${UUID}", user.getUuid());
+      emailController.send(email, subject, text);
     } catch (Exception e) {
       String message = "Error registering new user";
       LOGGER.error(message, e);
@@ -265,7 +268,10 @@ public final class UserResource extends AbstractResource {
     }
     
     try {
-      emailController.send(user.getEmail(), "password reset", "http://localhost:9090/recipecosting/resetpassword.html?uuid=" + user.getUuid());
+      String subject = emailController.getProperty("mail.reset.subject");
+      String template = emailController.getProperty("mail.reset.template");
+      String text = template.replace("${UUID}", user.getUuid());
+      emailController.send(user.getEmail(), subject, text);      
     } catch (Exception e) {
       String message = "Error sending password reset email";
       LOGGER.error(message, e);
