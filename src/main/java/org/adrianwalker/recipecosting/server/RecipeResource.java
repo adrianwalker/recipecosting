@@ -60,7 +60,7 @@ public final class RecipeResource extends AbstractResource {
 
     recipesDelegate.delete(getSessionUser(), ids);
 
-    return response("recipes deleted");
+    return response("Recipes deleted");
   }
 
   @POST

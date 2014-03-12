@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 @Path("/user")
 public final class UserResource extends AbstractResource {
-
+  
   private static final Logger LOGGER = LoggerFactory.getLogger(UserResource.class);
   private static final String SESSION_USER_ATTRIBUTE = "user";
   private static final Pattern EMAIL_REGEX = Pattern.compile(Patterns.EMAIL);
@@ -35,7 +35,7 @@ public final class UserResource extends AbstractResource {
   private static RecipeCostingEntityResourceDelegate<User> userDelegate;
   private static RecipeCostingEntityResourceDelegate<Unit> unitsDelegate;
   private static RecipeCostingEntityResourceDelegate<UnitConversion> userConversionsDelegate;
-
+  
   static {
     EntityManagerFactory emf = PersistenceManager.INSTANCE.getEntityManagerFactory();
     loginController = new LoginController(emf);
@@ -44,7 +44,7 @@ public final class UserResource extends AbstractResource {
     unitsDelegate = new RecipeCostingEntityResourceDelegate<Unit>(Unit.class, emf);
     userConversionsDelegate = new RecipeCostingEntityResourceDelegate<UnitConversion>(UnitConversion.class, emf);
   }
-
+  
   @POST
   @Path("register")
   @Produces(MediaType.APPLICATION_JSON)
@@ -55,102 +55,102 @@ public final class UserResource extends AbstractResource {
           final String password1,
           @FormParam("password2")
           final String password2) throws Exception {
-
+    
     LOGGER.info("email = " + email + " password1 = " + password1 + " password2 = " + password2);
-
-
+    
+    
     if (null == email || email.isEmpty()) {
       return response("Invalid email address");
     }
-
+    
     if (null == password1 || password1.isEmpty()
             || null == password2 || password2.isEmpty()) {
-
+      
       return response("Invalid passwords");
     }
-
+    
     String password;
     if (password1.equals(password2)) {
       password = password1;
     } else {
       return response("Passwords do not match");
     }
-
+    
     if (password.length() < PASSWORD_LENGTH) {
       return response("Passwords must be at least " + PASSWORD_LENGTH + " characters");
     }
-
+    
     Matcher matcher = EMAIL_REGEX.matcher(email);
     if (!matcher.matches()) {
       return response("Invalid email address");
     }
-
+    
     long count;
     try {
       count = loginController.countByUsername(email);
     } catch (Exception e) {
-      String message = "error registering new user";
+      String message = "Error registering new user";
       LOGGER.error(message, e);
       return response(message);
     }
-
+    
     if (count != 0) {
       return response("User already exists");
     }
-
+    
     User user = new User();
     user.setEmail(email);
     user.setUsername(email);
     user.setPassword(loginController.passwordHash(password));
     user.setEnabled(false);
     user.setUuid(UUID.randomUUID().toString());
-
+    
     try {
       user = userDelegate.update(user);
       emailController.send(email, "user registered", "http://localhost:9090/recipecosting/enable.html?uuid=" + user.getUuid());
     } catch (Exception e) {
-      String message = "error registering new user";
+      String message = "Error registering new user";
       LOGGER.error(message, e);
       return response(message);
     }
-
+    
     return response("Check your email to enable your account");
   }
-
+  
   @POST
   @Path("enable")
   @Produces(MediaType.APPLICATION_JSON)
   public Map<String, Object> enable(
           @FormParam("uuid")
           final String uuid) throws Exception {
-
+    
     LOGGER.info("uuid = " + uuid);
-
+    
     if (null == uuid || uuid.length() < UUID_LENGTH) {
       return response("Invalid identifier");
     }
-
+    
     User user = loginController.findByUuid(uuid);
-
+    
     if (null != user) {
       user.setEnabled(true);
       user.setUuid(UUID.randomUUID().toString());
-
+      
       try {
         user = userDelegate.update(user);
       } catch (Exception e) {
-        String message = "error enabling user";
+        String message = "Error enabling user";
         LOGGER.error(message, e);
         return response(message);
       }
-
+      
       UserData userData = new UserData(unitsDelegate, userConversionsDelegate);
       userData.createDefaultDataForUser(user);
     }
-
+    
     return response();
   }
-
+  
   @POST
   @Path("login")
   @Produces(MediaType.APPLICATION_JSON)
@@ -159,50 +159,51 @@ public final class UserResource extends AbstractResource {
           final String username,
           @FormParam("password")
           final String password) throws Exception {
-
+    
     LOGGER.info("username = " + username + ", password = " + password);
-
+    
     if (null == username || username.isEmpty()
             || null == password || password.isEmpty()) {
-
+      
       return response("Invalid username/password");
     }
-
+    
     Matcher matcher = EMAIL_REGEX.matcher(username);
     if (!matcher.matches()) {
       return response("Invalid username/password");
     }
-
+    
     User user;
     try {
-      user = loginController.findByUsernamePassword(username, loginController.passwordHash(password));
+      user = loginController.findByUsernamePassword(
+              username, loginController.passwordHash(password));
     } catch (Exception e) {
-      String message = "error logging in";
+      String message = "Error logging in";
       LOGGER.error(message, e);
       return response(message);
     }
-
+    
     if (null == user || !user.getEnabled()) {
       return response("Invalid username/password");
     }
-
+    
     HttpSession session = getSession();
     session.setAttribute(SESSION_USER_ATTRIBUTE, user);
-
+    
     return response();
   }
-
+  
   @GET
   @Path("logout")
   @Produces(MediaType.APPLICATION_JSON)
   public Map<String, Object> logout() throws Exception {
-
+    
     HttpSession session = getSession();
     session.invalidate();
-
+    
     return response();
   }
-
+  
   @POST
   @Path("changepassword")
   @Produces(MediaType.APPLICATION_JSON)
@@ -211,69 +212,69 @@ public final class UserResource extends AbstractResource {
           final String password1,
           @FormParam("password2")
           final String password2) throws Exception {
-
+    
     String password;
     if (password1.equals(password2)) {
       password = password1;
     } else {
       return response("Passwords do not match");
     }
-
+    
     if (null == password || password.length() < PASSWORD_LENGTH) {
       return response("Passwords must be atleast " + PASSWORD_LENGTH + " characters");
     }
-
+    
     User user = getSessionUser();
     user.setPassword(loginController.passwordHash(password));
-
+    
     try {
       user = userDelegate.update(user);
     } catch (Exception e) {
-      String message = "error changing password";
+      String message = "Error changing password";
       LOGGER.error(message, e);
       return response(message);
     }
-
+    
     return response("Password changed");
   }
-
+  
   @POST
   @Path("forgotpassword")
   @Produces(MediaType.APPLICATION_JSON)
   public Map<String, Object> forgotPassword(
           @FormParam("username")
           final String username) throws Exception {
-
+    
     LOGGER.info("username = " + username);
-
+    
     if (null == username || username.isEmpty()) {
       return response("Invalid username");
     }
-
+    
     User user;
     try {
       user = loginController.findByUsername(username);
     } catch (Exception e) {
-      String message = "error finding user";
+      String message = "Error finding user";
       LOGGER.error(message, e);
       return response(message);
     }
-
+    
     if (null == user || !user.getEnabled()) {
       return response("User not found");
     }
-
+    
     try {
       emailController.send(user.getEmail(), "password reset", "http://localhost:9090/recipecosting/resetpassword.html?uuid=" + user.getUuid());
     } catch (Exception e) {
-      String message = "error sending password reset email";
+      String message = "Error sending password reset email";
       LOGGER.error(message, e);
       return response(message);
     }
-
-    return response();
+    
+    return response("Check your email to change your password");
   }
-
+  
   @POST
   @Path("resetpassword")
   @Produces(MediaType.APPLICATION_JSON)
@@ -284,42 +285,42 @@ public final class UserResource extends AbstractResource {
           final String password1,
           @FormParam("password2")
           final String password2) throws Exception {
-
+    
     String password;
     if (password1.equals(password2)) {
       password = password1;
     } else {
       return response("Passwords do not match");
     }
-
+    
     if (null == password || password.length() < PASSWORD_LENGTH) {
       return response("Passwords must be atleast " + PASSWORD_LENGTH + " characters");
     }
-
+    
     User user;
     try {
       user = loginController.findByUuid(uuid);
     } catch (Exception e) {
-      String message = "error resetting password";
+      String message = "Error resetting password";
       LOGGER.error(message, e);
       return response(message);
     }
-
+    
     if (null == user || !user.getEnabled()) {
       return response("User not found");
     }
-
+    
     user.setPassword(loginController.passwordHash(password));
     user.setUuid(UUID.randomUUID().toString());
-
+    
     try {
       user = userDelegate.update(user);
     } catch (Exception e) {
-      String message = "error resetting password";
+      String message = "Error resetting password";
       LOGGER.error(message, e);
       return response(message);
     }
-
-    return response();
+    
+    return response("Password reset");
   }
 }

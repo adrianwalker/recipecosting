@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.xml.bind.DatatypeConverter;
 import org.adrianwalker.recipecosting.common.entity.User;
 
 public final class LoginController {
@@ -120,9 +121,11 @@ public final class LoginController {
     } catch (final NoSuchAlgorithmException nsae) {
       throw new IllegalArgumentException(nsae);
     }
+    md.reset();
     md.update(password.getBytes());
     md.update(salt.getBytes());
+    String hex = DatatypeConverter.printHexBinary(md.digest());
 
-    return String.valueOf(md.digest());
+    return hex;
   }
 }
