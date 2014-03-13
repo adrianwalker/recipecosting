@@ -8,47 +8,28 @@
     <script src="js/logging.js"></script>
     <script src="js/dialog.js"></script>
     <link rel="stylesheet" href="css/style.css" type="text/css" />
-     <!-- Bootstrap -->
+    <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <script src="js/bootstrap.min.js"></script>
   </head>
   <body>
-    <div>
-      <%@ include file="dialog.jspf" %>
-      <h2>Login</h2>
-      <form id="form1">
-        <div>
-          <label for="username">Username:</label>
-          <input id="username" name="username" type="text"/>
-        </div>
-        <div>
-          <label for="password">Password:</label>
-          <input id="password" name="password" type="password"/>
-        </div>
-        <div>
-          <input id ="login" type="button" value="Log in"/>
-          <a id="forgotpassword" href="#">Forgotten your password?</a>
-        </div>
+    <%@ include file="dialog.jspf" %>
+    <div class="container">
+      <form id="form1" class="form-signin" role="form">
+        <h2 class="form-signin-heading">Login</h2>
+        <input id="username" name="username" type="email" class="form-control" placeholder="Username" required autofocus/>
+        <input id="password" name="password" type="password" class="form-control" placeholder="Password" required/>
+        <input id ="login" type="button" value="Log in" class="btn btn-lg btn-primary btn-block"/>
+        <a id="forgotpassword" href="#">Forgotten your password?</a>
       </form>
     </div>
-    <div>
-      <h2>Register</h2>
-      <form id="form2">
-        <div>
-          <label for="email">Email:</label>
-          <input id="email" name="email" type="text"/>
-        </div>
-        <div>
-          <label for="password1">Password:</label>
-          <input id="password1" name="password1" type="password"/>
-        </div>
-        <div>
-          <label for="password2">Password Again:</label>
-          <input id="password2" name="password2" type="password"/>
-        </div>
-        <div>
-          <input id ="register" type="button" value="Register"/>
-        </div>
+    <div class="container">
+      <form id="form2"class="form-signin" role="form">
+        <h2 class="form-signin-heading">Register</h2>
+        <input id="email" name="email" type="email" class="form-control" placeholder="Username" required autofocus/>
+        <input id="password1" name="password1" type="password" class="form-control" placeholder="Password" required/>
+        <input id="password2" name="password2" type="password" class="form-control" placeholder="Password Again" required/>
+        <input id ="register" type="button" value="Register" class="btn btn-lg btn-primary btn-block"/>
       </form>
     </div>
     <script>
