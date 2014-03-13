@@ -3,8 +3,6 @@
   <head>
     <title></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <script src="js/jquery-1.11.0.min.js"></script>
-    <script src="js/jquery.validate.min.js"></script>
     <script src="js/logging.js"></script>
     <script src="js/dialog.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -16,22 +14,74 @@
     <div class="container">
       <form id="form1" class="form-signin" role="form">
         <h2 class="form-signin-heading">Login</h2>
-        <input id="username" name="username" type="text" class="form-control" placeholder="Username" required autofocus/>
-        <input id="password" name="password" type="password" class="form-control" placeholder="Password" required/>
-        <input id ="login" type="button" value="Log in" class="btn btn-lg btn-primary btn-block"/>
-        <a id="forgotpassword" href="#">Forgotten your password?</a>
+        <input id="username" name="username" class="form-control" type="email" placeholder="Username" required autofocus/>
+        <input id="password" name="password" class="form-control" type="password" placeholder="Password" required/>
+        <br/>
+        <button id="login" type="submit" class="btn btn-lg btn-primary btn-block"/>Log in</button>
+        <button id="forgotpassword" type="submit" class="btn btn-link">Forgotten your password?</button>
       </form>
     </div>
     <div class="container">
-      <form id="form2"class="form-signin" role="form">
+      <form id="form2" role="form">
         <h2 class="form-signin-heading">Register</h2>
-        <input id="email" name="email" type="text" class="form-control" placeholder="Email Address" required autofocus/>
-        <input id="password1" name="password1" type="password" class="form-control" placeholder="Password" required/>
-        <input id="password2" name="password2" type="password" class="form-control" placeholder="Password Again" required/>
-        <input id ="register" type="button" value="Register" class="btn btn-lg btn-primary btn-block"/>
+        <input id="email" name="email" type="email" placeholder="Email Address" required autofocus/>
+        <input id="password1" name="password1" type="password" placeholder="Password" required/>
+        <input id="password2" name="password2" type="password" placeholder="Password Again" required/>
+        <br/>
+        <button id ="register" type="submit" class="btn btn-lg btn-primary btn-block">Register</button>
       </form>
     </div>
     <script>
+      function login() {
+        $.post("rest/user/login", {
+          username: $("#username").val(),
+          password: $("#password").val()
+        }).done(function(data) {
+
+          var message = data.message;
+          if (message) {
+            dialog(message);
+          } else {
+            window.location.replace("recipes.html");
+          }
+
+        }).fail(function(xhr, status, error) {
+          dialog(error);
+        });
+      }
+
+      function register() {
+        $.post("rest/user/register", {
+          email: $("#email").val(),
+          password1: $("#password1").val(),
+          password2: $("#password2").val()
+        }).done(function(data) {
+
+          var message = data.message;
+          if (message) {
+            dialog(message);
+          }
+
+        }).fail(function(xhr, status, error) {
+          dialog(error);
+        });
+      }
+
+      function forgotPassword() {
+        $.post("rest/user/forgotpassword", {
+          username: $("#username").val()
+        }).done(function(data) {
+
+          var message = data.message;
+          if (message) {
+            dialog(message);
+          }
+
+        }).fail(function(xhr, status, error) {
+          dialog(error);
+        });
+      }
+
       $(function() {
 
         $("#login").click(function() {
@@ -50,27 +100,10 @@
                 minlength: 1,
                 maxlength: 1000
               }
+            },
+            submitHandler: function(form) {
+              login();
             }
-          });
-
-          if (!form.valid()) {
-            return false;
-          }
-
-          $.post("rest/user/login", {
-            username: $("#username").val(),
-            password: $("#password").val()
-          }).done(function(data) {
-
-            var message = data.message;
-            if (message) {
-              dialog(message);
-            } else {
-              window.location.replace("recipes.html");
-            }
-
-          }).fail(function(xhr, status, error) {
-            dialog(error);
           });
         });
 
@@ -97,26 +130,10 @@
                 maxlength: 1000,
                 equalTo: '#password1'
               }
+            },
+            submitHandler: function(form) {
+              register();
             }
-          });
-
-          if (!form.valid()) {
-            return false;
-          }
-
-          $.post("rest/user/register", {
-            email: $("#email").val(),
-            password1: $("#password1").val(),
-            password2: $("#password2").val()
-          }).done(function(data) {
-
-            var message = data.message;
-            if (message) {
-              dialog(message);
-            }
-
-          }).fail(function(xhr, status, error) {
-            dialog(error);
           });
         });
 
@@ -137,26 +154,11 @@
                 minlength: 1,
                 maxlength: 1000
               }
+            },
+            submitHandler: function(form) {
+              login();
             }
           });
-
-          if (!form.valid()) {
-            return false;
-          }
-
-          $.post("rest/user/forgotpassword", {
-            username: $("#username").val()
-          }).done(function(data) {
-
-            var message = data.message;
-            if (message) {
-              dialog(message);
-            }
-
-          }).fail(function(xhr, status, error) {
-            dialog(error);
-          });
-
           return false;
         });
       });
