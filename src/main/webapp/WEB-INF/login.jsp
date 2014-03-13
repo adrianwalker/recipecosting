@@ -7,17 +7,16 @@
     <script src="js/jquery.validate.min.js"></script>
     <script src="js/logging.js"></script>
     <script src="js/dialog.js"></script>
-    <link rel="stylesheet" href="css/style.css" type="text/css" />
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
     <script src="js/bootstrap.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
   </head>
   <body>
     <%@ include file="dialog.jspf" %>
     <div class="container">
       <form id="form1" class="form-signin" role="form">
         <h2 class="form-signin-heading">Login</h2>
-        <input id="username" name="username" type="email" class="form-control" placeholder="Username" required autofocus/>
+        <input id="username" name="username" type="text" class="form-control" placeholder="Username" required autofocus/>
         <input id="password" name="password" type="password" class="form-control" placeholder="Password" required/>
         <input id ="login" type="button" value="Log in" class="btn btn-lg btn-primary btn-block"/>
         <a id="forgotpassword" href="#">Forgotten your password?</a>
@@ -26,7 +25,7 @@
     <div class="container">
       <form id="form2"class="form-signin" role="form">
         <h2 class="form-signin-heading">Register</h2>
-        <input id="email" name="email" type="email" class="form-control" placeholder="Username" required autofocus/>
+        <input id="email" name="email" type="text" class="form-control" placeholder="Email Address" required autofocus/>
         <input id="password1" name="password1" type="password" class="form-control" placeholder="Password" required/>
         <input id="password2" name="password2" type="password" class="form-control" placeholder="Password Again" required/>
         <input id ="register" type="button" value="Register" class="btn btn-lg btn-primary btn-block"/>
@@ -38,7 +37,6 @@
         $("#login").click(function() {
 
           var form = $("#form1");
-
           form.validate({
             rules: {
               username: {
@@ -49,7 +47,6 @@
               },
               password: {
                 required: true,
-                email: true,
                 minlength: 1,
                 maxlength: 1000
               }
@@ -132,6 +129,11 @@
               username: {
                 required: true,
                 email: true,
+                minlength: 1,
+                maxlength: 1000
+              },
+              password: {
+                required: false,
                 minlength: 1,
                 maxlength: 1000
               }
