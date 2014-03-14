@@ -1,0 +1,9 @@
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="js/ajax.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/dialog.js"></script>
+    <script src="js/logging.js"></script>
+    <script src="js/url.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css" type="text/css" />

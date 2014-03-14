@@ -3,11 +3,7 @@
   <head>
     <title></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <script src="js/logging.js"></script>
-    <script src="js/dialog.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <%@ include file="head.jspf" %>
   </head>
   <body>
     <%@ include file="dialog.jspf" %>
@@ -22,11 +18,11 @@
       </form>
     </div>
     <div class="container">
-      <form id="form2" role="form">
+      <form id="form2" class="form-signin" role="form">
         <h2 class="form-signin-heading">Register</h2>
-        <input id="email" name="email" type="email" placeholder="Email Address" required autofocus/>
-        <input id="password1" name="password1" type="password" placeholder="Password" required/>
-        <input id="password2" name="password2" type="password" placeholder="Password Again" required/>
+        <input id="email" name="email" class="form-control" type="email" placeholder="Email Address" required />
+        <input id="password1" class="form-control" name="password1" type="password" placeholder="Password" required/>
+        <input id="password2" class="form-control" name="password2" type="password" placeholder="Password Again" required/>
         <br/>
         <button id ="register" type="submit" class="btn btn-lg btn-primary btn-block">Register</button>
       </form>
@@ -159,7 +155,6 @@
               login();
             }
           });
-          return false;
         });
       });
     </script>
