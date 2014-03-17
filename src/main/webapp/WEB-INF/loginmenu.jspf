@@ -12,22 +12,7 @@
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>          
-          <a href="recipes.html">Recipes</a>
-        </li>
-        <li>          
-          <a href="ingredients.html">Ingredients</a>
-        </li>
-        <li>          
-          <a href="unitconversions.html">Unit Conversions</a>
-        </li>
-        <li>          
-          <a href="units.html">Units</a>
-        </li>
-        <li>          
-          <a href="changepassword.html">Change Password</a>
-        </li>
-        <li>          
-          <a href="logout.html">Log Out</a>        
+          <a href="login.html">Log In</a>
         </li>
       </ul>
     </div>

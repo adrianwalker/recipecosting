@@ -5,7 +5,7 @@
     <%@ include file="head.jspf" %>
   </head>
   <body>
-    <div>
+    <div class="container">
       <%@ include file="dialog.jspf" %>
       <%@ include file="menu.jspf" %>
       <form id="form">
@@ -212,7 +212,7 @@
 
       function calculateCost(recipeIngredient, ratioLookup, ingredientLookup) {
 
-        if(recipeIngredient._delete) {
+        if (recipeIngredient._delete) {
           return 0;
         }
 

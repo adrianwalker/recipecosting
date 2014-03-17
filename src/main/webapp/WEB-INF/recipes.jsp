@@ -2,48 +2,24 @@
 <html>
   <head>
     <title></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <script src="js/jquery-1.11.0.min.js"></script>
-    <script src="js/jquery.validate.min.js"></script>
-    <script src="js/ajax.js"></script>
-    <script src="js/logging.js"></script>
-    <script src="js/dialog.js"></script>
-    <script src="js/common.js"></script>
-    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <%@ include file="head.jspf" %>
   </head>
   <body>
-    <div>
-      <%@ include file="dialog.jspf" %>
-      <%@ include file="menu.jspf" %>
-      <div>
-        <table id="data">
-          <thead>
-            <tr>
-              <th>
-                &nbsp;
-              </th>
-              <th>
-                recipe
-              </th>
-            </tr>
-          </thead>
-        </table>
+    <%@ include file="dialog.jspf" %>
+    <%@ include file="menu.jspf" %>
+    <div class="container">
+      <h2>Recipes</h2>
+
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <table id="data" class="table">
+          </table>
+        </div>
       </div>
-      <div>
-        <table>
-          <tr>
-            <td>
-              <input id="save" type="button" value="Save" />
-            </td>
-            <td>
-              <input id="add" type="button" value="Add" />
-            </td>
-            <td>
-              <input id="delete" type="button" value="Delete" />
-            </td>
-          </tr>
-        </table>
-      </div>
+
+      <button id="save" type="button" class="btn btn-primary">Save</button>
+      <button id="add" type="button" class="btn btn-primary">Add</button>
+      <button id="delete" type="button" class="btn btn-primary">Delete</button>
     </div>
     <script>
       function addRows(recipes) {
@@ -58,7 +34,7 @@
       function addRow(index, recipe) {
 
         var row = $("<tr id='row" + index + "'/>");
-        $(row).append($("<td/>").append("<input id='id" + index + "' type='checkbox' value='" + recipe.id + "'/>"));
+        $(row).append($("<td style='width: 1px;'/>").append("<input id='id" + index + "' type='checkbox' value='" + recipe.id + "'/>"));
         $(row).append($("<td/>").append("<a href='recipe.html?id=" + recipe.id + "' id='name" + index + "' >" + recipe.name + "</a>"));
 
         $("#data").append(row);

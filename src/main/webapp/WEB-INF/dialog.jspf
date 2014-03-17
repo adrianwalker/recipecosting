@@ -1,9 +1,15 @@
 <div id="overlay">
-  <div id="dialog">
-    <div id="text">
+
+  <div id="dialog" class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Panel title</h3>
     </div>
-    <div id="buttons">
-      <input id="ok" type="button" value="OK"/>
+    <div class="panel-body">
+      <div id="text">
+      </div>
+      <div id="buttons">
+        <input id="ok" type="button" value="OK"/>
+      </div>
     </div>
   </div>
 </div>
