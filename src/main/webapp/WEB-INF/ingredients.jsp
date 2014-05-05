@@ -156,7 +156,7 @@
           ingredientsLookup = lookup(ingredients);
           addRows(ingredients, units);
         }).fail(function(xhr, status, error) {
-          dialog(error);
+          dialog("Error", error);
         });
 
         $("#save").click(function() {
@@ -169,12 +169,12 @@
           }
 
           $.when(save("rest/ingredient", ingredients)).done(function(data) {
-            dialog(data.message, data.messages);
+            dialog("Ingredients", data.message);
             ingredients = data.ingredients;
             ingredientsLookup = lookup(ingredients);
             addRows(ingredients, units);
           }).fail(function(xhr, status, error) {
-            dialog(error);
+            dialog("Error", error);
           });
         });
 

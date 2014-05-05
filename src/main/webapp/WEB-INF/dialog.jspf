@@ -1,16 +1,18 @@
-<div id="overlay">
-
-  <div id="dialog" class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Panel title</h3>
-    </div>
-    <div class="panel-body">
-      <div id="text">
+<div id="dialog" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="title" class="modal-title"></h4>
       </div>
-      <div id="buttons">
-        <input id="ok" type="button" value="OK"/>
+      <div class="modal-body">
+        <div>
+          <p id="text">
+          </p>
+        </div>
+        <div class="text-center">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
-

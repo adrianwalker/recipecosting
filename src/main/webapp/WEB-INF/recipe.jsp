@@ -5,80 +5,79 @@
     <%@ include file="head.jspf" %>
   </head>
   <body>
+    <%@ include file="dialog.jspf" %>
+    <%@ include file="menu.jspf" %>
     <div class="container">
-      <%@ include file="dialog.jspf" %>
-      <%@ include file="menu.jspf" %>
+      <h2>Recipe</h2>
+
       <form id="form">
-        <div>
-          <table>
-            <tr>
-              <td>name:</td>
-              <td><input id="name" name="name"/></td>
-            </tr>
-            <tr>
-              <td>servings:</td>
-              <td><input id="serves" name="serves"/></td>
-            </tr>
-          </table>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div>
+              <table class="table">
+                <tr>
+                  <td>Name:</td>
+                  <td>
+                    <input id="name" name="name" class="form-control" type="text" placeholder="Name" required autofocus/>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Servings:</td>
+                  <td>
+                    <input id="serves" name="serves" class="form-control" type="number" required/>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div>
+              <table id="data" class="table">
+                <thead>
+                  <tr>
+                    <th>
+                      &nbsp;
+                    </th>
+                    <th>
+                      Ingredient
+                    </th>
+                    <th>
+                      Amount
+                    </th>
+                    <th>
+                      Unit
+                    </th>
+                    <th>
+                      Cost
+                    </th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+            <div>
+              <table class="table">
+                <tr>
+                  <td>
+                    Total Cost:
+                  </td>
+                  <td class='text-right'>
+                    <label id="total_cost"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Serving Cost:
+                  </td>
+                  <td class='text-right'>
+                    <label id="serving_cost"></label>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
         </div>
-        <div>
-          <table id="data">
-            <thead>
-              <tr>
-                <th>
-                  &nbsp;
-                </th>
-                <th>
-                  ingredient
-                </th>
-                <th>
-                  amount
-                </th>
-                <th>
-                  unit
-                </th>
-                <th>
-                  cost
-                </th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-        <div>
-          <table>
-            <tr>
-              <td>
-                total cost:
-              </td>
-              <td>
-                <label id="total_cost"></label>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                serving cost:
-              </td>
-              <td>
-                <label id="serving_cost"></label>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div>
-          <table>
-            <tr>
-              <td>
-                <input id="save" type="button" value="Save" />
-              </td>
-              <td>
-                <input id="add" type="button" value="Add" />
-              </td>
-              <td>
-                <input id="delete" type="button" value="Delete" />
-              </td>
-            </tr>
-          </table>
-        </div>
+
+        <button id="save" type="button" class="btn btn-primary">Save Recipe</button>
+        <button id="add" type="button" class="btn btn-primary">Add Ingredient</button>
+        <button id="delete" type="button" class="btn btn-primary">Delete Ingredients</button>        
       </form>
     </div>
     <script>
@@ -110,7 +109,7 @@
 
       function addRow(index, recipe, recipeIngredient, ingredients, units, ratioLookup, ingredientLookup) {
 
-        var ingredientSelect = $("<select id='ingredient" + index + "' name='ingredient" + index + "' />");
+        var ingredientSelect = $("<select id='ingredient" + index + "' name='ingredient" + index + "' class='form-control'/>");
         $(ingredientSelect).append("<option value=''>-- select --</option>");
         $.each(ingredients, function(index, ingredient) {
           var selected;
@@ -118,7 +117,7 @@
           $(ingredientSelect).append("<option value='" + ingredient.id + "' " + selected + ">" + ingredient.name + " (" + ingredient.unit.name + ")</option>");
         });
 
-        var unitSelect = $("<select id='unit" + index + "' name='unit" + index + "' />");
+        var unitSelect = $("<select id='unit" + index + "' name='unit" + index + "' class='form-control'/>");
         $(unitSelect).append("<option value=''>-- select --</option>");
         $.each(units, function(index, unit) {
           var selected;
@@ -129,9 +128,9 @@
         var row = $("<tr id='row" + index + "'/>");
         $(row).append($("<td/>").append("<input id='id" + index + "' name='id" + index + "' type='checkbox' value='" + recipeIngredient.id + "'/>"));
         $(row).append($("<td/>").append(ingredientSelect));
-        $(row).append($("<td/>").append("<input id='amount" + index + "' name='amount" + index + "' value='" + recipeIngredient.amount + "' />"));
+        $(row).append($("<td/>").append("<input id='amount" + index + "' name='amount" + index + "' value='" + recipeIngredient.amount + "'  class='form-control' type='number' required/>"));
         $(row).append($("<td/>").append(unitSelect));
-        $(row).append($("<td/>").append("<label id='cost" + index + "' name='cost" + index + "' >?</label>"));
+        $(row).append($("<td class='text-right'/>").append("<label id='cost" + index + "' name='cost" + index + "'>?</label>"));
 
         $("#data").append(row);
 
@@ -336,7 +335,7 @@
           addRows(recipe, ingredients, units, ratiosLookup, ingredientsLookup);
           updateCosts(recipe, ratiosLookup, ingredientsLookup);
         }).fail(function(xhr, status, error) {
-          dialog(error);
+          dialog("Error", error);
         });
 
         $("#save").click(function() {
@@ -349,7 +348,7 @@
           }
 
           $.when(save("rest/recipe", [recipe].concat(recipe.recipeIngredients))).done(function(data) {
-            dialog(data.message, data.messages);
+            dialog("Recipe", data.message);
 
             recipe = data.recipe;
             recipeIngredientsLookup = lookup(recipe.recipeIngredients)
@@ -359,7 +358,7 @@
             addRows(recipe, ingredients, units, ratiosLookup, ingredientsLookup);
             updateCosts(recipe, ratiosLookup, ingredientsLookup);
           }).fail(function(xhr, status, error) {
-            dialog(error);
+            dialog("Error", error);
           });
         });
 

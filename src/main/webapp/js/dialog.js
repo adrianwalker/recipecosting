@@ -1,25 +1,10 @@
-function dialog(message, messages) {
+function dialog(title, message) {
 
-  var overlay = $("#overlay");
-
-  var html = $("<p>" + message + "</p>");
-  if (messages && messages.length > 0) {
-    html.append("<ul>");
-    $(messages).each(function(index, value) {
-      html.append("<li>" + value + "</li>");
-    });
-    html.append("</ul>");
-  }
-
-  $("#text").html(html);
-
-  $("#ok").click(function() {
-    overlay.hide();
-  });
-
-  overlay.show();
+  $("#title").html(title);
+  $("#text").html(message);
+  $('#dialog').modal('show');
 }
 
 function error() {
-  dialog("An unexpected error has occurred");
+  dialog("Error", "An unexpected error has occurred");
 }

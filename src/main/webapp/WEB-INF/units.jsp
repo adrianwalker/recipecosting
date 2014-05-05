@@ -99,7 +99,7 @@
           unitsLookup = lookup(units);
           addRows(units);
         }).fail(function(xhr, status, error) {
-          dialog(error);
+          dialog("Error", error);
         });
 
         $("#save").click(function() {
@@ -109,12 +109,12 @@
           }
 
           $.when(save("rest/unit", units)).done(function(data) {
-            dialog(data.message, data.messages);
+            dialog("Units", data.message);
             units = data.units;
             unitsLookup = lookup(units);
             addRows(units);
           }).fail(function(xhr, status, error) {
-            dialog(error);
+            dialog("Error", error);
           });
         });
 

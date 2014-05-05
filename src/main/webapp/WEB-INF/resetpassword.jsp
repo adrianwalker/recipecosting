@@ -63,7 +63,7 @@
             }).done(function() {
               window.location.replace("login.html");
             }).fail(function(xhr, status, error) {
-              dialog(error);
+              dialog("Error", error);
             });
           }
         });

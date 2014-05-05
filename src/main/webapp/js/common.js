@@ -10,7 +10,7 @@ function remove(lookup) {
   var checked = $('input[id^=id]:checked');
 
   if (checked.length === 0) {
-    dialog("select items to delete");
+    dialog("Delete","Select items to delete");
     return;
   }
 

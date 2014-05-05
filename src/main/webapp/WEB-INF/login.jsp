@@ -36,13 +36,13 @@
 
           var message = data.message;
           if (message) {
-            dialog(message);
+            dialog("Login",message);
           } else {
             window.location.replace("recipes.html");
           }
 
         }).fail(function(xhr, status, error) {
-          dialog(error);
+          dialog("Error", error);
         });
       }
 
@@ -55,11 +55,11 @@
 
           var message = data.message;
           if (message) {
-            dialog(message);
+            dialog("Login", message);
           }
 
         }).fail(function(xhr, status, error) {
-          dialog(error);
+          dialog("Error", error);
         });
       }
 
@@ -70,11 +70,11 @@
 
           var message = data.message;
           if (message) {
-            dialog(message);
+            dialog("Login", message);
           }
 
         }).fail(function(xhr, status, error) {
-          dialog(error);
+          dialog("Error", error);
         });
       }
 

@@ -142,7 +142,7 @@
           unitConversionsLookup = lookup(unitConversions);
           addRows(unitConversions, units);
         }).fail(function(xhr, status, error) {
-          dialog(error);
+          dialog("Error", error);
         });
 
         $("#save").click(function() {
@@ -154,12 +154,12 @@
           }
 
           $.when(save("rest/unitconversion", unitConversions)).done(function(data) {
-            dialog(data.message, data.messages);
+            dialog("Unit Conversions", data.message);
             unitConversions = data.unitConversions;
             unitConversionsLookup = lookup(unitConversions);
             addRows(unitConversions, units);
           }).fail(function(xhr, status, error) {
-            dialog(error);
+            dialog("Error", error);
           });
         });
 

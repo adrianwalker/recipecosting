@@ -17,9 +17,9 @@
         </div>
       </div>
 
-      <button id="save" type="button" class="btn btn-primary">Save</button>
-      <button id="add" type="button" class="btn btn-primary">Add</button>
-      <button id="delete" type="button" class="btn btn-primary">Delete</button>
+      <button id="save" type="button" class="btn btn-primary">Save Recipes</button>
+      <button id="add" type="button" class="btn btn-primary">Add Recipe</button>
+      <button id="delete" type="button" class="btn btn-primary">Delete Recipes</button>
     </div>
     <script>
       function addRows(recipes) {
@@ -49,13 +49,13 @@
           recipsLookup = lookup(recipes);
           addRows(recipes);
         }).fail(function(xhr, status, error) {
-          dialog(error);
+          dialog("Error", error);
         });
 
         $("#save").click(function() {
 
           $.when(del("rest/recipe", recipes)).done(function(data) {
-            dialog(data.message);
+            dialog("Recipes", data.message);
 
             recipes = read("rest/recipe");
 
@@ -63,11 +63,11 @@
               recipes = data.recipes;
               addRows(recipes);
             }).fail(function(xhr, status, error) {
-              dialog(error);
+              dialog("Error", error);
             });
 
           }).fail(function(xhr, status, error) {
-            dialog(error);
+            dialog("Error", error);
           });
         });
 
