@@ -2,35 +2,23 @@
 <html>
   <head>
     <title></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <script src="js/jquery-1.11.0.min.js"></script>
-    <script src="js/jquery.validate.min.js"></script>
-    <script src="js/logging.js"></script>
-    <script src="js/url.js"></script>
-    <script src="js/dialog.js"></script>
-    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <%@ include file="head.jspf" %>
   </head>
   <body>
-    <div>
-      <%@ include file="dialog.jspf" %>
-      <form id="form">
-        <div>
-          <label for="password1">Password:</label>
-          <input id="password1" type="password"/>
-        </div>
-        <div>
-          <label for="password2">Password Again:</label>
-          <input id="password2" type="password"/>
-        </div>
-        <div>
-          <input id="resetpassword" type="button" value="Reset Password"/>
-        </div>
+    <%@ include file="dialog.jspf" %>
+    <%@ include file="menu.jspf" %>
+    <div class="container">
+      <form id="form" name="form" class="form-signin" role="form">
+        <h2>Change Password</h2>
+        <input id="password1" name="password1" class="form-control" type="password" placeholder="Password" required autofocus/>
+        <input id="password2" name="password2" class="form-control" type="password" placeholder="Password Again" required/>
+        <br/>
+        <input id="resetpassword" type="button" value="Reset Password" class="btn btn-primary"/>
       </form>
     </div>
     <script>
       $(function() {
         var form = $("#form");
-
 
         form.validate({
           rules: {

@@ -128,7 +128,7 @@
         var row = $("<tr id='row" + index + "'/>");
         $(row).append($("<td/>").append("<input id='id" + index + "' name='id" + index + "' type='checkbox' value='" + recipeIngredient.id + "'/>"));
         $(row).append($("<td/>").append(ingredientSelect));
-        $(row).append($("<td/>").append("<input id='amount" + index + "' name='amount" + index + "' value='" + recipeIngredient.amount + "'  class='form-control' type='number' required/>"));
+        $(row).append($("<td/>").append("<input id='amount" + index + "' name='amount" + index + "' value='" + recipeIngredient.amount + "'  class='form-control text-right' type='number' required/>"));
         $(row).append($("<td/>").append(unitSelect));
         $(row).append($("<td class='text-right'/>").append("<label id='cost" + index + "' name='cost" + index + "'>?</label>"));
 

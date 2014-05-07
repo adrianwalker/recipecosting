@@ -2,58 +2,45 @@
 <html>
   <head>
     <title></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <script src="js/jquery-1.11.0.min.js"></script>
-    <script src="js/jquery.validate.min.js"></script>
-    <script src="js/ajax.js"></script>
-    <script src="js/logging.js"></script>
-    <script src="js/dialog.js"></script>
-    <script src="js/common.js"></script>
-    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <%@ include file="head.jspf" %>
   </head>
   <body>
-    <div>
-      <%@ include file="dialog.jspf" %>
-      <%@ include file="menu.jspf" %>
+    <%@ include file="dialog.jspf" %>
+    <%@ include file="menu.jspf" %>
+    <div class="container">
+      <h2>Ingredients</h2>
+
       <form id="form">
-        <div>
-          <table id="data">
-            <thead>
-              <tr>
-                <th>
-                  &nbsp;
-                </th>
-                <th>
-                  name
-                </th>
-                <th>
-                  amount
-                </th>
-                <th>
-                  unit
-                </th>
-                <th>
-                  cost
-                </th>
-              </tr>
-            </thead>
-          </table>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div>
+              <table id="data" class="table">
+                <thead>
+                  <tr>
+                    <th>
+                      &nbsp;
+                    </th>
+                    <th>
+                      Name
+                    </th>
+                    <th>
+                      Amount
+                    </th>
+                    <th>
+                      Unit
+                    </th>
+                    <th>
+                      Cost
+                    </th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
         </div>
-        <div>
-          <table>
-            <tr>
-              <td>
-                <input id="save" type="button" value="Save" />
-              </td>
-              <td>
-                <input id="add" type="button" value="Add" />
-              </td>
-              <td>
-                <input id="delete" type="button" value="Delete" />
-              </td>
-            </tr>
-          </table>
-        </div>
+        <button id="save" type="button" class="btn btn-primary">Save Ingredients</button>
+        <button id="add" type="button" class="btn btn-primary">Add Ingredient</button>
+        <button id="delete" type="button" class="btn btn-primary">Delete Ingredients</button>
       </form>
     </div>
     <script>
@@ -68,7 +55,7 @@
 
       function addRow(index, ingredient, units) {
 
-        var unitSelect = $("<select id='unit" + index + "' name='unit" + index + "' />");
+        var unitSelect = $("<select id='unit" + index + "' name='unit" + index + "' class='form-control'/>");
         $(unitSelect).append("<option value=''>-- select --</option>");
         $.each(units, function(index, unit) {
           var selected;
@@ -77,11 +64,11 @@
         });
 
         var row = $("<tr id='row" + index + "'/>");
-        $(row).append($("<td/>").append("<input id='id" + index + "' name='id" + index + "' type='checkbox' value='" + ingredient.id + "'/>"));
-        $(row).append($("<td/>").append("<input id='name" + index + "' name='name" + index + "' value='" + ingredient.name + "' />"));
-        $(row).append($("<td/>").append("<input id='amount" + index + "' name='amount" + index + "' value='" + ingredient.amount + "' />"));
+        $(row).append($("<td/>").append("<input id='id" + index + "' name='id" + index + "' type='checkbox' value='" + ingredient.id + "' />"));
+        $(row).append($("<td/>").append("<input id='name" + index + "' name='name" + index + "' value='" + ingredient.name + "' class='form-control' required/>"));
+        $(row).append($("<td/>").append("<input id='amount" + index + "' name='amount" + index + "' value='" + ingredient.amount + "' class='form-control text-right' type='number' required/>"));
         $(row).append($("<td/>").append(unitSelect));
-        $(row).append($("<td/>").append("<input id='cost" + index + "' name='cost" + index + "' value='" + ingredient.cost + "' />"));
+        $(row).append($("<td/>").append("<input id='cost" + index + "' name='cost" + index + "' value='" + ingredient.cost + "' class='form-control text-right' type='number' required/>"));
 
         $("#data").append(row);
 
