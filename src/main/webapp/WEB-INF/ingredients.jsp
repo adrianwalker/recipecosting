@@ -68,7 +68,7 @@
         $(row).append($("<td/>").append("<input id='name" + index + "' name='name" + index + "' value='" + ingredient.name + "' class='form-control' required/>"));
         $(row).append($("<td/>").append("<input id='amount" + index + "' name='amount" + index + "' value='" + ingredient.amount + "' class='form-control text-right' type='number' required/>"));
         $(row).append($("<td/>").append(unitSelect));
-        $(row).append($("<td/>").append("<input id='cost" + index + "' name='cost" + index + "' value='" + ingredient.cost + "' class='form-control text-right' type='number' required/>"));
+        $(row).append($("<td/>").append("<input id='cost" + index + "' name='cost" + index + "' value='" + ingredient.cost.toFixed(2) + "' class='form-control text-right' type='number' required/>"));
 
         $("#data").append(row);
 

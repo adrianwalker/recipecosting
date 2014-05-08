@@ -7,7 +7,7 @@
   <body>
     <%@ include file="dialog.jspf" %>
     <%@ include file="menu.jspf" %>
-    <div  class="container">
+    <div class="container">
       <h2>Units</h2>
 
       <form id="form">

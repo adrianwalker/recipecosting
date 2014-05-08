@@ -12,6 +12,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import org.adrianwalker.recipecosting.common.entity.Ingredient;
+import org.adrianwalker.recipecosting.common.entity.Recipe;
 import org.adrianwalker.recipecosting.common.entity.Unit;
 import org.adrianwalker.recipecosting.common.entity.UnitConversion;
 import org.adrianwalker.recipecosting.common.entity.User;
@@ -34,7 +36,9 @@ public final class UserResource extends AbstractResource {
   private static EmailController emailController;
   private static RecipeCostingEntityResourceDelegate<User> userDelegate;
   private static RecipeCostingEntityResourceDelegate<Unit> unitsDelegate;
-  private static RecipeCostingEntityResourceDelegate<UnitConversion> userConversionsDelegate;
+  private static RecipeCostingEntityResourceDelegate<UnitConversion> unitConversionsDelegate;
+  private static RecipeCostingEntityResourceDelegate<Ingredient> ingredientsDelegate;
+  private static RecipeCostingEntityResourceDelegate<Recipe> recipesDelegate;
   
   static {
     EntityManagerFactory emf = PersistenceManager.INSTANCE.getEntityManagerFactory();
@@ -42,7 +46,9 @@ public final class UserResource extends AbstractResource {
     emailController = new EmailController();
     userDelegate = new RecipeCostingEntityResourceDelegate<User>(User.class, emf);
     unitsDelegate = new RecipeCostingEntityResourceDelegate<Unit>(Unit.class, emf);
-    userConversionsDelegate = new RecipeCostingEntityResourceDelegate<UnitConversion>(UnitConversion.class, emf);
+    unitConversionsDelegate = new RecipeCostingEntityResourceDelegate<UnitConversion>(UnitConversion.class, emf);
+    ingredientsDelegate = new RecipeCostingEntityResourceDelegate<Ingredient>(Ingredient.class, emf);
+    recipesDelegate = new RecipeCostingEntityResourceDelegate<Recipe>(Recipe.class, emf);
   }
   
   @POST
@@ -110,6 +116,8 @@ public final class UserResource extends AbstractResource {
       String subject = emailController.getProperty("mail.registration.subject");
       String template = emailController.getProperty("mail.registration.template");
       String text = template.replace("${UUID}", user.getUuid());
+      text = text.replace("${username}", email);
+      text = text.replace("${password}", password);
       emailController.send(email, subject, text);
     } catch (Exception e) {
       String message = "Error registering new user";
@@ -147,7 +155,7 @@ public final class UserResource extends AbstractResource {
         return response(message);
       }
       
-      UserData userData = new UserData(unitsDelegate, userConversionsDelegate);
+      UserData userData = new UserData(unitsDelegate, unitConversionsDelegate, ingredientsDelegate, recipesDelegate);
       userData.createDefaultDataForUser(user);
     }
     

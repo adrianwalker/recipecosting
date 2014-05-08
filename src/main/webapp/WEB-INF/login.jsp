@@ -36,7 +36,7 @@
 
           var message = data.message;
           if (message) {
-            dialog("Login",message);
+            dialog("Login", message);
           } else {
             window.location.replace("recipes.html");
           }

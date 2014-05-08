@@ -1,6 +1,11 @@
 package org.adrianwalker.recipecosting.server.util;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import org.adrianwalker.recipecosting.common.entity.Ingredient;
+import org.adrianwalker.recipecosting.common.entity.Recipe;
+import org.adrianwalker.recipecosting.common.entity.RecipeIngredient;
 import org.adrianwalker.recipecosting.common.entity.Unit;
 import org.adrianwalker.recipecosting.common.entity.UnitConversion;
 import org.adrianwalker.recipecosting.common.entity.User;
@@ -10,12 +15,19 @@ public final class UserData {
 
   private RecipeCostingEntityResourceDelegate<Unit> unitsDelegate;
   private RecipeCostingEntityResourceDelegate<UnitConversion> unitConversionsDelegate;
+  private RecipeCostingEntityResourceDelegate<Ingredient> ingredientsDelegate;
+  private RecipeCostingEntityResourceDelegate<Recipe> recipesDelegate;
 
   public UserData(
           final RecipeCostingEntityResourceDelegate<Unit> unitsDelegate,
-          final RecipeCostingEntityResourceDelegate<UnitConversion> unitConversionsDelegate) {
+          final RecipeCostingEntityResourceDelegate<UnitConversion> unitConversionsDelegate,
+          final RecipeCostingEntityResourceDelegate<Ingredient> ingredientsDelegate,
+          final RecipeCostingEntityResourceDelegate<Recipe> recipesDelegate) {
+
     this.unitsDelegate = unitsDelegate;
     this.unitConversionsDelegate = unitConversionsDelegate;
+    this.ingredientsDelegate = ingredientsDelegate;
+    this.recipesDelegate = recipesDelegate;
   }
 
   private Unit createUnit(final User user, final String name) throws Exception {
@@ -36,6 +48,42 @@ public final class UserData {
     return unitConversionsDelegate.update(unitConversion);
   }
 
+  private Ingredient createIngredient(final User user, final String name, final String amount, final Unit unit, final String cost) throws Exception {
+    Ingredient selfRasingFlour = new Ingredient();
+    selfRasingFlour.setName(name);
+    selfRasingFlour.setAmount(new BigDecimal(amount));
+    selfRasingFlour.setUnit(unit);
+    selfRasingFlour.setCost(new BigDecimal(cost));
+    selfRasingFlour.setUser(user);
+
+    return ingredientsDelegate.update(selfRasingFlour);
+  }
+
+  private RecipeIngredient createRecipeIngredient(final User user, final Ingredient ingredient, final String amount, final Unit unit) {
+    RecipeIngredient recipeIngredient = new RecipeIngredient();
+    recipeIngredient.setIngredient(ingredient);
+    recipeIngredient.setAmount(new BigDecimal(amount));
+    recipeIngredient.setUnit(unit);
+    recipeIngredient.setUser(user);
+
+    return recipeIngredient;
+  }
+
+  private Recipe createRecipe(final User user, final String name, final int serves, final List<RecipeIngredient> ingredients) throws Exception {
+    Recipe recipe = new Recipe();
+    recipe.setName(name);
+    recipe.setServes(serves);
+
+    for (RecipeIngredient recipeIngredient : ingredients) {
+      recipeIngredient.setRecipe(recipe);
+    }
+
+    recipe.setRecipeIngredients(ingredients);
+    recipe.setUser(user);
+
+    return recipesDelegate.update(recipe);
+  }
+
   public void createDefaultDataForUser(final User user) throws Exception {
     // Units
 
@@ -54,6 +102,7 @@ public final class UserData {
     Unit millilitre = createUnit(user, "ml");
     // each
     Unit each = createUnit(user, "each");
+    Unit slice = createUnit(user, "slice");
 
     // Unit Conversions
 
@@ -85,6 +134,7 @@ public final class UserData {
 
     // pint
     UnitConversion pintToFluidOunce = createUnitConversion(user, pint, fluidOunce, "20");
+    UnitConversion pintToMillitre = createUnitConversion(user, pint, millilitre, "568.261485");
     UnitConversion pintToTablespoon = createUnitConversion(user, pint, tablespoon, "32");
     UnitConversion pintToTeaspoon = createUnitConversion(user, pint, teaspoon, "96");
 
@@ -93,6 +143,58 @@ public final class UserData {
     UnitConversion fluidOunceToTeaspoon = createUnitConversion(user, fluidOunce, tablespoon, "4.8");
 
     // tablespoon
-    UnitConversion fluidTablespoonToTeaspoon = createUnitConversion(user, tablespoon, teaspoon, "3");
+    UnitConversion tablespoonToTeaspoon = createUnitConversion(user, tablespoon, teaspoon, "3");
+    UnitConversion tablespoonToMillilitre = createUnitConversion(user, tablespoon, millilitre, "15");
+    UnitConversion tablespoonToLitre = createUnitConversion(user, tablespoon, litre, "0.015");
+    UnitConversion tablespoonToGram = createUnitConversion(user, tablespoon, gram, "15");
+    UnitConversion tablespoonToKilogram = createUnitConversion(user, tablespoon, kilogram, "0.015");    
+    
+    // teaspoon
+    UnitConversion teaspoonToMillilitre = createUnitConversion(user, teaspoon, millilitre, "5");
+    UnitConversion teaspoonToLitre = createUnitConversion(user, teaspoon, litre, "0.005");
+    UnitConversion teaspoonToGram = createUnitConversion(user, teaspoon, gram, "5");
+    UnitConversion teaspoonToKilogram = createUnitConversion(user, teaspoon, kilogram, "0.005");
+
+    // Ingredients
+
+    Ingredient selfRasingFlour = createIngredient(user, "self-raising flour", "1.5", kilogram, "0.45");
+    Ingredient salt = createIngredient(user, "salt", "750", gram, "0.29");
+    Ingredient bakingPowder = createIngredient(user, "baking powder", "170", gram, "1.08");
+    Ingredient butter = createIngredient(user, "butter", "250", gram, "0.98");
+    Ingredient casterSugar = createIngredient(user, "caster sugar", "1", kilogram, "1.48");
+    Ingredient milk = createIngredient(user, "milk", "4", pint, "1.00");
+    Ingredient vanillaExtract = createIngredient(user, "vanilla extract", "75", millilitre, "2.98");
+    Ingredient eggs = createIngredient(user, "eggs", "6", each, "1.00");
+    Ingredient jam = createIngredient(user, "jam", "430", gram, "1.00");
+    Ingredient clottedCream = createIngredient(user, "clotted cream", "250", millilitre, "1.30");
+
+    // Recipe Ingredients
+
+    RecipeIngredient selfRaisingFlourIngredient = createRecipeIngredient(user, selfRasingFlour, "350", gram);
+    RecipeIngredient saltIngredient = createRecipeIngredient(user, salt, "0.25", teaspoon);
+    RecipeIngredient bakingPowderIngredient = createRecipeIngredient(user, bakingPowder, "1", teaspoon);
+    RecipeIngredient butterIngredient = createRecipeIngredient(user, butter, "85", gram);
+    RecipeIngredient casterSugarIngredient = createRecipeIngredient(user, casterSugar, "3", tablespoon);
+    RecipeIngredient milkIngredient = createRecipeIngredient(user, milk, "175", millilitre);
+    RecipeIngredient vanillaExtractIngredient = createRecipeIngredient(user, vanillaExtract, "1", teaspoon);
+    RecipeIngredient eggsIngredient = createRecipeIngredient(user, eggs, "1", each);
+    RecipeIngredient jamIngredient = createRecipeIngredient(user, jam, "8", teaspoon);
+    RecipeIngredient clottedCreamIngredient = createRecipeIngredient(user, clottedCream, "8", tablespoon);
+
+    // Recipe
+
+    List<RecipeIngredient> recipeIngredients = new ArrayList<RecipeIngredient>();
+    recipeIngredients.add(selfRaisingFlourIngredient);
+    recipeIngredients.add(saltIngredient);
+    recipeIngredients.add(bakingPowderIngredient);
+    recipeIngredients.add(butterIngredient);
+    recipeIngredients.add(casterSugarIngredient);
+    recipeIngredients.add(milkIngredient);
+    recipeIngredients.add(vanillaExtractIngredient);
+    recipeIngredients.add(eggsIngredient);
+    recipeIngredients.add(jamIngredient);
+    recipeIngredients.add(clottedCreamIngredient);
+
+    Recipe scones = createRecipe(user, "Classic scones with jam & clotted cream (example recipe)", 8, recipeIngredients);
   }
 }
