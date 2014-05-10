@@ -103,7 +103,7 @@
 
   <build>
     <finalName>recipecosting</finalName>
-
+    
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -113,11 +113,36 @@
           <target>1.6</target>
         </configuration>
       </plugin>
+      
+      <plugin>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>yuicompressor-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compress</goal>
+            </goals>
+          </execution>
+        </executions>        
+        <configuration>
+          <excludes>
+            <exclude>**/*.min.js</exclude>
+            <exclude>**/*.min.css</exclude>
+          </excludes>
+          <suffix>.min</suffix>
+        </configuration>
+      </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
         <version>2.1.1</version>
+        <configuration>
+          <packagingExcludes>
+            %regex[js/((?!\.).)*.js],
+            %regex[css/((?!\.).)*.css]
+          </packagingExcludes>
+        </configuration>
       </plugin>
 
       <plugin>
