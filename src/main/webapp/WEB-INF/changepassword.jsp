@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title></title>
+    <title>Change Password</title>
     <%@ include file="head.jspf" %>
     <script src="js/changepassword.min.js"></script>
   </head>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title></title>
+    <title>Ingredients</title>
     <%@ include file="head.jspf" %>
     <script src="js/ingredients.min.js"></script>
   </head>

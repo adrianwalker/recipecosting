@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title></title>
+    <title>Unit Conversions</title>
     <%@ include file="head.jspf" %>
     <script src="js/unitconversions.min.js"></script>
   </head>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title></title>
+    <title>Enable Account</title>
     <%@ include file="head.jspf" %>
     <script src="js/enable.min.js"></script>
   </head>

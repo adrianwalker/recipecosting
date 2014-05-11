@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title></title>
+    <title>Log Out</title>
     <%@ include file="head.jspf" %>
     <script src="js/logout.min.js"></script>
   </head>
