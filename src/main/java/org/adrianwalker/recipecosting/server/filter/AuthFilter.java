@@ -9,13 +9,12 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.adrianwalker.recipecosting.server.UserResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class AuthFilter implements Filter {
   
-  private static final Logger LOGGER = LoggerFactory.getLogger(UserResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AuthFilter.class);
   private static final String REDIRECT_URL = "/login.html";
   private static final String[] PUBLIC_URLS = {
     REDIRECT_URL,
