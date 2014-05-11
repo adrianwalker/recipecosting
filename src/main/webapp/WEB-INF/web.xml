@@ -12,7 +12,7 @@
     <filter-name>AuthFilter</filter-name>
     <url-pattern>/</url-pattern>
     <url-pattern>*.html</url-pattern>
-    <url-pattern>rest/*</url-pattern>
+    <url-pattern>/rest/*</url-pattern>
   </filter-mapping>
 
   <!-- jersey -->
