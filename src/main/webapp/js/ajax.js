@@ -21,7 +21,8 @@ function save(url, data) {
   });
 
   if (changed.length === 0 && ids.length === 0) {
-    return {message: "no changes to save"};
+    data.message = "No changes to save";
+    return data;
   }
 
   data = {
@@ -50,7 +51,8 @@ function del(url, data) {
   });
 
   if (ids.length === 0) {
-    return {message: "no changes to save"};
+    data.message = "No changes to save";
+    return data;
   }
 
   return $.ajax({
