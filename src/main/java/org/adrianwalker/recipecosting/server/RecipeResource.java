@@ -59,8 +59,11 @@ public final class RecipeResource extends AbstractResource {
   public Map<String, Object> delete(final List<Long> ids) throws Exception {
 
     recipesDelegate.delete(getSessionUser(), ids);
+    Map<String, Object> response = response();
+    response.put("saved", true);
+    response.put("message", "Recipes saved");
 
-    return response("Recipes deleted");
+    return response;
   }
 
   @POST
@@ -87,8 +90,9 @@ public final class RecipeResource extends AbstractResource {
     recipe = recipesDelegate.update(getSessionUser(), recipe);
 
     Map<String, Object> response = response();
+    response.put("saved", true);
     response.put("recipe", recipe);
-    response.put("message", "recipe saved");
+    response.put("message", "Recipe saved");
 
     return response;
   }

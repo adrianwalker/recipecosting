@@ -99,9 +99,11 @@ $(function() {
 
     $.when(save("rest/unitconversion", unitConversions)).done(function(data) {
       dialog("Unit Conversions", data.message);
-      unitConversions = data.unitConversions;
-      unitConversionsLookup = lookup(unitConversions);
-      addRows(unitConversions, units);
+      if (data.saved) {
+        unitConversions = data.unitConversions;
+        unitConversionsLookup = lookup(unitConversions);
+        addRows(unitConversions, units);
+      }
     }).fail(function(xhr, status, error) {
       dialog("Error", error);
     });

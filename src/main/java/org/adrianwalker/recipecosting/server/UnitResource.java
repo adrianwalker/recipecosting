@@ -38,7 +38,7 @@ public final class UnitResource extends AbstractRecipeCostingUserEntityResource<
   public Map<String, Object> save(final Save<Unit> save) throws Exception {
     
     Map<String, Object> response = response();
-    response.putAll(save(save, "units saved"));
+    response.putAll(save(save, "Units saved"));
     response.putAll(read());
 
     return response;

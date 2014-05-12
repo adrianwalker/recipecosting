@@ -47,6 +47,8 @@ public abstract class AbstractRecipeCostingUserEntityResource<T extends RecipeCo
     }
     
     Map<String, Object> response = response();
+    
+    response.put("saved", true);
     response.put("message", message);
     if(!messages.isEmpty()) {
       response.put("messages", messages);

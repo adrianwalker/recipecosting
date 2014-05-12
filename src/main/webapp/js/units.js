@@ -60,9 +60,11 @@ $(function() {
 
     $.when(save("rest/unit", units)).done(function(data) {
       dialog("Units", data.message);
-      units = data.units;
-      unitsLookup = lookup(units);
-      addRows(units);
+      if (data.saved) {
+        units = data.units;
+        unitsLookup = lookup(units);
+        addRows(units);
+      }
     }).fail(function(xhr, status, error) {
       dialog("Error", error);
     });

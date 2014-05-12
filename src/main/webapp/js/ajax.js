@@ -21,7 +21,11 @@ function save(url, data) {
   });
 
   if (changed.length === 0 && ids.length === 0) {
-    data.message = "No changes to save";
+    data = {
+      saved: false,
+      message: "No changes to save"
+    };
+
     return data;
   }
 
@@ -51,7 +55,11 @@ function del(url, data) {
   });
 
   if (ids.length === 0) {
-    data.message = "No changes to save";
+    data = {
+      saved: false,
+      message: "No changes to save"
+    };
+
     return data;
   }
 

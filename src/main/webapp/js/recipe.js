@@ -266,14 +266,16 @@ $(function() {
 
     $.when(save("rest/recipe", [recipe].concat(recipe.recipeIngredients))).done(function(data) {
       dialog("Recipe", data.message);
+      if (data.saved) {
 
-      recipe = data.recipe;
-      recipeIngredientsLookup = lookup(recipe.recipeIngredients)
+        recipe = data.recipe;
+        recipeIngredientsLookup = lookup(recipe.recipeIngredients)
 
-      setName(recipe);
-      setServes(recipe);
-      addRows(recipe, ingredients, units, ratiosLookup, ingredientsLookup);
-      updateCosts(recipe, ratiosLookup, ingredientsLookup);
+        setName(recipe);
+        setServes(recipe);
+        addRows(recipe, ingredients, units, ratiosLookup, ingredientsLookup);
+        updateCosts(recipe, ratiosLookup, ingredientsLookup);
+      }
     }).fail(function(xhr, status, error) {
       dialog("Error", error);
     });

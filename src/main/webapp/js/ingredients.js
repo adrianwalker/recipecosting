@@ -111,9 +111,11 @@ $(function() {
 
     $.when(save("rest/ingredient", ingredients)).done(function(data) {
       dialog("Ingredients", data.message);
-      ingredients = data.ingredients;
-      ingredientsLookup = lookup(ingredients);
-      addRows(ingredients, units);
+      if (data.saved) {
+        ingredients = data.ingredients;
+        ingredientsLookup = lookup(ingredients);
+        addRows(ingredients, units);
+      }
     }).fail(function(xhr, status, error) {
       dialog("Error", error);
     });

@@ -31,16 +31,19 @@ $(function() {
   $("#save").click(function() {
 
     $.when(del("rest/recipe", recipes)).done(function(data) {
+
       dialog("Recipes", data.message);
+      if (data.saved) {
 
-      recipes = read("rest/recipe");
+        recipes = read("rest/recipe");
 
-      $.when(recipes).done(function(data) {
-        recipes = data.recipes;
-        addRows(recipes);
-      }).fail(function(xhr, status, error) {
-        dialog("Error", error);
-      });
+        $.when(recipes).done(function(data) {
+          recipes = data.recipes;
+          addRows(recipes);
+        }).fail(function(xhr, status, error) {
+          dialog("Error", error);
+        });
+      }
 
     }).fail(function(xhr, status, error) {
       dialog("Error", error);

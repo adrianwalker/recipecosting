@@ -38,7 +38,7 @@ public final class IngredientResource extends AbstractRecipeCostingUserEntityRes
   public Map<String, Object> save(final Save<Ingredient> save) throws Exception {
 
     Map<String, Object> response = response();
-    response.putAll(save(save, "ingredients saved"));
+    response.putAll(save(save, "Ingredients saved"));
     response.putAll(read());
 
     return response;    
