@@ -1,7 +1,18 @@
-function dialog(title, message) {
+function dialog(title, message, messages) {
 
   $("#title").html(title);
-  $("#text").html(message);
+
+  var html = message;
+  if (messages != null && messages.length !== 0) {
+    html += "<ul>"
+    $.each(messages, function(index, message) {
+      html += "<li>" + message + "</li>";
+    });
+    html += "</ul>"
+  }
+
+  $("#text").html(html);
+
   $('#dialog').modal('show');
 }
 

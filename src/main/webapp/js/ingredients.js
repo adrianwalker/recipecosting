@@ -85,7 +85,8 @@ function add(ingredients, units) {
 
 $(function() {
 
-  $("#form").validate();
+  var form = $("#form");
+  form.validate();
 
   var ingredients = read("rest/ingredient");
   var units = read("rest/unit");
@@ -102,15 +103,12 @@ $(function() {
 
   $("#save").click(function() {
 
-    var form = $("#form");
-    form.validate();
-
     if (!form.valid()) {
       return false;
     }
 
     $.when(save("rest/ingredient", ingredients)).done(function(data) {
-      dialog("Ingredients", data.message);
+      dialog("Ingredients", data.message, data.messages);
       if (data.saved) {
         ingredients = data.ingredients;
         ingredientsLookup = lookup(ingredients);

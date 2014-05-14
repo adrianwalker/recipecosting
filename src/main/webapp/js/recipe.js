@@ -186,7 +186,8 @@ function add(recipe, recipeIngredients, ingredients, units, ratioLookup, ingredi
 
 $(function() {
 
-  $("#form").validate({
+  var form = $("#form");
+  form.validate({
     rules: {
       name: {
         required: true,
@@ -257,15 +258,12 @@ $(function() {
 
   $("#save").click(function() {
 
-    var form = $("#form");
-    form.validate();
-
     if (!form.valid()) {
       return false;
     }
 
     $.when(save("rest/recipe", [recipe].concat(recipe.recipeIngredients))).done(function(data) {
-      dialog("Recipe", data.message);
+      dialog("Recipe", data.message, data.message);
       if (data.saved) {
 
         recipe = data.recipe;

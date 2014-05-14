@@ -53,6 +53,8 @@ $(function() {
   $("#login").click(function() {
 
     var form = $("#form1");
+
+    form.data("validator", false);
     form.validate({
       rules: {
         username: {
@@ -66,10 +68,12 @@ $(function() {
           minlength: 1,
           maxlength: 1000
         }
-      }, submitHandler: function(form) {
-        login();
       }
     });
+
+    if (form.valid()) {
+      login();
+    }
   });
 
   $("#register").click(function() {
@@ -95,17 +99,19 @@ $(function() {
           maxlength: 1000,
           equalTo: '#password1'
         }
-      },
-      submitHandler: function(form) {
-        register();
       }
     });
+
+    if (form.valid()) {
+      register();
+    }
   });
 
   $("#forgotpassword").click(function() {
 
     var form = $("#form1");
 
+    form.data("validator", false);
     form.validate({
       rules: {
         username: {
@@ -119,10 +125,11 @@ $(function() {
           minlength: 1,
           maxlength: 1000
         }
-      },
-      submitHandler: function(form) {
-        forgotPassword();
       }
     });
+
+    if (form.valid()) {
+      forgotPassword();
+    }
   });
 });

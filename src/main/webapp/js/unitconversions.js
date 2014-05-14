@@ -91,14 +91,12 @@ $(function() {
 
   $("#save").click(function() {
 
-    form.validate();
-
     if (!form.valid()) {
       return false;
     }
 
     $.when(save("rest/unitconversion", unitConversions)).done(function(data) {
-      dialog("Unit Conversions", data.message);
+      dialog("Unit Conversions", data.message, data.messages);
       if (data.saved) {
         unitConversions = data.unitConversions;
         unitConversionsLookup = lookup(unitConversions);

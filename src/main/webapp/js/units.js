@@ -59,7 +59,7 @@ $(function() {
     }
 
     $.when(save("rest/unit", units)).done(function(data) {
-      dialog("Units", data.message);
+      dialog("Units", data.message, data.message);
       if (data.saved) {
         units = data.units;
         unitsLookup = lookup(units);
