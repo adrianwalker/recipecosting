@@ -263,7 +263,7 @@ $(function() {
     }
 
     $.when(save("rest/recipe", [recipe].concat(recipe.recipeIngredients))).done(function(data) {
-      dialog("Recipe", data.message, data.message);
+      dialog("Recipe", data.message, data.messages);
       if (data.saved) {
 
         recipe = data.recipe;
