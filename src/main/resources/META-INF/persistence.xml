@@ -9,11 +9,11 @@
     <class>org.adrianwalker.recipecosting.common.entity.Unit</class>
     <class>org.adrianwalker.recipecosting.common.entity.User</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/recipecosting"/>
-      <property name="javax.persistence.jdbc.user" value="postgres"/>
-      <property name="javax.persistence.jdbc.password" value="postgres"/>
-      <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="javax.persistence.jdbc.url" value="${javax.persistence.jdbc.url}"/>
+      <property name="javax.persistence.jdbc.user" value="${javax.persistence.jdbc.user}"/>
+      <property name="javax.persistence.jdbc.password" value="${javax.persistence.jdbc.password}"/>
+      <property name="javax.persistence.jdbc.driver" value="${javax.persistence.jdbc.driver}"/>
+      <property name="javax.persistence.schema-generation.database.action" value="${javax.persistence.schema-generation.database.action}"/>
     </properties>
   </persistence-unit>
 </persistence>
