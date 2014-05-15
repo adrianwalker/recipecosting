@@ -2,7 +2,7 @@
 <configuration>
 
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <File>/var/log/recipecosting/recipecosting.log</File>
+    <File>/usr/share/tomcat6/logs</File>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <FileNamePattern>recipecosting.log.%d{yyyy-MM-dd}</FileNamePattern>
     </rollingPolicy>
