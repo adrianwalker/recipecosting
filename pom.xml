@@ -36,7 +36,7 @@
         <mail.smtp.port>587</mail.smtp.port>
         <mail.smtp.auth>true</mail.smtp.auth>
         <mail.smtp.starttls.enable>true</mail.smtp.starttls.enable>
-        <mail.registration.subject>Registration</mail.registration.subject>
+        <mail.registration.subject>ecoster.co.uk - Registration</mail.registration.subject>
         <mail.registration.template>
           Thanks for registering.\n\
           \n\
