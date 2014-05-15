@@ -30,7 +30,7 @@
         <javax.persistence.schema-generation.database.action>create</javax.persistence.schema-generation.database.action>
         <mail.transport.protocol>smtp</mail.transport.protocol>
         <mail.smtp.user>ady.walker@gmail.com</mail.smtp.user>
-        <mail.smtp.password>XXX</mail.smtp.password>
+        <mail.smtp.password>changeit</mail.smtp.password>
         <mail.smtp.from>ady.walker@gmail.com</mail.smtp.from>
         <mail.smtp.host>smtp.gmail.com</mail.smtp.host>
         <mail.smtp.port>587</mail.smtp.port>
@@ -63,9 +63,9 @@
     <profile>
       <id>live</id>
       <properties>
-        <javax.persistence.jdbc.url>jdbc:postgresql://localhost:5432/ecoster</javax.persistence.jdbc.url>
-        <javax.persistence.jdbc.user>XXX</javax.persistence.jdbc.user>
-        <javax.persistence.jdbc.password>XXX</javax.persistence.jdbc.password>
+        <javax.persistence.jdbc.url>jdbc:postgresql://localhost:5432/changeit</javax.persistence.jdbc.url>
+        <javax.persistence.jdbc.user>changeit</javax.persistence.jdbc.user>
+        <javax.persistence.jdbc.password>changeit</javax.persistence.jdbc.password>
         <javax.persistence.jdbc.driver>org.postgresql.Driver</javax.persistence.jdbc.driver>
         <javax.persistence.schema-generation.database.action>create</javax.persistence.schema-generation.database.action>
         <mail.transport.protocol>smtp</mail.transport.protocol>
@@ -97,7 +97,7 @@
           http://www.ecoster.co.uk/resetpassword.html?uuid=${UUID}\n
         </mail.reset.template>
         <password.digest>SHA-1</password.digest>
-        <password.salt>XXX</password.salt>
+        <password.salt>changeit</password.salt>
       </properties>
     </profile>
   </profiles>
