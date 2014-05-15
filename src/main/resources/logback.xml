@@ -2,7 +2,7 @@
 <configuration>
 
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <File>/usr/share/tomcat6/logs</File>
+    <File>/usr/share/tomcat6/logs/ecoster.log</File>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <FileNamePattern>recipecosting.log.%d{yyyy-MM-dd}</FileNamePattern>
     </rollingPolicy>
