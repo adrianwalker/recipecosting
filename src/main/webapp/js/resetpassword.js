@@ -5,12 +5,12 @@ $(function() {
     rules: {
       password1: {
         required: true,
-        minlength: 1,
+        minlength: 6,
         maxlength: 1000
       },
       password2: {
         required: true,
-        minlength: 1,
+        minlength: 6,
         maxlength: 1000,
         equalTo: '#password1'
       }
