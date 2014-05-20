@@ -51,6 +51,10 @@ function addRow(index, recipe, recipeIngredient, ingredients, units, ratioLookup
 
   $("#data").append(row);
 
+  $("#id" + index).bind("change", function() {
+    recipeIngredient._checked = this.checked;
+  });
+
   $("#ingredient" + index).bind("change", function() {
     recipe._changed = true;
     recipeIngredient.ingredient.id = $(this).val();
@@ -174,6 +178,7 @@ function calculateServingCost(totalCost, servings) {
 function add(recipe, recipeIngredients, ingredients, units, ratioLookup, ingredientLookup) {
 
   var recipeIngredient = {
+    _checked: false,
     id: null,
     ingredient: {id: null},
     amount: 0.0,
