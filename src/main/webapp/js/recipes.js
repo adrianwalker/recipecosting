@@ -14,15 +14,17 @@ function addRow(index, recipe) {
   $(row).append($("<td/>").append("<a href='recipe.html?id=" + recipe.id + "' id='name" + index + "' >" + recipe.name + "</a>"));
 
   $("#data").append(row);
+
+  $("#id" + index).bind("change", function() {
+    recipe._checked = this.checked;
+  });
 }
 
 $(function() {
   var recipes = read("rest/recipe");
-  var recipsLookup;
 
   $.when(recipes).done(function(data) {
     recipes = data.recipes;
-    recipsLookup = lookup(recipes);
     addRows(recipes);
   }).fail(function(xhr, status, error) {
     dialog("Error", error);
@@ -55,6 +57,6 @@ $(function() {
   });
 
   $("#delete").click(function() {
-    remove(recipsLookup);
+    remove(recipes);
   });
 });

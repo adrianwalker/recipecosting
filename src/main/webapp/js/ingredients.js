@@ -26,6 +26,10 @@ function addRow(index, ingredient, units) {
 
   $("#data").append(row);
 
+  $("#id" + index).bind("change", function() {
+    ingredient._checked = this.checked;
+  });
+
   $("#name" + index).bind("input", function() {
     ingredient._changed = true;
     ingredient.name = $(this).val();
@@ -90,12 +94,10 @@ $(function() {
 
   var ingredients = read("rest/ingredient");
   var units = read("rest/unit");
-  var ingredientsLookup;
 
   $.when(ingredients, units).done(function(data1, data2) {
     ingredients = data1[0].ingredients;
     units = data2[0].units;
-    ingredientsLookup = lookup(ingredients);
     addRows(ingredients, units);
   }).fail(function(xhr, status, error) {
     dialog("Error", error);
@@ -111,7 +113,6 @@ $(function() {
       dialog("Ingredients", data.message, data.messages);
       if (data.saved) {
         ingredients = data.ingredients;
-        ingredientsLookup = lookup(ingredients);
         addRows(ingredients, units);
       }
     }).fail(function(xhr, status, error) {
@@ -124,6 +125,6 @@ $(function() {
   });
 
   $("#delete").click(function() {
-    remove(ingredientsLookup);
+    remove(ingredients);
   });
 });

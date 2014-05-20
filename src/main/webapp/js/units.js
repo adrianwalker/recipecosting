@@ -15,6 +15,10 @@ function addRow(index, unit) {
 
   $("#data").append(row);
 
+  $("#id" + index).bind("change", function() {
+    unit._checked = this.checked;
+  });
+
   $("#name" + index).bind("input", function() {
     unit._changed = true;
     unit.name = $(this).val();
@@ -42,11 +46,9 @@ $(function() {
   form.validate();
 
   var units = read("rest/unit");
-  var unitsLookup;
 
   $.when(units).done(function(data) {
     units = data.units;
-    unitsLookup = lookup(units);
     addRows(units);
   }).fail(function(xhr, status, error) {
     dialog("Error", error);
@@ -62,7 +64,6 @@ $(function() {
       dialog("Units", data.message, data.messages);
       if (data.saved) {
         units = data.units;
-        unitsLookup = lookup(units);
         addRows(units);
       }
     }).fail(function(xhr, status, error) {
@@ -75,6 +76,6 @@ $(function() {
   });
 
   $("#delete").click(function() {
-    remove(unitsLookup);
+    remove(units);
   });
 });

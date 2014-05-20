@@ -178,7 +178,6 @@ function calculateServingCost(totalCost, servings) {
 function add(recipe, recipeIngredients, ingredients, units, ratioLookup, ingredientLookup) {
 
   var recipeIngredient = {
-    _checked: false,
     id: null,
     ingredient: {id: null},
     amount: 0.0,
@@ -229,7 +228,6 @@ $(function() {
 
   var ratiosLookup;
   var ingredientsLookup;
-  var recipeIngredientsLookup;
 
   $.when(recipe, ingredients, units, unitConversions).done(function(data1, data2, data3, data4) {
 
@@ -251,7 +249,6 @@ $(function() {
     });
 
     ingredientsLookup = lookup(ingredients);
-    recipeIngredientsLookup = lookup(recipe.recipeIngredients)
 
     setName(recipe);
     setServes(recipe);
@@ -272,7 +269,6 @@ $(function() {
       if (data.saved) {
 
         recipe = data.recipe;
-        recipeIngredientsLookup = lookup(recipe.recipeIngredients)
 
         setName(recipe);
         setServes(recipe);
@@ -290,7 +286,7 @@ $(function() {
   });
 
   $("#delete").click(function() {
-    remove(recipeIngredientsLookup);
+    remove(recipe.recipeIngredients);
     recipe._changed = true;
 
     updateCosts(recipe, ratiosLookup, ingredientsLookup);

@@ -29,6 +29,10 @@ function addRow(index, unitConversion, units) {
 
   $("#data").append(row);
 
+  $("#id" + index).bind("change", function() {
+    unitConversion._checked = this.checked;
+  });
+
   $("#unitFrom" + index).bind("change", function() {
     unitConversion._changed = true;
     unitConversion.unitFrom.id = $(this).val();
@@ -78,12 +82,10 @@ $(function() {
 
   var unitConversions = read("rest/unitconversion");
   var units = read("rest/unit");
-  var unitConversionsLookup;
 
   $.when(unitConversions, units).done(function(data1, data2) {
     unitConversions = data1[0].unitConversions;
     units = data2[0].units;
-    unitConversionsLookup = lookup(unitConversions);
     addRows(unitConversions, units);
   }).fail(function(xhr, status, error) {
     dialog("Error", error);
@@ -99,7 +101,6 @@ $(function() {
       dialog("Unit Conversions", data.message, data.messages);
       if (data.saved) {
         unitConversions = data.unitConversions;
-        unitConversionsLookup = lookup(unitConversions);
         addRows(unitConversions, units);
       }
     }).fail(function(xhr, status, error) {
@@ -112,6 +113,6 @@ $(function() {
   });
 
   $("#delete").click(function() {
-    remove(unitConversionsLookup)
+    remove(unitConversions)
   });
 });
