@@ -248,7 +248,10 @@ $(function() {
       }
     });
 
-    ingredientsLookup = lookup(ingredients);
+    ingredientsLookup = {};
+    $.each(ingredients, function(index, ingredient) {
+      ingredientsLookup[ingredient.id] = ingredient;
+    });
 
     setName(recipe);
     setServes(recipe);

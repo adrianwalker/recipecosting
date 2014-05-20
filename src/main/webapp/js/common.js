@@ -1,11 +1,3 @@
-function lookup(entities) {
-  var entityLookup = {};
-  $.each(entities, function(index, entity) {
-    entityLookup[entity.id] = entity;
-  });
-  return entityLookup;
-}
-
 function remove(entities) {
 
   var checked = $('input[id^=id]:checked');
