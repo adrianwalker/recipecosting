@@ -2,7 +2,8 @@ function read(url) {
 
   return $.ajax({
     type: "GET",
-    url: url
+    url: url,
+    cache: false
   });
 }
 
@@ -37,6 +38,7 @@ function save(url, data) {
   return $.ajax({
     type: "POST",
     url: url,
+    cache: false,
     data: JSON.stringify(data, replacer),
     contentType: "application/json",
     dataType: "json"
@@ -66,6 +68,7 @@ function del(url, data) {
   return $.ajax({
     type: "DELETE",
     url: url,
+    cache: false,
     data: JSON.stringify(ids),
     contentType: "application/json",
     dataType: "json"
