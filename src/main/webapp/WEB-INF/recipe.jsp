@@ -17,13 +17,17 @@
             <div>
               <table class="table">
                 <tr>
-                  <td>Name:</td>
                   <td>
-                    <input id="name" name="name" class="form-control" type="text" placeholder="Name" required autofocus/>
+                    <label for="name">Name:</label>
+                  </td>
+                  <td>
+                    <input id="name" name="name" class="form-control" type="text" required autofocus/>
                   </td>
                 </tr>
                 <tr>
-                  <td>Servings:</td>
+                  <td>
+                    <label for="serves">Servings:</label>
+                  </td>
                   <td>
                     <input id="serves" name="serves" class="form-control" type="number" required/>
                   </td>
@@ -78,7 +82,7 @@
 
         <button id="save" type="button" class="btn btn-primary">Save Recipe</button>
         <button id="add" type="button" class="btn btn-primary">Add Ingredient</button>
-        <button id="delete" type="button" class="btn btn-primary">Delete Ingredients</button>        
+        <button id="delete" type="button" class="btn btn-primary">Delete Ingredients</button>
       </form>
     </div>
   </body>

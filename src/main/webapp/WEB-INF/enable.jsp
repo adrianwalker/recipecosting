@@ -9,7 +9,7 @@
     <%@ include file="dialog.jspf" %>
     <%@ include file="loginmenu.jspf" %>
     <div class="container">
-      <form id="form1" name="form1" class="form-signin" role="form">
+      <form id="form1" name="form1" class="form330px" role="form">
         <h2>Enable Account</h2>
         <p>Please wait while your account is enabled...</p>
       </form>
